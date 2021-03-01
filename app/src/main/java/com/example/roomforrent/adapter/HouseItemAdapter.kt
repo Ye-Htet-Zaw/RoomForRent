@@ -15,6 +15,7 @@ class HouseItemAdapter(val context: Context, val addresses: ArrayList<String>, v
 
     private var onClickListener: OnClickListener? = null
     var name: String? = null
+    var role: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
