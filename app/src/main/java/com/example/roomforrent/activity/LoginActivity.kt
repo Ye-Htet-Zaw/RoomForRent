@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
-
+   //NangTintTintTun
     private fun setUpActionBar() {
         setSupportActionBar(toolBarLogin)
         val actionBar = supportActionBar
