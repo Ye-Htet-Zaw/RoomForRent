@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.tab_bar_layout.view.*
 
 class MainActivity : AppCompatActivity() {
 
+    //Declare arr variable
     var tabNameArr = ArrayList<String>()
     var tabIconArr = ArrayList<Int>()
     var activeTabIconArr = ArrayList<Int>()
