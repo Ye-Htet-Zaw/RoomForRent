@@ -1,0 +1,64 @@
+<resources>
+    //Search
+    <string name="app_name">RoomForRent</string>
+    <string name="category">Category</string>
+    <string name="address">Address</string>
+    <string name="amount">Amount</string>
+    <string name="peroid">Peroid</string>
+    <string name="search">Search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //RenderProfileScreen
+    <string name="image_contentDescription">image</string>
+    <string name="plz_login_text">Please login to your account</string>
+    <string name="version_text_description">Version 1.0 9/2/2021</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
+    //LoginScreen
+    <string name="login">Login</string>
+    <string name="login_text">Login To Your Account</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="email">Email Address</string>
+    <string name="sign_in_description_text">Enter your name, email id and password, to register with us.</string>
+
+    //ChangePasswordScreen
+    <string name="current_pw">Current Password</string>
+    <string name="new_pw">New Password</string>
+    <string name="confirm_pw">Retype New Password</string>
+    <string name="btn_updatePassword">Update</string>
+
+    <!--owner image-->
+    <string name="owner_image_contentDescription">owner image</string>
+    <!--Personal info image-->
+    <string name="owner_personal_image_contentDescription">image</string>
+
+    <!--owner profile version-->
+    <string name="owner_profile_version">VERSION 2.21(12.12019)</string>
+
+    <!--owner profile logout-->
+    <string name="owner_profile_logout">Logout</string>
+
+    <!--personal info toolbar-->
+    <string name="personal_info_toolbar_text">Save</string>
+
+    <!--personal info -->
+    <string name="personal_info_text">Edit personal info</string>
+    <string name="personal_info_des_first_name">First name</string>
+    <string name="personal_info_first_name">Chaw Suu </string>
+    <string name="personal_info_des_last_name">Last name</string>
+    <string name="personal_info_last_name">Hlaing</string>
+    <string name="personal_info_gender">Gender</string>
+    <string name="personal_info_birth_date">Birth date</string>
+    <string name="personal_info_email">Email</string>
+    <string name="personal_info_phone_num1">Phone number1</string>
+    <string name="personal_info_phone_num2">Phone number2</string>
+
+    <!--gender popup info -->
+    <string name="gender_text">Gender</string>
+    <string name="male_text">Male</string>
+    <string name="female_text">Female</string>
+    <string name="other_text">Other</string>
+    <string name="title_activity_location">Map</string>
+</resources>

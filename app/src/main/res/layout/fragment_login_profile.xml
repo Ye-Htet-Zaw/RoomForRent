@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/white"
+    tools:context=".fragment.LoginProfileFragment">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_profile_user_image"
+                    android:layout_width="@dimen/owner_profile_user_image_size"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="@dimen/owner_profile_image_marginTop"
+                    android:contentDescription="@string/owner_image_contentDescription"
+                    android:src="@drawable/ic_owner_profile_image"
+                    app:civ_border_width="@dimen/owner_profile_border_width"
+                   />
+
+                <TextView
+                    android:id="@+id/tv_owner_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="center_horizontal"
+                    android:text="Chaw Suu Hlaing"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/owner_name_text_size"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!--Owner profile personfal info -->
+
+            <LinearLayout
+                android:id="@+id/ll_owner_personal_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/owner_personal_info_layout_marginTop"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv_owner_personal_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Personal Information"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/owner_personal_info_text_size" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/owner_personal_info_image_width"
+                        android:layout_height="@dimen/owner_personal_info_image_height"
+                        android:contentDescription="@string/owner_personal_image_contentDescription"
+                        android:src="@drawable/ic_owner_profile_image" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/owner_profile_divider_height"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/black" />
+
+
+            <!--Owner profile payment and payout -->
+            <LinearLayout
+                android:id="@+id/ll_owner_payment_payout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/owner_profile_layout_marginTop"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv_owner_payment_payout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Payment and payout"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/owner_personal_info_text_size" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/owner_personal_info_image_width"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/owner_personal_image_contentDescription"
+                        android:src="@drawable/money" />
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/owner_profile_divider_height"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/black" />
+
+            <!--Owner profile list your space-->
+            <LinearLayout
+                android:id="@+id/ll_owner_list_space"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/owner_profile_layout_marginTop"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv_owner_list_yourspace"
+                    android:fontFamily="@font/roboto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="List your space"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/owner_personal_info_text_size" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/owner_personal_info_image_width"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/owner_personal_image_contentDescription"
+                        android:src="@drawable/home" />
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/owner_profile_divider_height"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/black" />
+
+            <!--Owner profile Change password-->
+            <LinearLayout
+                android:id="@+id/ll_owner_change_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/owner_profile_layout_marginTop"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv_owner_change_password"
+                    android:fontFamily="@font/roboto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change Password"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/owner_personal_info_text_size" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/owner_personal_info_image_width"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/owner_personal_image_contentDescription"
+                        android:src="@drawable/password" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/owner_profile_divider_height"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/black" />
+
+            <!--Owner profile Give us feedback-->
+            <LinearLayout
+                android:id="@+id/ll_owner_give_us_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/owner_profile_layout_marginTop"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv_owner_feedback"
+                    android:fontFamily="@font/roboto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Give us feedback"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/owner_personal_info_text_size" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/owner_personal_info_image_width"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/owner_personal_image_contentDescription"
+                        android:src="@drawable/feedback" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/owner_profile_divider_height"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/black" />
+
+            <!--Owner profile Terms of service-->
+            <LinearLayout
+                android:id="@+id/ll_owner_term_of_service"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/owner_profile_layout_marginTop"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv_owner_terms_service"
+                    android:fontFamily="@font/roboto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Terms of Service"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/owner_personal_info_text_size" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/owner_personal_info_image_width"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/owner_personal_image_contentDescription"
+                        android:src="@drawable/terms_of_service" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/owner_profile_divider_height"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/black" />
+
+            <!--Owner profile Version-->
+            <TextView
+                android:id="@+id/tv_owner_version"
+                android:fontFamily="@font/roboto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/owner_profile_layout_marginTop"
+                android:text="@string/owner_profile_version"
+                android:textColor="@color/black"
+                android:textSize="@dimen/owner_personal_info_text_size" />
+
+            <!--Owner profile Logout-->
+               <Button
+                   android:id="@+id/btn_owner_profile_logout"
+                   android:layout_width="@dimen/owner_profile_logout_width"
+                   android:layout_height="@dimen/owner_profile_logout_height"
+                   android:layout_marginTop="@dimen/owner_profile_layout_marginTop"
+                   android:background="@drawable/shape_rounded_button"
+                   android:text="@string/owner_profile_logout"
+                   android:textColor="@color/white"
+                   android:layout_gravity="center"
+                   app:backgroundTint="@color/white"
+                   app:backgroundTintMode="multiply" />
+
+            <include
+                android:layout_marginTop="10dp"
+                layout="@layout/activity_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+</ScrollView>
