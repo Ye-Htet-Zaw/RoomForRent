@@ -14,6 +14,7 @@ class HouseItemAdapter(val context: Context, val addresses: ArrayList<String>, v
     RecyclerView.Adapter<HouseItemAdapter.ViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
+    var name: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -72,6 +73,7 @@ class HouseItemAdapter(val context: Context, val addresses: ArrayList<String>, v
         val tvAddress = view.tv_address
         val tvPrice = view.tv_price
         val cardViewItem = view.cv_house_list
+
     }
 
     interface OnClickListener {
