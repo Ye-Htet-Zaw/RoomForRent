@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/layout_personal_info"
     android:fillViewport="true">
-
+<!--this is my changes-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
