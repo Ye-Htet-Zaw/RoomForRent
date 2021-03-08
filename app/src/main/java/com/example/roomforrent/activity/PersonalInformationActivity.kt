@@ -5,15 +5,24 @@ import android.app.Dialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.roomforrent.R
+import com.example.roomforrent.models.User
+import com.example.roomforrent.services.ServiceBuilder
+import com.example.roomforrent.services.UserProfileService
 import kotlinx.android.synthetic.main.activity_personal_information.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 class PersonalInformationActivity : AppCompatActivity() {
@@ -26,6 +35,9 @@ class PersonalInformationActivity : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
         window.setBackgroundDrawable(resources.getDrawable(R.drawable.toolbarbg))
         setUpToolbar()
+
+        //getUserPersonalInfo
+         getUserInfoById("USE0000001")
 
         //to change gender when click on gender edittext
         et_gender.setOnClickListener {
@@ -116,6 +128,45 @@ class PersonalInformationActivity : AppCompatActivity() {
         //dpd.datePicker.setMaxDate(Date().time - 86400000)
         dpd.show()
     }
+
+    //get user info from api
+    private fun getUserInfoById(user_id:String) {
+        //initiate the service
+        val destinationService  = ServiceBuilder.buildService(UserProfileService::class.java)
+        val requestCall =destinationService.getUserInfo(user_id)
+        //make network call asynchronously
+        requestCall.enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                Log.d("Response", "onResponse: ${response.body()}")
+                if (response.isSuccessful){
+                    val user = response.body()!! as User
+                    Log.d("Response", "countrylist size : ${user.user_name}")
+                    Toast.makeText(this@PersonalInformationActivity, "user name is ${user.user_name}", Toast.LENGTH_SHORT).show()
+                    et_first_name.setText(user.user_name)
+                    when(user.user_gender){
+                        0->et_gender.setText("Male")
+                        1->et_gender.setText("Female")
+                        2->et_gender.setText("Other")
+                        else->et_gender.setText("Null")
+                    }
+                    et_birth_date.setText(user.user_dob.toString())
+                    et_email.setText(user.user_email)
+                    et_phone_num1.setText(user.phone_one)
+                    et_phone_num2.setText(user.phone_two)
+
+                }else{
+                    Toast.makeText(this@PersonalInformationActivity, "Something went wrong ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.i("Something","Something went wrong ${response.message()}")
+                }
+            }
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Toast.makeText(this@PersonalInformationActivity, "Something went wrong $t", Toast.LENGTH_SHORT).show()
+                Log.i("errorM",t.message.toString())
+            }
+        })
+    }
+
+
 
 
 }
