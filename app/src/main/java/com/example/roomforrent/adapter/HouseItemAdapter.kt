@@ -1,6 +1,7 @@
 package com.example.roomforrent.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,14 +9,19 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomforrent.R
+import com.example.roomforrent.models.HouseList
 import kotlinx.android.synthetic.main.house_item.view.*
 
-class HouseItemAdapter(val context: Context, val addresses: ArrayList<String>, val prices: ArrayList<String>, val houseImage: ArrayList<Int>) :
+class HouseItemAdapter(val context: Context) :
     RecyclerView.Adapter<HouseItemAdapter.ViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
-    var name: String? = null
-    var role: String? = null
+    private var houseData: ArrayList<HouseList>? = null
+
+    fun setData(list: ArrayList<HouseList>){
+        houseData = list
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -32,14 +38,9 @@ class HouseItemAdapter(val context: Context, val addresses: ArrayList<String>, v
             changeColor=onClick(holder.ivHeart,changeColor)
         }
 
-        val address = addresses.get(position)
-        holder.tvAddress.text = address
-
-        val price = prices.get(position)
-        holder.tvPrice.text = price
-
-        val image = houseImage.get(position)
-        holder.ivImage.setImageResource(image)
+        Log.d("Response", "List Count :${houseData?.size} ")
+        val item = houseData?.get(position)
+        holder.bindView(item)
 
         holder.itemView.setOnClickListener {
             if (onClickListener != null){
@@ -63,7 +64,7 @@ class HouseItemAdapter(val context: Context, val addresses: ArrayList<String>, v
         return changeColor
     }
     override fun getItemCount(): Int {
-        return addresses.size
+        return houseData?.size?:0
     }
 
 
@@ -74,6 +75,12 @@ class HouseItemAdapter(val context: Context, val addresses: ArrayList<String>, v
         val tvAddress = view.tv_address
         val tvPrice = view.tv_price
         val cardViewItem = view.cv_house_list
+
+        fun bindView(item: HouseList?) {
+            itemView.tv_address.text = item?.house_address
+            itemView.tv_price.text = item?.rent.toString()
+            //Picasso.get().load("http://192.168.100.4:9090/images/${item?.id}.jpg").into(itemView.img_photo)
+        }
 
     }
 
