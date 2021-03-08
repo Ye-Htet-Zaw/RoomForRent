@@ -12,13 +12,34 @@ import android.view.ViewGroup
 import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.HouseListActivity
+import com.example.roomforrent.utils.Constants.categoryArr
+import com.example.roomforrent.utils.Constants.periodArr
+import com.example.roomforrent.utils.Constants.townshipArr
+import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.view.*
 
 class SearchFragment : Fragment() {
 
+    lateinit var categoryAdapter: MySpinnerAdapter
+    lateinit var townshipAdapter: MySpinnerAdapter
+    lateinit var periodAdapter: MySpinnerAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        townshipAdapter = context?.let { createSpinnerAdapter(it, townshipArr) }!!
+        categoryAdapter = context?.let { createSpinnerAdapter(it, categoryArr) }!!
+        periodAdapter = context?.let { createSpinnerAdapter(it, periodArr) }!!
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        categorySpinner.adapter = categoryAdapter
+        addressSpinner.adapter = townshipAdapter
+        peroidSpinner.adapter = periodAdapter
+        btn_serach.setOnClickListener {
+            startActivity(Intent(context, HouseListActivity::class.java))
+
+        }
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
@@ -26,36 +47,10 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_search, container, false)
-
-        //create spinner adapter
-        val adapter = createSpinnerAdapter(context!!)
-
-        v.categorySpinner.adapter = adapter
-        v.amountSpinner.adapter = adapter
-        v.addressSpinner.adapter = adapter
-        v.peroidSpinner.adapter = adapter
-        v.btn_serach.setOnClickListener {
-            Log.i("SearchbtnClick","click")
-            startActivity(Intent(context, HouseListActivity::class.java))
-        }
-        return v
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
-    private fun createSpinnerAdapter(context: Context): MySpinnerAdapter {
-        var arr: ArrayList<String> = ArrayList()
-        arr.add("Item1")
-        arr.add("Item2")
-        arr.add("Item3")
-        arr.add("Item4")
-
-        var itemAdapter = MySpinnerAdapter(context,arr)
-        /*var adapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            context,
-            android.R.layout.simple_spinner_item, arr
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)*/
-        return itemAdapter
+    private fun createSpinnerAdapter(context: Context, arr: ArrayList<String>): MySpinnerAdapter {
+        return MySpinnerAdapter(context, arr)
     }
 }
