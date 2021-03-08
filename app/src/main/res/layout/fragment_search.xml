@@ -133,15 +133,18 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-                        <Spinner
-                            android:id="@+id/amountSpinner"
+                        <EditText
+                            android:id="@+id/edt_amount"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/spinner_height"
                             android:layout_marginRight="@dimen/spinner_align"
                             android:layout_weight="1"
-                            android:background="@drawable/spinnerbg"
-                            android:gravity="center"
-                            android:spinnerMode="dropdown" />
+                            android:background="@drawable/textboxbg"
+                            android:hint="@string/hintAmountTxt"
+                            android:fontFamily="@font/roboto"
+                            android:textSize="15dp"
+                            android:paddingLeft="@dimen/textbox_padding_left"
+                            android:inputType="number" />
 
                         <Spinner
                             android:id="@+id/peroidSpinner"

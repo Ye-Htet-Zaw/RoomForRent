@@ -19,6 +19,7 @@
         <dimen name="spinner_text_marginTop">15dp</dimen>
         <dimen name="spinner_text_marginBottom">20dp</dimen>
         <dimen name="tab_indicator_height">0dp</dimen>
+        <dimen name="textbox_padding_left">10dp</dimen>
 
         <dimen name="splash_screen_title_text_size">70sp</dimen>
         //Render Profile Screen

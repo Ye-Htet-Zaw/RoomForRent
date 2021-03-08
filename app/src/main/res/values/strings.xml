@@ -6,6 +6,7 @@
     <string name="amount">Amount</string>
     <string name="peroid">Peroid</string>
     <string name="search">Search</string>
+    <string name="hintAmountTxt">Enter Amount</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
