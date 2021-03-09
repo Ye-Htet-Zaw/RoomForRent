@@ -71,10 +71,6 @@ class HouseItemAdapter(val context: Context) :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // Holds the TextView that will add each item to
         val ivHeart = view.iv_heart
-        val ivImage = view.iv_roomImg
-        val tvAddress = view.tv_address
-        val tvPrice = view.tv_price
-        val cardViewItem = view.cv_house_list
 
         fun bindView(item: HouseList?) {
             itemView.tv_address.text = item?.house_address
