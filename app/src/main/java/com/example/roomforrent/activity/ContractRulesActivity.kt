@@ -3,12 +3,19 @@ package com.example.roomforrent.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.roomforrent.R
+import com.example.roomforrent.utils.Constants
 import kotlinx.android.synthetic.main.activity_contract_rules.*
+import kotlinx.android.synthetic.main.activity_house_information.*
 
 class ContractRulesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contract_rules)
+        if (intent.hasExtra(Constants.CONTRACT_RULE)){
+            val contractRule = intent.getStringExtra(Constants.CONTRACT_RULE).toString()
+            contract_rules.text = contractRule
+        }
+
         setupActionBar()
     }
 
