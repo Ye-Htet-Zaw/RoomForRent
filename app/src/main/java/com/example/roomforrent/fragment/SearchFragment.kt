@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.HouseListActivity
@@ -24,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_search.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.Serializable
 
 class SearchFragment : Fragment() {
 
@@ -108,6 +108,9 @@ class SearchFragment : Fragment() {
                 //can call all api passing parameter
                 callSearchService(callGetAllRoomList)
             }
+            else{
+                Toast.makeText(context, "needed to call api when item selected", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -115,10 +118,7 @@ class SearchFragment : Fragment() {
         callGetRoomList.enqueue(object : Callback<List<House>> {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 Log.i("TestingSearchApi", "Success search " + response.body()!!.size)
-                val args = Bundle()
-                args.putSerializable("ARRAYLIST", response.body() as Serializable?)
                 val intent = Intent(context, HouseListActivity::class.java)
-                intent.putExtra("BUNDLE", args)
                 startActivity(intent)
             }
 
