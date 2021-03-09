@@ -5,15 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Spinner
-import com.example.roomforrent.adapter.MySpinnerAdapter
+import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.HouseListActivity
+import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.models.House
 import com.example.roomforrent.services.SearchRoomService
 import com.example.roomforrent.services.ServiceBuilder
@@ -25,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_search.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.Serializable
 
 class SearchFragment : Fragment() {
 
@@ -114,13 +114,16 @@ class SearchFragment : Fragment() {
     private fun callSearchService(callGetRoomList: Call<List<House>>) {
         callGetRoomList.enqueue(object : Callback<List<House>> {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
-                Log.i("TestingSearchApi", "Success search "+response.body()!!.size)
+                Log.i("TestingSearchApi", "Success search " + response.body()!!.size)
+                val args = Bundle()
+                args.putSerializable("ARRAYLIST", response.body() as Serializable?)
                 val intent = Intent(context, HouseListActivity::class.java)
+                intent.putExtra("BUNDLE", args)
                 startActivity(intent)
             }
 
             override fun onFailure(call: Call<List<House>>, t: Throwable) {
-                Log.i("TestingSearchApi", "fail search"+t.message)
+                Log.i("TestingSearchApi", "fail search" + t.message)
             }
         })
     }
