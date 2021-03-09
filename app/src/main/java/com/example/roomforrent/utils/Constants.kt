@@ -149,4 +149,16 @@ object Constants {
     const val OneYear: String = "12"
     const val TwoYears: String = "24"
 
+    //HouseDetail
+    const val NO_OF_GUESTS: String = "no_of_guests"
+    const val AREA: String = "area"
+    const val NO_OF_TOILET: String = "no_of_toilet"
+    const val NO_OF_BATH: String = "no_of_bath"
+    const val NO_OF_BEDROOM: String = "no_of_bedroom"
+    const val WIFI: String = "wifi"
+    const val NO_OF_AIRCON: String = "no_of_aircon"
+    const val NO_OF_FLOOR: String = "no_of_floor"
+    const val CONTRACT_RULE: String = "contract_rule"
+
+
 }
