@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface UserLoginService {
-    @GET("getUserWithEmailAndPassword/{user_email}&{password}/")
-    fun getUserWithEmailAndPassword(@Path("user_email") user_email: String, @Path("password") password: String): Call<UserLogin>
+    @GET("getUserWithEmailAndPassword/{user_email}&{password}")
+    fun getUserWithEmailAndPassword(@Path("user_email") user_email: String,@Path("password") password: String): Call<UserLogin>
 }

@@ -23,7 +23,7 @@ class ProfileFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val v =  inflater.inflate(R.layout.fragment_profile, container, false)
-        v.btn_sign_in.setOnClickListener {
+        v.btn_sign_in_profile.setOnClickListener {
             startActivity(Intent(context, LoginActivity::class.java))
         }
 
