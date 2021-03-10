@@ -60,7 +60,10 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
-                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        if (response.isSuccessful) {
+                        val intent=Intent(this@LoginActivity,MainActivity::class.java)
+                        intent.putExtra("UserId",response.body()!!.user_id)
+                        startActivity(intent)}
                         //when success use shared preferences
                         val editor: SharedPreferences.Editor = share.edit()
                         editor.putBoolean("isLogin", true)
