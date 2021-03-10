@@ -1,6 +1,8 @@
 package com.example.roomforrent.activity
-
+//NTTT
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.log
 
 class LoginActivity : AppCompatActivity() {
     lateinit var callGetUser: Call<UserLogin>
@@ -25,7 +28,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        val destinationService = ServiceBuilder.buildService(UserLoginService::class.java)
+
+        val share:SharedPreferences  = getSharedPreferences("myPreference",
+            Context.MODE_PRIVATE)
         //For Change status bar color
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
@@ -45,16 +50,24 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }else
             {
-                callGetUser = destinationService.getUserWithEmailAndPassword(et_email.text.toString().trim(), et_password.text.toString().trim())
+                val destinationService = ServiceBuilder.buildService(UserLoginService::class.java)
+                callGetUser = destinationService.getUserWithEmailAndPassword(et_email.text.toString().trim(),et_password.text.toString().trim())
                 callGetUser.enqueue(object :Callback<UserLogin>{
                     override fun onFailure(call: Call<UserLogin>, t: Throwable) {
+                        Toast.makeText(this@LoginActivity,"Your Email and Password Incorrect",Toast.LENGTH_LONG).show()
+                        Log.e(t.message, "ERROR")
 
-                        Toast.makeText(this@LoginActivity,"Your Email and Password Something wrong",Toast.LENGTH_LONG).show()
                     }
 
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
-                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-
+                        if (response.isSuccessful) {
+                        val intent=Intent(this@LoginActivity,MainActivity::class.java)
+                        intent.putExtra("UserId",response.body()!!.user_id)
+                        startActivity(intent)}
+                        //when success use shared preferences
+                        val editor: SharedPreferences.Editor = share.edit()
+                        editor.putBoolean("isLogin", true)
+                        editor.commit()
                         Toast.makeText(this@LoginActivity,"LOGIN SUCCESSFULLY",Toast.LENGTH_LONG).show()
 
                     }
