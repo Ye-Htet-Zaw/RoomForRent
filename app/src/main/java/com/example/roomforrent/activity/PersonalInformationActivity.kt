@@ -33,10 +33,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PersonalInformationActivity : AppCompatActivity() {
-    //this is my changes
-    lateinit var selectedDateFromDatePicker:Date
-    lateinit var dateFromDb:Date
-    lateinit var dateString:String
+
+     var dateFromDbString: String?=null
+     var dateString:String?=null
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -176,12 +175,18 @@ class PersonalInformationActivity : AppCompatActivity() {
                     }
 
                     //assign date from db to local var to show in android screen
-                    dateFromDb = user.user_dob
+                    var dateFromDb:Date = user.user_dob
                     //to show date from db to android
                     val pattern = "dd/MM/yyyy"
                     val simpleDateFormat = SimpleDateFormat(pattern)
                     val date = simpleDateFormat.format(dateFromDb)
                     et_birth_date.setText(date)
+
+                    //if datepicker is not used to save orignal date
+                    val pattern1 = "yyyy-MM-dd"
+                    val simpleDateFormat1 = SimpleDateFormat(pattern1)
+                    dateFromDbString = simpleDateFormat1.format(dateFromDb)
+
                     et_email.setText(user.user_email)
                     et_phone_num1.setText(user.phone_one)
                     et_phone_num2.setText(user.phone_two)
@@ -231,7 +236,13 @@ class PersonalInformationActivity : AppCompatActivity() {
         jsonObject.put("phone_one", phoneOne)
         jsonObject.put("phone_two", phoneTwo)
         jsonObject.put("user_gender", gender)
-        jsonObject.put("dobString", dateString)
+
+        if(dateString==null) {
+            jsonObject.put("dobString", dateFromDbString)
+        }else{
+            jsonObject.put("dobString", dateString)
+        }
+
         jsonObject.put("updater_id", user_id)
 
 
