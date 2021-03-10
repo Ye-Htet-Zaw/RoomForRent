@@ -17,6 +17,8 @@ import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.models.House
 import com.example.roomforrent.services.SearchRoomService
 import com.example.roomforrent.services.ServiceBuilder
+import com.example.roomforrent.utils.Constants.CALLAPI
+import com.example.roomforrent.utils.Constants.GetAllRoomList
 import com.example.roomforrent.utils.Constants.categoryArr
 import com.example.roomforrent.utils.Constants.periodArr
 import com.example.roomforrent.utils.Constants.townshipArr
@@ -28,7 +30,6 @@ import retrofit2.Response
 
 class SearchFragment : Fragment() {
 
-    lateinit var callGetAllRoomList: Call<List<House>>
     lateinit var categoryAdapter: MySpinnerAdapter
     lateinit var townshipAdapter: MySpinnerAdapter
     lateinit var periodAdapter: MySpinnerAdapter
@@ -38,8 +39,6 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val searchRoomService = ServiceBuilder.buildService(SearchRoomService::class.java)
-        callGetAllRoomList = searchRoomService.getAllRoomList()
         townshipAdapter = context?.let { createSpinnerAdapter(it, townshipArr) }!!
         categoryAdapter = context?.let { createSpinnerAdapter(it, categoryArr) }!!
         periodAdapter = context?.let { createSpinnerAdapter(it, periodArr) }!!
@@ -102,16 +101,26 @@ class SearchFragment : Fragment() {
         }
 
         btn_serach.setOnClickListener {
+            val searchRoomService = ServiceBuilder.buildService(SearchRoomService::class.java)
             if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
                 && selectedPeroid.equals("Select")
             ) {
-                //can call all api passing parameter
-                callSearchService(callGetAllRoomList)
+
+                showHouseList(GetAllRoomList)
+                /*var callGetAllRoomList: Call<List<House>> =searchRoomService.getAllRoomList()
+                callSearchService(callGetAllRoomList)*/
             }
             else{
-                Toast.makeText(context, "needed to call api when item selected", Toast.LENGTH_SHORT).show()
+                /*var callGetRoomListByCategoryAndTownShip: Call<List<House>> = searchRoomService.getRoomListByCategoryAndTownShip(selectedCategory,selectedAddress)
+                callSearchService(callGetRoomListByCategoryAndTownShip)*/
             }
         }
+    }
+
+    private fun showHouseList(serviceType : String) {
+        val intent = Intent(context,HouseListActivity::class.java)
+        intent.putExtra(CALLAPI, serviceType)
+        startActivity(intent)
     }
 
     private fun callSearchService(callGetRoomList: Call<List<House>>) {
