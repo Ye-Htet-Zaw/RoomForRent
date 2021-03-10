@@ -1,6 +1,8 @@
 package com.example.roomforrent.activity
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -25,7 +27,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        val destinationService = ServiceBuilder.buildService(UserLoginService::class.java)
+
+        val share:SharedPreferences  = getSharedPreferences("myPreference",
+            Context.MODE_PRIVATE)
         //For Change status bar color
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
@@ -45,16 +49,19 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }else
             {
+                val destinationService = ServiceBuilder.buildService(UserLoginService::class.java)
                 callGetUser = destinationService.getUserWithEmailAndPassword(et_email.text.toString().trim(), et_password.text.toString().trim())
                 callGetUser.enqueue(object :Callback<UserLogin>{
                     override fun onFailure(call: Call<UserLogin>, t: Throwable) {
-
-                        Toast.makeText(this@LoginActivity,"Your Email and Password Something wrong",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@LoginActivity,"Your Email and Password Incorrect",Toast.LENGTH_LONG).show()
                     }
 
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-
+                        //when success use shared preferences
+                        val editor: SharedPreferences.Editor = share.edit()
+                        editor.putBoolean("isLogin", true)
+                        editor.commit()
                         Toast.makeText(this@LoginActivity,"LOGIN SUCCESSFULLY",Toast.LENGTH_LONG).show()
 
                     }
