@@ -30,6 +30,7 @@ class MyTabAdapter(
             1 -> fragment = LoginProfileFragment()
             2 -> fragment = PostHouseFragment()
             3 -> {
+                //NTTT
                 fragment = when (share.getBoolean("isLogin",false)) {
                     true -> LoginProfileFragment()
                     false -> ProfileFragment()

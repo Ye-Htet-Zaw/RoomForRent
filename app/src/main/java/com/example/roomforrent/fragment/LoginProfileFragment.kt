@@ -34,6 +34,7 @@ class LoginProfileFragment : Fragment() {
         v.ll_owner_change_password.setOnClickListener {
             startActivity(Intent(context, ChangePasswordActivity::class.java))
         }
+        //NTTT
         v.btn_owner_profile_logout.setOnClickListener {
             startActivity(Intent(context, MainActivity::class.java))
             val share: SharedPreferences = context?.getSharedPreferences("myPreference",
