@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.log
 
 class LoginActivity : AppCompatActivity() {
     lateinit var callGetUser: Call<UserLogin>
@@ -50,10 +51,12 @@ class LoginActivity : AppCompatActivity() {
             }else
             {
                 val destinationService = ServiceBuilder.buildService(UserLoginService::class.java)
-                callGetUser = destinationService.getUserWithEmailAndPassword(et_email.text.toString().trim(), et_password.text.toString().trim())
+                callGetUser = destinationService.getUserWithEmailAndPassword(et_email.text.toString().trim(),et_password.text.toString().trim())
                 callGetUser.enqueue(object :Callback<UserLogin>{
                     override fun onFailure(call: Call<UserLogin>, t: Throwable) {
                         Toast.makeText(this@LoginActivity,"Your Email and Password Incorrect",Toast.LENGTH_LONG).show()
+                        Log.e(t.message, "ERROR")
+
                     }
 
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
