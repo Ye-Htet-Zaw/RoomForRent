@@ -7,8 +7,13 @@ object Constants {
 
     //Search
     const val CALLAPI = "CallApi"
+    const val SelectedCategory = "SelectedCategory"
+    const val SelectedAddress = "SelectedAddress"
+    const val SelectedPeroid = "SelectedPeroid"
+    const val Amount = "Amount"
     const val select: String = "Select"
     const val GetAllRoomList = "GetAllRoomList"
+    const val GetRoomListByCategoryAndTownShip = "GetRoomListByCategoryAndTownShip"
 
     val townshipArr: ArrayList<String>
         get() {

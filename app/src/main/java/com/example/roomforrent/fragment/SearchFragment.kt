@@ -17,8 +17,13 @@ import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.models.House
 import com.example.roomforrent.services.SearchRoomService
 import com.example.roomforrent.services.ServiceBuilder
+import com.example.roomforrent.utils.Constants.Amount
 import com.example.roomforrent.utils.Constants.CALLAPI
 import com.example.roomforrent.utils.Constants.GetAllRoomList
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndTownShip
+import com.example.roomforrent.utils.Constants.SelectedAddress
+import com.example.roomforrent.utils.Constants.SelectedCategory
+import com.example.roomforrent.utils.Constants.SelectedPeroid
 import com.example.roomforrent.utils.Constants.categoryArr
 import com.example.roomforrent.utils.Constants.periodArr
 import com.example.roomforrent.utils.Constants.townshipArr
@@ -36,6 +41,7 @@ class SearchFragment : Fragment() {
     var selectedCategory: String = ""
     var selectedAddress: String = ""
     var selectedPeroid: String = ""
+    var amount : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,40 +107,25 @@ class SearchFragment : Fragment() {
         }
 
         btn_serach.setOnClickListener {
-            val searchRoomService = ServiceBuilder.buildService(SearchRoomService::class.java)
+            amount = edt_amount.text.toString()
             if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select")
-            ) {
-
+                && selectedPeroid.equals("Select") && amount.equals("")) {
                 showHouseList(GetAllRoomList)
-                /*var callGetAllRoomList: Call<List<House>> =searchRoomService.getAllRoomList()
-                callSearchService(callGetAllRoomList)*/
             }
             else{
-                /*var callGetRoomListByCategoryAndTownShip: Call<List<House>> = searchRoomService.getRoomListByCategoryAndTownShip(selectedCategory,selectedAddress)
-                callSearchService(callGetRoomListByCategoryAndTownShip)*/
+                showHouseList(GetAllRoomList)
             }
         }
     }
 
-    private fun showHouseList(serviceType : String) {
+    private fun showHouseList(serviceName : String) {
         val intent = Intent(context,HouseListActivity::class.java)
-        intent.putExtra(CALLAPI, serviceType)
+        intent.putExtra(CALLAPI, serviceName)
+        intent.putExtra(SelectedCategory,selectedCategory)
+        intent.putExtra(SelectedAddress,selectedAddress)
+        intent.putExtra(SelectedPeroid,selectedPeroid)
+        intent.putExtra(Amount,amount)
         startActivity(intent)
-    }
-
-    private fun callSearchService(callGetRoomList: Call<List<House>>) {
-        callGetRoomList.enqueue(object : Callback<List<House>> {
-            override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
-                Log.i("TestingSearchApi", "Success search " + response.body()!!.size)
-                val intent = Intent(context, HouseListActivity::class.java)
-                startActivity(intent)
-            }
-
-            override fun onFailure(call: Call<List<House>>, t: Throwable) {
-                Log.i("TestingSearchApi", "fail search" + t.message)
-            }
-        })
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
