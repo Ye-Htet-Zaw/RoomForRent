@@ -38,10 +38,10 @@
                 android:layout_height="@dimen/detail_image_height"
                 android:src="@drawable/group"/>
             <TextView
+                android:id="@+id/no_of_guests_information"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Limit 5 guests"
                 android:textColor="#7A8089"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -58,10 +58,10 @@
                 android:layout_height="@dimen/detail_image_height"
                 android:src="@drawable/area"/>
             <TextView
+                android:id="@+id/house_area"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="3000 sqft"
                 android:textColor="#7A8089"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -78,10 +78,10 @@
                 android:layout_height="@dimen/detail_image_height"
                 android:src="@drawable/toilet"/>
             <TextView
+                android:id="@+id/no_of_toilet"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="3 toilets"
                 android:textColor="#7A8089"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -98,10 +98,10 @@
                 android:layout_height="@dimen/detail_image_height"
                 android:src="@drawable/shower"/>
             <TextView
+                android:id="@+id/no_of_bath"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2 baths"
                 android:textColor="#7A8089"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -118,10 +118,10 @@
                 android:layout_height="@dimen/detail_image_height"
                 android:src="@drawable/bed"/>
             <TextView
+                android:id="@+id/no_of_bedroom"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2 bedroom"
                 android:textColor="#7A8089"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -138,10 +138,10 @@
                 android:layout_height="@dimen/detail_image_height"
                 android:src="@drawable/wifi"/>
             <TextView
+                android:id="@+id/house_wifi"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Free"
                 android:textColor="#7A8089"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -158,10 +158,10 @@
                 android:layout_height="@dimen/detail_image_height"
                 android:src="@drawable/aircon"/>
             <TextView
+                android:id="@+id/no_of_aircon"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="3 Aircons"
                 android:textColor="#7A8089"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -178,10 +178,10 @@
                 android:layout_height="@dimen/detail_image_height"
                 android:src="@drawable/apartment"/>
             <TextView
+                android:id="@+id/no_of_floor"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2 Floor"
                 android:textColor="#7A8089"
                 android:textSize="16sp" />
         </LinearLayout>

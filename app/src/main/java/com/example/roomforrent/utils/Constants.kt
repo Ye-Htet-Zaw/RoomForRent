@@ -5,6 +5,16 @@ import kotlin.collections.ArrayList
 
 object Constants {
 
+    //Search
+    const val CALLAPI = "CallApi"
+    const val SelectedCategory = "SelectedCategory"
+    const val SelectedAddress = "SelectedAddress"
+    const val SelectedPeroid = "SelectedPeroid"
+    const val Amount = "Amount"
+    const val select: String = "Select"
+    const val GetAllRoomList = "GetAllRoomList"
+    const val GetRoomListByCategoryAndTownShip = "GetRoomListByCategoryAndTownShip"
+
     val townshipArr: ArrayList<String>
         get() {
             val towhshipArr = ArrayList(
@@ -88,7 +98,7 @@ object Constants {
             return periodArr
         }
 
-    const val select: String = "Select"
+
 
     //Township
     const val Ahlon: String = "Ahlon"
@@ -148,5 +158,19 @@ object Constants {
     const val SixMonths: String = "6"
     const val OneYear: String = "12"
     const val TwoYears: String = "24"
+
+    //HouseDetail
+    const val NO_OF_GUESTS: String = "no_of_guests"
+    const val AREA: String = "area"
+    const val NO_OF_TOILET: String = "no_of_toilet"
+    const val NO_OF_BATH: String = "no_of_bath"
+    const val NO_OF_BEDROOM: String = "no_of_bedroom"
+    const val WIFI: String = "wifi"
+    const val NO_OF_AIRCON: String = "no_of_aircon"
+    const val NO_OF_FLOOR: String = "no_of_floor"
+    const val CONTRACT_RULE: String = "contract_rule"
+
+
+
 
 }
