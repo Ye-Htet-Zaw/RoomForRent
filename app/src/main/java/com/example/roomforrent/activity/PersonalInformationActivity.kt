@@ -4,8 +4,11 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.RadioButton
@@ -14,6 +17,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.example.roomforrent.R
 import com.example.roomforrent.models.User
 import com.example.roomforrent.services.ServiceBuilder
@@ -31,6 +35,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class PersonalInformationActivity : AppCompatActivity() {
 
@@ -86,17 +91,33 @@ class PersonalInformationActivity : AppCompatActivity() {
             }
         }//end of gender
 
-        //when click on edit text birth date to change date of birth
+
         val editText = findViewById<EditText>(R.id.et_birth_date)
-        // editText.isFocusable = false
         editText.setOnClickListener() { view->
             clickDatePicker(view)
 
         }//end of dateTime
 
+        //if save text is clicked ,updatefun is worked
         tv_title.setOnClickListener { view->
             updatePersonalInfo(view, "USE0000001")
         }
+
+        //if user name is inputed error msg is showed
+        et_user_name.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+               tv_user_name_error.isVisible=false
+            }
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+
+
 
 
     }//end of onCreate
@@ -133,7 +154,7 @@ class PersonalInformationActivity : AppCompatActivity() {
                 ).show()
 
                 //insert dateString to give it to db
-                dateString="$Selectedyear-${Selectedmonth + 1}-$SelecteddayOfMonth"
+                dateString = "$Selectedyear-${Selectedmonth + 1}-$SelecteddayOfMonth"
 
                 //to show in android
                 val selectedDate = "$SelecteddayOfMonth/${Selectedmonth + 1}/$Selectedyear"
@@ -166,7 +187,7 @@ class PersonalInformationActivity : AppCompatActivity() {
                         "user name is ${user.user_name}",
                         Toast.LENGTH_SHORT
                     ).show()
-                    et_first_name.setText(user.user_name)
+                    et_user_name.setText(user.user_name)
                     when (user.user_gender) {
                         0 -> et_gender.setText("Male")
                         1 -> et_gender.setText("Female")
@@ -175,7 +196,7 @@ class PersonalInformationActivity : AppCompatActivity() {
                     }
 
                     //assign date from db to local var to show in android screen
-                    var dateFromDb:Date = user.user_dob
+                    var dateFromDb: Date = user.user_dob
                     //to show date from db to android
                     val pattern = "dd/MM/yyyy"
                     val simpleDateFormat = SimpleDateFormat(pattern)
@@ -215,7 +236,7 @@ class PersonalInformationActivity : AppCompatActivity() {
     //to update personal info
     private fun updatePersonalInfo(view: View, user_id: String){
 
-        var name = et_first_name.text.toString()
+        var name = et_user_name.text.toString()
         var selectedGender=et_gender.text.toString()
         var gender=0
         when(selectedGender){
@@ -227,48 +248,63 @@ class PersonalInformationActivity : AppCompatActivity() {
         var phoneOne=et_phone_num1.text.toString()
         var phoneTwo=et_phone_num2.text.toString()
 
+      if(name.isEmpty()){
+           tv_user_name_error.text="Name must not be empty"
+           tv_user_name_error.isVisible=true
 
-        // Create JSON using JSONObject
-        val jsonObject = JSONObject()
-        jsonObject.put("user_id", user_id)
-        jsonObject.put("user_name", name)
-        jsonObject.put("user_email", email)
-        jsonObject.put("phone_one", phoneOne)
-        jsonObject.put("phone_two", phoneTwo)
-        jsonObject.put("user_gender", gender)
+       }else if(name[0].isDigit()){
+              tv_user_name_error.text="Name should start with A-Z"
+              tv_user_name_error.isVisible=true
 
-        if(dateString==null) {
-            jsonObject.put("dobString", dateFromDbString)
-        }else{
-            jsonObject.put("dobString", dateString)
-        }
+       }else{
 
-        jsonObject.put("updater_id", user_id)
+           // Create JSON using JSONObject
+           val jsonObject = JSONObject()
+           jsonObject.put("user_id", user_id)
+           jsonObject.put("user_name", name)
+           jsonObject.put("user_email", email)
+           jsonObject.put("phone_one", phoneOne)
+           jsonObject.put("phone_two", phoneTwo)
+           jsonObject.put("user_gender", gender)
+
+           if(dateString==null) {
+               jsonObject.put("dobString", dateFromDbString)
+           }else{
+               jsonObject.put("dobString", dateString)
+           }
+
+           jsonObject.put("updator_id", user_id)
 
 
-        // Convert JSONObject to String
-        val jsonObjectString = jsonObject.toString()
-       // Create RequestBody
-        val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
-        CoroutineScope(Dispatchers.IO).launch {
-            val destinationService  = ServiceBuilder.buildService(UserProfileService::class.java)
-            val response =destinationService.updateUserInfo(requestBody)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    Toast.makeText(
-                        this@PersonalInformationActivity,
-                        "successful updated",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    //val intent= Intent(this@PersonalInformationActivity,MainActivity::class.java)
-                    //startActivity(intent)
-                } else {
-                    Log.e("RETROFIT_ERROR", response.code().toString())
-                    Toast.makeText(this@PersonalInformationActivity, "Updated Fail", Toast.LENGTH_SHORT).show()
+           // Convert JSONObject to String
+           val jsonObjectString = jsonObject.toString()
+           // Create RequestBody
+           val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
+           CoroutineScope(Dispatchers.IO).launch {
+               val destinationService  = ServiceBuilder.buildService(UserProfileService::class.java)
+               val response =destinationService.updateUserInfo(requestBody)
+               withContext(Dispatchers.Main) {
+                   if (response.isSuccessful) {
+                       Toast.makeText(
+                           this@PersonalInformationActivity,
+                           "successful updated",
+                           Toast.LENGTH_SHORT
+                       ).show()
+                       //val intent= Intent(this@PersonalInformationActivity,MainActivity::class.java)
+                       //startActivity(intent)
+                   } else {
+                       Log.e("RETROFIT_ERROR", response.code().toString())
+                       Toast.makeText(
+                           this@PersonalInformationActivity,
+                           "Updated Fail",
+                           Toast.LENGTH_SHORT
+                       ).show()
 
-                }
-            }
-        }
+                   }
+               }
+           }
+
+       }
 
 
     }

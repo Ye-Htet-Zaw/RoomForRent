@@ -60,7 +60,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!--first name description text-->
+        <!-- name description text-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,16 +68,16 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_first_name_description"
+                android:id="@+id/tv_user_name_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="@string/personal_info_des_first_name"
+                android:text="@string/personal_info_des_user_name"
                 android:textColor="@color/grey"
                 android:textSize="@dimen/owner_personal_info_text_size" />
 
             <EditText
-                android:id="@+id/et_first_name"
+                android:id="@+id/et_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -87,36 +87,16 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/owner_name_text_size" />
 
-        </LinearLayout>
-
-
-        <!--last name text-->
-        <!--<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/personal_info_layout_padding"
-            android:orientation="vertical">
-
             <TextView
-                android:id="@+id/tv_last_name_description"
+                android:id="@+id/tv_user_name_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:text="@string/personal_info_des_last_name"
-                android:textColor="@color/grey"
+                android:textColor="@color/red"
+                android:visibility="gone"
                 android:textSize="@dimen/owner_personal_info_text_size" />
 
-            <EditText
-                android:id="@+id/et_last_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto"
-                android:inputType="text"
-                android:text="@string/personal_info_last_name"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/grey"
-                android:textSize="@dimen/owner_name_text_size" />
-        </LinearLayout>-->
+        </LinearLayout>
 
         <!--gender text-->
         <LinearLayout
