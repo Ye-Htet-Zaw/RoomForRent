@@ -299,10 +299,6 @@
                    app:backgroundTint="@color/white"
                    app:backgroundTintMode="multiply" />
 
-            <include
-                android:layout_marginTop="10dp"
-                layout="@layout/activity_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+
         </LinearLayout>
 </ScrollView>

@@ -9,6 +9,6 @@ data class User(val user_id:String,val user_name:String,
                 val user_gender:Int,val user_dob:Date,val dobString:String,
                 val user_position:Int,val user_delete_flag:Int,
                 val delete_dateTime:Date,val creator_id:String,
-                val creator_dateTime:Date,val updater_id:String,
+                val creator_dateTime:Date,val updator_id:String,
                 val update_dateTime:Date
 )
