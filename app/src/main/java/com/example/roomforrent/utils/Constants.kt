@@ -14,6 +14,20 @@ object Constants {
     const val select: String = "Select"
     const val GetAllRoomList = "GetAllRoomList"
     const val GetRoomListByCategoryAndTownShip = "GetRoomListByCategoryAndTownShip"
+    const val GetRoomListByCategory = "GetRoomListByCategory"
+    const val GetRoomListByTownship = "GetRoomListByTownship"
+    const val GetRoomListByAmount = "GetRoomListByAmount"
+    const val GetRoomListByPeriod = "GetRoomListByPeriod"
+    const val GetRoomListByCategoryAndAmount = "GetRoomListByCategoryAndAmount"
+    const val GetRoomListByCategoryAndPeriod = "GetRoomListByCategoryAndPeriod"
+    const val GetRoomListByTownShipAndRent = "GetRoomListByTownShipAndRent"
+    const val GetRoomListByTownShipAndPeriod = "GetRoomListByTownShipAndPeriod"
+    const val GetRoomListByAmountAndPeriod = "GetRoomListByAmountAndPeriod"
+    const val GetRoomListByCategoryAndAddressAndPeriod = "GetRoomListByCategoryAndAddressAndPeriod"
+    const val GetRoomListByCategoryAndAddressAndAmount = "GetRoomListByCategoryAndAddressAndAmount"
+    const val GetRoomListByCategoryAndAmountAndPeriod = "GetRoomListByCategoryAndAmountAndPeriod"
+    const val GetRoomListByAddressAndAmountAndPeriod = "GetRoomListByAddressAndAmountAndPeriod"
+    const val GetRoomListByAll = "GetRoomListByAll"
 
     val townshipArr: ArrayList<String>
         get() {
