@@ -94,7 +94,7 @@
         <dimen name="personal_info_toolbar_textsize">16sp</dimen>
         <dimen name="personal_info_marginTop">10dp</dimen>
         <dimen name="personal_info_layout_padding">10dp</dimen>
-        <dimen name="personal_info_toolbar_textview_marginLeft">300dp</dimen>
+        <dimen name="personal_info_toolbar_textview_marginLeft">250dp</dimen>
 
         <!-- house detail -->
         <dimen name="linear_padding">15dp</dimen>

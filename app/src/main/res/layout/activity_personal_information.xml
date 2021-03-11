@@ -25,6 +25,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@drawable/toolbarbg">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/personal_info_toolbar_text"
+                    android:layout_marginLeft="@dimen/personal_info_toolbar_textview_marginLeft"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/personal_info_toolbar_textsize"
+                    android:textStyle="bold" />
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -159,9 +170,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
                 android:inputType="text"
-                android:focusable="false"
                 android:text="2/2/2019"
                 android:backgroundTint="@color/grey"
+                android:focusable="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/owner_name_text_size" />
         </LinearLayout>
@@ -190,6 +201,10 @@
                 android:inputType="text"
                 android:text="chawsuu@gmail.com"
                 android:backgroundTint="@color/grey"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/owner_name_text_size" />
         </LinearLayout>
@@ -218,6 +233,10 @@
                 android:inputType="text"
                 android:text="0977777777777"
                 android:backgroundTint="@color/grey"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/owner_name_text_size" />
         </LinearLayout>
@@ -246,6 +265,10 @@
                 android:inputType="text"
                 android:text="0977777777774"
                 android:backgroundTint="@color/grey"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/owner_name_text_size" />
         </LinearLayout>
