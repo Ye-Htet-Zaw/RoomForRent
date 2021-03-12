@@ -2,10 +2,12 @@ package com.example.roomforrent.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -40,6 +42,7 @@ import com.example.roomforrent.utils.Constants.GetRoomListByTownship
 import com.example.roomforrent.utils.Constants.SelectedAddress
 import com.example.roomforrent.utils.Constants.SelectedCategory
 import com.example.roomforrent.utils.Constants.SelectedPeroid
+import kotlinx.android.synthetic.main.activity_house_detail.*
 import kotlinx.android.synthetic.main.activity_house_list.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -230,6 +233,7 @@ class HouseListActivity : AppCompatActivity() {
         callGetRoomList.enqueue(object : Callback<List<House>> {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 if (response.isSuccessful) {
+                    progress.visibility= View.GONE
                     val houseList = response.body()!! as List<House>
                     Log.d("Response", "houseList size : ${houseList.size}")
                     adapter.setData(houseList as ArrayList<House>)
