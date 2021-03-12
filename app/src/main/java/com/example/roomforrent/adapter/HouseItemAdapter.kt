@@ -12,6 +12,7 @@ import com.example.roomforrent.R
 import com.example.roomforrent.models.House
 import com.example.roomforrent.models.HouseList
 import kotlinx.android.synthetic.main.house_item.view.*
+import com.squareup.picasso.Picasso
 
 class HouseItemAdapter(val context: Context) :
     RecyclerView.Adapter<HouseItemAdapter.ViewHolder>() {
@@ -78,7 +79,7 @@ class HouseItemAdapter(val context: Context) :
         fun bindView(item: House?) {
             itemView.tv_address.text = item?.house_ADDRESS.toString()
             itemView.tv_price.text = item?.rent.toString()
-            //Picasso.get().load("http://192.168.100.4:9090/images/${item?.id}.jpg").into(itemView.img_photo)
+            Picasso.get().load("http://192.168.100.4:9090/images/${item?.house_ID}/1.jpg").into(itemView.iv_roomImg)
         }
 
     }
