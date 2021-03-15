@@ -23,6 +23,7 @@ import com.example.roomforrent.models.User
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserProfileService
 import kotlinx.android.synthetic.main.activity_personal_information.*
+import kotlinx.android.synthetic.main.fragment_login_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -292,6 +293,7 @@ class PersonalInformationActivity : AppCompatActivity() {
                        ).show()
                        //val intent= Intent(this@PersonalInformationActivity,MainActivity::class.java)
                        //startActivity(intent)
+                       //tv_owner_name.text=et_user_name.text.toString()
                    } else {
                        Log.e("RETROFIT_ERROR", response.code().toString())
                        Toast.makeText(
