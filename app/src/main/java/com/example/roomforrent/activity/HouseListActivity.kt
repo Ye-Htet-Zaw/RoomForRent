@@ -2,10 +2,12 @@ package com.example.roomforrent.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -22,10 +24,25 @@ import com.example.roomforrent.utils.Constants
 import com.example.roomforrent.utils.Constants.Amount
 import com.example.roomforrent.utils.Constants.CALLAPI
 import com.example.roomforrent.utils.Constants.GetAllRoomList
+import com.example.roomforrent.utils.Constants.GetRoomListByAddressAndAmountAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByAll
+import com.example.roomforrent.utils.Constants.GetRoomListByAmount
+import com.example.roomforrent.utils.Constants.GetRoomListByAmountAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategory
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAddressAndAmount
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAddressAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAmount
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAmountAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndPeriod
 import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndTownShip
+import com.example.roomforrent.utils.Constants.GetRoomListByPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByTownShipAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByTownShipAndRent
+import com.example.roomforrent.utils.Constants.GetRoomListByTownship
 import com.example.roomforrent.utils.Constants.SelectedAddress
 import com.example.roomforrent.utils.Constants.SelectedCategory
 import com.example.roomforrent.utils.Constants.SelectedPeroid
+import kotlinx.android.synthetic.main.activity_house_detail.*
 import kotlinx.android.synthetic.main.activity_house_list.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,6 +101,27 @@ class HouseListActivity : AppCompatActivity() {
                 callSearchService(callGetAllRoomList)
             }
 
+            GetRoomListByCategory ->{
+                val callGetRoomListByCategory: Call<List<House>> = searchRoomService.getRoomListByCategory(selectedCategory)
+                callSearchService(callGetRoomListByCategory)
+            }
+
+            GetRoomListByTownship ->{
+                val callGetRoomListByTownship: Call<List<House>> = searchRoomService.getRoomListByTownship(selectedAddress)
+                callSearchService(callGetRoomListByTownship)
+            }
+
+            GetRoomListByPeriod ->{
+                val callGetRoomListByPeriod: Call<List<House>> = searchRoomService.getRoomListByPeroid(3)
+                callSearchService(callGetRoomListByPeriod)
+
+            }
+
+            GetRoomListByAmount ->{
+                val callGetRoomListByAmount: Call<List<House>> = searchRoomService.getRoomListByAmount(amount.toInt())
+                callSearchService(callGetRoomListByAmount)
+            }
+
             GetRoomListByCategoryAndTownShip -> {
                 val callGetRoomListByCategoryAndTownShip: Call<List<House>> =
                     searchRoomService.getRoomListByCategoryAndTownShip(
@@ -93,6 +131,101 @@ class HouseListActivity : AppCompatActivity() {
                 callSearchService(callGetRoomListByCategoryAndTownShip)
             }
 
+            GetRoomListByCategoryAndPeriod ->{
+                val callGetRoomListByCategoryAndPeriod: Call<List<House>> =
+                    searchRoomService.getRoomListByCategoryAndPeriod(
+                        selectedCategory,
+                        selectedPeroid.toInt()
+                    )
+                callSearchService(callGetRoomListByCategoryAndPeriod)
+            }
+
+            GetRoomListByCategoryAndAmount -> {
+                val callGetRoomListByCategoryAndAmount: Call<List<House>> =
+                    searchRoomService.getRoomListByCategoryAndAmount(
+                        selectedCategory,
+                        amount.toInt()
+                    )
+                callSearchService(callGetRoomListByCategoryAndAmount)
+            }
+
+            GetRoomListByTownShipAndRent -> {
+                val callGetRoomListByTownShipAndRent: Call<List<House>> =
+                    searchRoomService.getRoomListByTownshipAndRent(
+                        selectedAddress,
+                        amount.toInt()
+                    )
+                callSearchService(callGetRoomListByTownShipAndRent)
+            }
+
+            GetRoomListByTownShipAndPeriod -> {
+                val callGetRoomListByTownShipAndPeriod: Call<List<House>> =
+                    searchRoomService.getRoomListByTownshipAndPeriod(
+                        selectedAddress,
+                        selectedPeroid.toInt()
+                    )
+                callSearchService(callGetRoomListByTownShipAndPeriod)
+            }
+
+            GetRoomListByAmountAndPeriod ->{
+                val callGetRoomListByAmountAndPeriod: Call<List<House>> =
+                    searchRoomService.getRoomListByAmountAndPeriod(
+                        amount.toInt(),
+                        selectedPeroid.toInt()
+                    )
+                callSearchService(callGetRoomListByAmountAndPeriod)
+            }
+
+            GetRoomListByCategoryAndAddressAndPeriod ->{
+                val callGetRoomListByCategoryAndAddressAndPeriod: Call<List<House>> =
+                    searchRoomService.getRoomListByCategoryAndAddressAndPeriod(
+                        selectedCategory,
+                        selectedAddress,
+                        selectedPeroid.toInt()
+                    )
+                callSearchService(callGetRoomListByCategoryAndAddressAndPeriod)
+            }
+
+            GetRoomListByCategoryAndAddressAndAmount ->{
+                val callGetRoomListByCategoryAndAddressAndAmount: Call<List<House>> =
+                    searchRoomService.getRoomListByCategoryAndAddressAndAmount(
+                        selectedCategory,
+                        selectedAddress,
+                        amount.toInt()
+                    )
+                callSearchService(callGetRoomListByCategoryAndAddressAndAmount)
+            }
+
+            GetRoomListByCategoryAndAmountAndPeriod ->{
+                val callGetRoomListByCategoryAndAmountAndPeriod: Call<List<House>> =
+                    searchRoomService.getRoomListByCategoryAndAmountAndPeriod(
+                        selectedCategory,
+                        selectedPeroid.toInt(),
+                        amount.toInt()
+                    )
+                callSearchService(callGetRoomListByCategoryAndAmountAndPeriod)
+            }
+
+            GetRoomListByAddressAndAmountAndPeriod ->{
+                val callGetRoomListByAddressAndAmountAndPeriod: Call<List<House>> =
+                    searchRoomService.getRoomListByAddressAndAmountAndPeriod(
+                        selectedAddress,
+                        selectedPeroid.toInt(),
+                        amount.toInt()
+                    )
+                callSearchService(callGetRoomListByAddressAndAmountAndPeriod)
+            }
+
+            GetRoomListByAll ->{
+                val callGetRoomListByAll: Call<List<House>> =
+                    searchRoomService.getRoomListByAll(
+                        selectedCategory,
+                        selectedAddress,
+                        selectedPeroid.toInt(),
+                        amount.toInt()
+                    )
+                callSearchService(callGetRoomListByAll)
+            }
         }
     }
 
@@ -100,6 +233,7 @@ class HouseListActivity : AppCompatActivity() {
         callGetRoomList.enqueue(object : Callback<List<House>> {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 if (response.isSuccessful) {
+                    progress.visibility= View.GONE
                     val houseList = response.body()!! as List<House>
                     Log.d("Response", "houseList size : ${houseList.size}")
                     adapter.setData(houseList as ArrayList<House>)
@@ -113,7 +247,7 @@ class HouseListActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<House>>, t: Throwable) {
-                Log.d("Response", "fail service call")
+                Log.d("Response", "fail service call ${t.message}")
             }
         })
     }

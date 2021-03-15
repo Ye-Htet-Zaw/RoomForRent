@@ -20,7 +20,21 @@ import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants.Amount
 import com.example.roomforrent.utils.Constants.CALLAPI
 import com.example.roomforrent.utils.Constants.GetAllRoomList
+import com.example.roomforrent.utils.Constants.GetRoomListByAddressAndAmountAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByAll
+import com.example.roomforrent.utils.Constants.GetRoomListByAmount
+import com.example.roomforrent.utils.Constants.GetRoomListByAmountAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategory
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAddressAndAmount
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAddressAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAmount
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAmountAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndPeriod
 import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndTownShip
+import com.example.roomforrent.utils.Constants.GetRoomListByPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByTownShipAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByTownShipAndRent
+import com.example.roomforrent.utils.Constants.GetRoomListByTownship
 import com.example.roomforrent.utils.Constants.SelectedAddress
 import com.example.roomforrent.utils.Constants.SelectedCategory
 import com.example.roomforrent.utils.Constants.SelectedPeroid
@@ -107,13 +121,73 @@ class SearchFragment : Fragment() {
         }
 
         btn_serach.setOnClickListener {
-            amount = edt_amount.text.toString()
+            amount = edt_amount.text.toString().trim()
             if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
                 && selectedPeroid.equals("Select") && amount.equals("")) {
                 showHouseList(GetAllRoomList)
             }
+            else if(!selectedCategory.equals("Select")&& selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")){
+                showHouseList(GetRoomListByCategory)
+            }
+            else if(selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")){
+                showHouseList(GetRoomListByTownship)
+            }
+            else if(selectedCategory.equals("Select")&& selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")){
+                showHouseList(GetRoomListByPeriod)
+            }
+            else if(selectedCategory.equals("Select")&& selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")){
+                showHouseList(GetRoomListByAmount)
+            }
+            else if(!selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")){
+                showHouseList(GetRoomListByCategoryAndTownShip)
+            }
+            else if(!selectedCategory.equals("Select")&& selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")){
+                showHouseList(GetRoomListByCategoryAndPeriod)
+            }
+
+            else if(!selectedCategory.equals("Select")&& selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")){
+                showHouseList(GetRoomListByCategoryAndAmount)
+            }
+            else if(selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")){
+                showHouseList(GetRoomListByTownShipAndRent)
+            }
+            else if(selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")){
+                showHouseList(GetRoomListByTownShipAndPeriod)
+            }
+
+            else if(selectedCategory.equals("Select")&& selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && !amount.equals("")){
+                showHouseList(GetRoomListByAmountAndPeriod)
+            }
+
+            else if(!selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")){
+                showHouseList(GetRoomListByCategoryAndAddressAndPeriod)
+            }
+
+            else if(!selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")){
+                showHouseList(GetRoomListByCategoryAndAddressAndAmount)
+            }
+            else if(!selectedCategory.equals("Select")&& selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && !amount.equals("")){
+                showHouseList(GetRoomListByCategoryAndAmountAndPeriod)
+            }
+            else if(selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && !amount.equals("")){
+                showHouseList(GetRoomListByAddressAndAmountAndPeriod)
+            }
             else{
-                showHouseList(GetAllRoomList)
+                showHouseList(GetRoomListByAll)
             }
         }
     }
