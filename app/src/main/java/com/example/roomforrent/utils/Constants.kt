@@ -174,6 +174,13 @@ object Constants {
     const val TwoYears: String = "24"
 
     //HouseDetail
+    const val HOUSE_ADDRESS: String = "house_address"
+    const val RECOMMENTED_POINT: String = "recommented_point"
+    const val CONTACT_ONE: String = "contact_one"
+    const val CONTACT_TWO: String = "contact_two"
+    const val AMOUNT: String = "amount"
+    const val DEPOSIT: String = "deposit"
+    const val AVAILABLE_DATE: String = "available_date"
     const val NO_OF_GUESTS: String = "no_of_guests"
     const val AREA: String = "area"
     const val NO_OF_TOILET: String = "no_of_toilet"
@@ -183,6 +190,8 @@ object Constants {
     const val NO_OF_AIRCON: String = "no_of_aircon"
     const val NO_OF_FLOOR: String = "no_of_floor"
     const val CONTRACT_RULE: String = "contract_rule"
+    const val HOUSE_IMAGE: String = "house_image"
+
 
 
 

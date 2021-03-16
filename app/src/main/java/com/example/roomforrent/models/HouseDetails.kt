@@ -1,9 +1,8 @@
 package com.example.roomforrent.models
 
-import java.util.*
-
 data  class HouseDetails(
         val house_address: String,
+        val house_image: ArrayList<String>,
         val no_of_guests: Int,
         val no_of_room: Int,
         val no_of_bath: Int,

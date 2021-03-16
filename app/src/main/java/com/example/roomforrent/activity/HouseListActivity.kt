@@ -6,6 +6,7 @@ import android.opengl.Visibility
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -16,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.roomforrent.adapter.HouseItemAdapter
 import com.example.roomforrent.R
 import com.example.roomforrent.models.House
+import com.example.roomforrent.models.HouseDetails
 import com.example.roomforrent.models.HouseList
 import com.example.roomforrent.services.HouseListService
+import com.example.roomforrent.services.RoomForRentService
 import com.example.roomforrent.services.SearchRoomService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
@@ -237,6 +240,12 @@ class HouseListActivity : AppCompatActivity() {
                     val houseList = response.body()!! as List<House>
                     Log.d("Response", "houseList size : ${houseList.size}")
                     adapter.setData(houseList as ArrayList<House>)
+                    adapter.setOnClickListener(object : HouseItemAdapter.OnClickListener{
+                        override fun onClick(position: Int, model: House) {
+                            getDetailData(model.house_ID)
+                        }
+
+                    })
                 } else {
                     Toast.makeText(
                         this@HouseListActivity,
@@ -252,6 +261,34 @@ class HouseListActivity : AppCompatActivity() {
         })
     }
 
+    private fun getDetailData(mDetailId: String) {
+        val destinationService = ServiceBuilder.buildService(RoomForRentService::class.java)
+        val requestCall = destinationService.getHouseDetailById(mDetailId)
+
+        requestCall.enqueue(object : Callback<HouseDetails> {
+            override fun onResponse(call: Call<HouseDetails>, response: Response<HouseDetails>) {
+                var postlist: HouseDetails = response.body() as HouseDetails
+
+                var intent = Intent(this@HouseListActivity,HouseDetailActivity::class.java)
+                intent.putStringArrayListExtra(Constants.HOUSE_IMAGE, ArrayList<String>(postlist.house_image))
+                intent.putExtra(Constants.HOUSE_ADDRESS, postlist.house_address)
+                intent.putExtra(Constants.NO_OF_GUESTS, postlist.no_of_guests)
+                intent.putExtra(Constants.RECOMMENTED_POINT, postlist.recommented_points)
+                intent.putExtra(Constants.CONTACT_ONE, postlist.phone_one)
+                intent.putExtra(Constants.CONTACT_TWO, postlist.phone_two)
+                intent.putExtra(Constants.AMOUNT, postlist.rent)
+                intent.putExtra(Constants.DEPOSIT, postlist.deposit)
+                intent.putExtra(Constants.AVAILABLE_DATE, postlist.available_date)
+
+                startActivity(intent)
+            }
+
+            override fun onFailure(call: Call<HouseDetails>, t: Throwable) {
+                Toast.makeText(this@HouseListActivity, "Something went wrong $t", Toast.LENGTH_SHORT)
+            }
+        })
+    }
+
     private fun initAdapter() {
         adapter = HouseItemAdapter(this)
 
@@ -259,11 +296,12 @@ class HouseListActivity : AppCompatActivity() {
         recycler_view_items.layoutManager = LinearLayoutManager(this)
         recycler_view_items.adapter = adapter
 
-        adapter.setOnClickListener(object : HouseItemAdapter.OnClickListener {
+        /*adapter.setOnClickListener(object : HouseItemAdapter.OnClickListener {
             override fun onClick() {
-                startActivity(Intent(this@HouseListActivity, HouseDetailActivity::class.java))
+                var intent = Intent(this@HouseListActivity, HouseDetailActivity::class.java)
+                startActivity(intent)
             }
-        })
+        })*/
     }
 
 

@@ -36,6 +36,7 @@ class HouseItemAdapter(val context: Context) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val model = houseData!![position]
         var changeColor: Boolean = true
         holder.ivHeart.setOnClickListener {
             changeColor = onClick(holder.ivHeart, changeColor)
@@ -47,7 +48,7 @@ class HouseItemAdapter(val context: Context) :
 
         holder.itemView.setOnClickListener {
             if (onClickListener != null) {
-                onClickListener!!.onClick()
+                onClickListener!!.onClick(position, model)
             }
         }
 
@@ -79,13 +80,13 @@ class HouseItemAdapter(val context: Context) :
         fun bindView(item: House?) {
             itemView.tv_address.text = item?.house_ADDRESS.toString()
             itemView.tv_price.text = item?.rent.toString()
-            Picasso.get().load("http://192.168.100.4:9090/images/${item?.house_ID}/1.jpg").into(itemView.iv_roomImg)
+            Picasso.get().load("http://192.168.1.4:8080/images/${item?.house_ID}/1.jpg").into(itemView.iv_roomImg)
         }
 
     }
 
     interface OnClickListener {
-        fun onClick()
+        fun onClick(position: Int, model: House)
     }
 
     fun setOnClickListener(onClickListener: OnClickListener) {

@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.squareup.picasso.Picasso
+import com.synnapps.carouselview.ImageListener
 import kotlinx.android.synthetic.main.activity_house_detail.*
 import kotlinx.android.synthetic.main.activity_house_information.*
 import retrofit2.Call
@@ -30,6 +33,8 @@ import retrofit2.Response
 class HouseDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var houseDetails: HouseDetails
+    private var houseImage: ArrayList<String>? = null
+    private var houDetail: HouseDetails? = null
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +55,65 @@ class HouseDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.miniMap) as SupportMapFragment
         mapFragment.getMapAsync(this)
         setupActionBar()
-        loadHouseDetails()
+        //loadHouseDetails()
+        loadHouseDetailsData()
+    }
+
+    private fun loadHouseDetailsData() {
+        if (intent.hasExtra(Constants.HOUSE_IMAGE)){
+            houseImage =  intent.getStringArrayListExtra(Constants.HOUSE_IMAGE)
+        }
+
+        if (intent.hasExtra(Constants.HOUSE_ADDRESS)){
+            house_Address.text =  intent.getStringExtra(Constants.HOUSE_ADDRESS)
+        }
+
+        if (intent.hasExtra(Constants.NO_OF_GUESTS)){
+            no_of_guests_detail.text =  intent.getStringExtra(Constants.NO_OF_GUESTS)
+        }
+
+        if (intent.hasExtra(Constants.RECOMMENTED_POINT)){
+            recommended_point.text =  intent.getStringExtra(Constants.RECOMMENTED_POINT)
+        }
+
+        if (intent.hasExtra(Constants.CONTACT_ONE)){
+            phone_one.text =  intent.getStringExtra(Constants.CONTACT_ONE)
+        }
+
+        if (intent.hasExtra(Constants.CONTACT_TWO)){
+            phone_two.text =  intent.getStringExtra(Constants.CONTACT_TWO)
+        }
+
+        if (intent.hasExtra(Constants.AMOUNT)){
+            house_rent.text =  intent.getStringExtra(Constants.AMOUNT)
+        }
+
+        if (intent.hasExtra(Constants.DEPOSIT)){
+            house_deposit.text =  intent.getStringExtra(Constants.DEPOSIT)
+        }
+
+        if (intent.hasExtra(Constants.AVAILABLE_DATE)){
+            available_date.text =  intent.getStringExtra(Constants.AVAILABLE_DATE)
+        }
+
+
+            /*val product  = intent.getParcelableExtra<HouseDetails>(Constants.HOUSE_IMAGE)
+
+            product!!.area
+        Toast.makeText(this@HouseDetailActivity, "TEST "+product!!.area, Toast.LENGTH_SHORT).show()*/
+
+
+
+
+
+        var imageListener: ImageListener = object : ImageListener{
+            override fun setImageForPosition(position: Int, imageView: ImageView?) {
+                Picasso.get().load(houseImage!![position]).into(imageView)
+            }
+        }
+
+        carouselView.pageCount= houseImage!!.size
+        carouselView.setImageListener(imageListener)
     }
 
     private fun loadHouseDetails() {
