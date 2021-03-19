@@ -2,11 +2,8 @@ package com.example.roomforrent.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -51,7 +48,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HouseListActivity : AppCompatActivity() {
+class HouseListActivity : BaseActivity() {
 
     lateinit var adapter: HouseItemAdapter
     var serviceName: String = ""
@@ -59,6 +56,7 @@ class HouseListActivity : AppCompatActivity() {
     var selectedAddress: String = ""
     var selectedPeroid: String = ""
     var amount: String = ""
+    private lateinit var houseDetails: HouseDetails
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -242,6 +240,7 @@ class HouseListActivity : AppCompatActivity() {
                     adapter.setData(houseList as ArrayList<House>)
                     adapter.setOnClickListener(object : HouseItemAdapter.OnClickListener{
                         override fun onClick(position: Int, model: House) {
+                            showProgressDialog("Please Wait...")
                             getDetailData(model.house_ID)
                         }
 
@@ -267,20 +266,12 @@ class HouseListActivity : AppCompatActivity() {
 
         requestCall.enqueue(object : Callback<HouseDetails> {
             override fun onResponse(call: Call<HouseDetails>, response: Response<HouseDetails>) {
-                var postlist: HouseDetails = response.body() as HouseDetails
+                houseDetails= response.body() as HouseDetails
 
                 var intent = Intent(this@HouseListActivity,HouseDetailActivity::class.java)
-                intent.putStringArrayListExtra(Constants.HOUSE_IMAGE, ArrayList<String>(postlist.house_image))
-                intent.putExtra(Constants.HOUSE_ADDRESS, postlist.house_address)
-                intent.putExtra(Constants.NO_OF_GUESTS, postlist.no_of_guests)
-                intent.putExtra(Constants.RECOMMENTED_POINT, postlist.recommented_points)
-                intent.putExtra(Constants.CONTACT_ONE, postlist.phone_one)
-                intent.putExtra(Constants.CONTACT_TWO, postlist.phone_two)
-                intent.putExtra(Constants.AMOUNT, postlist.rent)
-                intent.putExtra(Constants.DEPOSIT, postlist.deposit)
-                intent.putExtra(Constants.AVAILABLE_DATE, postlist.available_date)
-
+                intent.putExtra(Constants.HOUSE_DETAIL, houseDetails)
                 startActivity(intent)
+                hideProgressDialog()
             }
 
             override fun onFailure(call: Call<HouseDetails>, t: Throwable) {
@@ -350,6 +341,4 @@ class HouseListActivity : AppCompatActivity() {
         }
         toolBarMain.setNavigationOnClickListener { onBackPressed() }
     }
-
-
 }

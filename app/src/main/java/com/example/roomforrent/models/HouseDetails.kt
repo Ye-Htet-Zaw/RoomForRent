@@ -1,5 +1,17 @@
+/**
+ *
+ * HouseDetails
+ *
+ * 2021/03/8 YHZ Create New
+ *
+ * House Detail Model
+ */
 package com.example.roomforrent.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data  class HouseDetails(
         val house_address: String,
         val house_image: ArrayList<String>,
@@ -16,9 +28,9 @@ data  class HouseDetails(
         val available_date: String,
         val rent: Int,
         val deposit: Int,
-        val longitude: String,
-        val latitude: String,
+        val longitude: Double,
+        val latitude: Double,
         val recommented_points: String,
         val contract_rule: String,
         val period: String
-)
+) : Parcelable
