@@ -1,22 +1,25 @@
+/**
+ *
+ * SearchFragment
+ *
+ * 2021/03/8 KMMN Create New
+ *
+ * search wanted rooms by filling room information
+ */
 package com.example.roomforrent.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.HouseListActivity
 import com.example.roomforrent.adapter.MySpinnerAdapter
-import com.example.roomforrent.models.House
-import com.example.roomforrent.services.SearchRoomService
-import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants.Amount
 import com.example.roomforrent.utils.Constants.CALLAPI
 import com.example.roomforrent.utils.Constants.GetAllRoomList
@@ -42,10 +45,6 @@ import com.example.roomforrent.utils.Constants.categoryArr
 import com.example.roomforrent.utils.Constants.periodArr
 import com.example.roomforrent.utils.Constants.townshipArr
 import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.android.synthetic.main.fragment_search.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SearchFragment : Fragment() {
 
@@ -55,7 +54,7 @@ class SearchFragment : Fragment() {
     var selectedCategory: String = ""
     var selectedAddress: String = ""
     var selectedPeroid: String = ""
-    var amount : String = ""
+    var amount: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,82 +122,81 @@ class SearchFragment : Fragment() {
         btn_serach.setOnClickListener {
             amount = edt_amount.text.toString().trim()
             if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select") && amount.equals("")) {
+                && selectedPeroid.equals("Select") && amount.equals("")
+            ) {
                 showHouseList(GetAllRoomList)
-            }
-            else if(!selectedCategory.equals("Select")&& selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select") && amount.equals("")){
+            } else if (!selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")
+            ) {
                 showHouseList(GetRoomListByCategory)
-            }
-            else if(selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select") && amount.equals("")){
+            } else if (selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")
+            ) {
                 showHouseList(GetRoomListByTownship)
-            }
-            else if(selectedCategory.equals("Select")&& selectedAddress.equals("Select")
-                && !selectedPeroid.equals("Select") && amount.equals("")){
+            } else if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")
+            ) {
                 showHouseList(GetRoomListByPeriod)
-            }
-            else if(selectedCategory.equals("Select")&& selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select") && !amount.equals("")){
+            } else if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
                 showHouseList(GetRoomListByAmount)
-            }
-            else if(!selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select") && amount.equals("")){
+            } else if (!selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")
+            ) {
                 showHouseList(GetRoomListByCategoryAndTownShip)
-            }
-            else if(!selectedCategory.equals("Select")&& selectedAddress.equals("Select")
-                && !selectedPeroid.equals("Select") && amount.equals("")){
+            } else if (!selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")
+            ) {
                 showHouseList(GetRoomListByCategoryAndPeriod)
-            }
-
-            else if(!selectedCategory.equals("Select")&& selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select") && !amount.equals("")){
+            } else if (!selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
                 showHouseList(GetRoomListByCategoryAndAmount)
-            }
-            else if(selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select") && !amount.equals("")){
+            } else if (selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
                 showHouseList(GetRoomListByTownShipAndRent)
-            }
-            else if(selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
-                && !selectedPeroid.equals("Select") && amount.equals("")){
+            } else if (selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")
+            ) {
                 showHouseList(GetRoomListByTownShipAndPeriod)
-            }
-
-            else if(selectedCategory.equals("Select")&& selectedAddress.equals("Select")
-                && !selectedPeroid.equals("Select") && !amount.equals("")){
+            } else if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
                 showHouseList(GetRoomListByAmountAndPeriod)
-            }
-
-            else if(!selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
-                && !selectedPeroid.equals("Select") && amount.equals("")){
+            } else if (!selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")
+            ) {
                 showHouseList(GetRoomListByCategoryAndAddressAndPeriod)
-            }
-
-            else if(!selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select") && !amount.equals("")){
+            } else if (!selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
                 showHouseList(GetRoomListByCategoryAndAddressAndAmount)
-            }
-            else if(!selectedCategory.equals("Select")&& selectedAddress.equals("Select")
-                && !selectedPeroid.equals("Select") && !amount.equals("")){
+            } else if (!selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
                 showHouseList(GetRoomListByCategoryAndAmountAndPeriod)
-            }
-            else if(selectedCategory.equals("Select")&& !selectedAddress.equals("Select")
-                && !selectedPeroid.equals("Select") && !amount.equals("")){
+            } else if (selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
                 showHouseList(GetRoomListByAddressAndAmountAndPeriod)
-            }
-            else{
+            } else {
                 showHouseList(GetRoomListByAll)
             }
         }
     }
 
-    private fun showHouseList(serviceName : String) {
-        val intent = Intent(context,HouseListActivity::class.java)
+    /**
+     * load  house list by clicking search button
+     */
+    private fun showHouseList(serviceName: String) {
+        val intent = Intent(context, HouseListActivity::class.java)
         intent.putExtra(CALLAPI, serviceName)
-        intent.putExtra(SelectedCategory,selectedCategory)
-        intent.putExtra(SelectedAddress,selectedAddress)
-        intent.putExtra(SelectedPeroid,selectedPeroid)
-        intent.putExtra(Amount,amount)
+        intent.putExtra(SelectedCategory, selectedCategory)
+        intent.putExtra(SelectedAddress, selectedAddress)
+        intent.putExtra(SelectedPeroid, selectedPeroid)
+        intent.putExtra(Amount, amount)
         startActivity(intent)
     }
 

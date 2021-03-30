@@ -1,3 +1,11 @@
+/**
+ *
+ * Tab Adapter
+ *
+ * 2021/03/8 KMMN Create New
+ *
+ * show four tabs in app
+ */
 package com.example.roomforrent.adapter
 
 import android.content.Context

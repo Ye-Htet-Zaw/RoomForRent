@@ -1,3 +1,11 @@
+/**
+ *
+ * SearchRoomService
+ *
+ * 2021/03/8 KMMN Create New
+ *
+ * call search api to get house list
+ */
 package com.example.roomforrent.services
 
 import com.example.roomforrent.models.House

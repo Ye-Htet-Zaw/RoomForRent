@@ -1,3 +1,11 @@
+/**
+ *
+ * House Data
+ *
+ * 2021/03/8 KMMN Create New
+ *
+ * include House table fields
+ */
 package com.example.roomforrent.models
 
 import java.sql.Timestamp

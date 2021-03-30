@@ -5,13 +5,23 @@ import kotlin.collections.ArrayList
 
 object Constants {
 
-    //Search
+    /**
+     * Key name to go house list activity
+     */
     const val CALLAPI = "CallApi"
+
+    /**
+     * String used in search ui
+     */
     const val SelectedCategory = "SelectedCategory"
     const val SelectedAddress = "SelectedAddress"
     const val SelectedPeroid = "SelectedPeroid"
     const val Amount = "Amount"
     const val select: String = "Select"
+
+    /**
+     * api names to call house list api
+     */
     const val GetAllRoomList = "GetAllRoomList"
     const val GetRoomListByCategoryAndTownShip = "GetRoomListByCategoryAndTownShip"
     const val GetRoomListByCategory = "GetRoomListByCategory"
@@ -29,6 +39,9 @@ object Constants {
     const val GetRoomListByAddressAndAmountAndPeriod = "GetRoomListByAddressAndAmountAndPeriod"
     const val GetRoomListByAll = "GetRoomListByAll"
 
+    /**
+     * township list use in search ui
+     */
     val townshipArr: ArrayList<String>
         get() {
             val towhshipArr = ArrayList(
@@ -84,6 +97,9 @@ object Constants {
             return towhshipArr
         }
 
+    /**
+     * category list use in search ui
+     */
     val categoryArr: ArrayList<String>
         get() {
             val categoryArr = ArrayList(
@@ -98,6 +114,9 @@ object Constants {
             return categoryArr
         }
 
+    /**
+     * period list use in search ui
+     */
     val periodArr: ArrayList<String>
         get() {
             val periodArr = ArrayList(
@@ -114,7 +133,9 @@ object Constants {
 
 
 
-    //Township
+    /**
+     * township names
+     */
     const val Ahlon: String = "Ahlon"
     const val Bahan: String = "Bahan"
     const val Dagon: String = "Dagon"
@@ -161,13 +182,17 @@ object Constants {
     const val Thongwa: String = "Thongwa"
     const val Twante: String = "Twante"
 
-    //Category
+    /**
+     * Category names
+     */
     const val Condominum: String = "Condominum"
     const val WholeHouse: String = "Whole House"
     const val Apartment: String = "Apartment"
     const val Hostal: String = "Hostal"
 
-    //Period
+    /**
+     * periods
+     */
     const val ThreeMonths: String = "3"
     const val SixMonths: String = "6"
     const val OneYear: String = "12"

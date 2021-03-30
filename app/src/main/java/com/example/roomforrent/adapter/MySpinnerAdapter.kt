@@ -1,3 +1,11 @@
+/**
+ *
+ * Spinner Adapter
+ *
+ * 2021/03/8 KMMN Create New
+ *
+ * spinner used to show townships , categorys and periods
+ */
 package com.example.roomforrent.adapter
 
 import android.content.Context
