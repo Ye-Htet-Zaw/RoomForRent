@@ -10,6 +10,7 @@ object Constants {
      */
     const val CALLAPI = "CallApi"
 
+
     /**
      * String used in search ui
      */
@@ -39,6 +40,8 @@ object Constants {
     const val GetRoomListByAddressAndAmountAndPeriod = "GetRoomListByAddressAndAmountAndPeriod"
     const val GetRoomListByAll = "GetRoomListByAll"
 
+    //nttt
+    const val USERID="UserId"
     /**
      * township list use in search ui
      */
