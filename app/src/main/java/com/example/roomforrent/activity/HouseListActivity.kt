@@ -1,3 +1,12 @@
+/**
+ *
+ * HouseListActivity
+ *
+ * 2021/03/8 HNT Create New
+ *
+ * Load House List
+ */
+
 package com.example.roomforrent.activity
 
 import android.annotation.SuppressLint
@@ -15,8 +24,6 @@ import com.example.roomforrent.adapter.HouseItemAdapter
 import com.example.roomforrent.R
 import com.example.roomforrent.models.House
 import com.example.roomforrent.models.HouseDetails
-import com.example.roomforrent.models.HouseList
-import com.example.roomforrent.services.HouseListService
 import com.example.roomforrent.services.RoomForRentService
 import com.example.roomforrent.services.SearchRoomService
 import com.example.roomforrent.services.ServiceBuilder
@@ -42,7 +49,6 @@ import com.example.roomforrent.utils.Constants.GetRoomListByTownship
 import com.example.roomforrent.utils.Constants.SelectedAddress
 import com.example.roomforrent.utils.Constants.SelectedCategory
 import com.example.roomforrent.utils.Constants.SelectedPeroid
-import kotlinx.android.synthetic.main.activity_house_detail.*
 import kotlinx.android.synthetic.main.activity_house_list.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -64,8 +70,6 @@ class HouseListActivity : BaseActivity() {
         setContentView(R.layout.activity_house_list)
 
         initAdapter()
-
-        //loadAccount()
 
         //get parameter value and service name form SearchFragment
         getIntentValue()
@@ -94,6 +98,7 @@ class HouseListActivity : BaseActivity() {
     }
 
 
+    //check service name for appropriate search
     private fun checkServiceName(serviceName: String) {
         val searchRoomService = ServiceBuilder.buildService(SearchRoomService::class.java)
         when (serviceName) {
@@ -230,6 +235,7 @@ class HouseListActivity : BaseActivity() {
         }
     }
 
+    //Show house list
     private fun callSearchService(callGetRoomList: Call<List<House>>) {
         callGetRoomList.enqueue(object : Callback<List<House>> {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
@@ -280,6 +286,7 @@ class HouseListActivity : BaseActivity() {
         })
     }
 
+    //Initialize adapter and Layout Manager
     private fun initAdapter() {
         adapter = HouseItemAdapter(this)
 
@@ -287,47 +294,6 @@ class HouseListActivity : BaseActivity() {
         recycler_view_items.layoutManager = LinearLayoutManager(this)
         recycler_view_items.adapter = adapter
 
-        /*adapter.setOnClickListener(object : HouseItemAdapter.OnClickListener {
-            override fun onClick() {
-                var intent = Intent(this@HouseListActivity, HouseDetailActivity::class.java)
-                startActivity(intent)
-            }
-        })*/
-    }
-
-
-    private fun loadAccount() {
-        //initiate the service
-        val destinationService = ServiceBuilder.buildService(HouseListService::class.java)
-        val requestCall = destinationService.getHouseList()
-        //make network call asynchronously
-        requestCall.enqueue(object : Callback<List<HouseList>> {
-            override fun onResponse(
-                call: Call<List<HouseList>>,
-                response: Response<List<HouseList>>
-            ) {
-                Log.d("Response", "onResponse: ${response.body()}")
-                if (response.isSuccessful) {
-                    val houseList = response.body()!!
-                    Log.d("Response", "houseList size : ${houseList.size}")
-                    adapter.setData(response.body()!! as ArrayList<House>)
-                } else {
-                    Toast.makeText(
-                        this@HouseListActivity,
-                        "Something went wrong ${response.message()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<HouseList>>, t: Throwable) {
-                Toast.makeText(
-                    this@HouseListActivity,
-                    "Something went wrong $t",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
     }
 
     @SuppressLint("ResourceAsColor")

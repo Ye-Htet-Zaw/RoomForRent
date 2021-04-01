@@ -1,3 +1,12 @@
+/**
+ *
+ * HouseItemAdapter
+ *
+ * 2021/03/8 HNT Create New
+ *
+ * Adapter to show house list
+ */
+
 package com.example.roomforrent.adapter
 
 import android.content.Context
@@ -10,7 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomforrent.R
 import com.example.roomforrent.models.House
-import com.example.roomforrent.models.HouseList
 import kotlinx.android.synthetic.main.house_item.view.*
 import com.squareup.picasso.Picasso
 
@@ -51,10 +59,9 @@ class HouseItemAdapter(val context: Context) :
                 onClickListener!!.onClick(position, model)
             }
         }
-
-        // Updating the background color according to the odd/even positions in list.
     }
 
+    // Change color of heart icon
     private fun onClick(heart: ImageView, changedColor: Boolean): Boolean {
         var changeColor: Boolean = changedColor
         changeColor = if (changeColor) {
@@ -74,13 +81,13 @@ class HouseItemAdapter(val context: Context) :
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        // Holds the TextView that will add each item to
+
         val ivHeart = view.iv_heart
 
         fun bindView(item: House?) {
             itemView.tv_address.text = item?.house_ADDRESS.toString()
             itemView.tv_price.text = item?.rent.toString()
-            Picasso.get().load("http://192.168.1.4:8080/images/${item?.house_ID}/1.jpg").into(itemView.iv_roomImg)
+            Picasso.get().load("http://192.168.0.127:9090/image/house/${item?.house_ID}/1.jpg").into(itemView.iv_roomImg)
         }
 
     }
