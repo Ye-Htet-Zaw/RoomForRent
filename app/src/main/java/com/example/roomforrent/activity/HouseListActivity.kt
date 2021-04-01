@@ -237,10 +237,11 @@ class HouseListActivity : BaseActivity() {
 
     //Show house list
     private fun callSearchService(callGetRoomList: Call<List<House>>) {
+        showProgressDialog("Please Wait...")
         callGetRoomList.enqueue(object : Callback<List<House>> {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 if (response.isSuccessful) {
-                    progress.visibility= View.GONE
+                    hideProgressDialog()
                     val houseList = response.body()!! as List<House>
                     Log.d("Response", "houseList size : ${houseList.size}")
                     adapter.setData(houseList as ArrayList<House>)
@@ -252,6 +253,7 @@ class HouseListActivity : BaseActivity() {
 
                     })
                 } else {
+                    hideProgressDialog()
                     Toast.makeText(
                         this@HouseListActivity,
                         "Something went wrong ${response.message()}",
@@ -261,6 +263,7 @@ class HouseListActivity : BaseActivity() {
             }
 
             override fun onFailure(call: Call<List<House>>, t: Throwable) {
+                hideProgressDialog()
                 Log.d("Response", "fail service call ${t.message}")
             }
         })
