@@ -5,12 +5,43 @@ import kotlin.collections.ArrayList
 
 object Constants {
 
-    //Search
+    /**
+     * Key name to go house list activity
+     */
     const val CALLAPI = "CallApi"
+
+    /**
+     * String used in search ui
+     */
+    const val SelectedCategory = "SelectedCategory"
+    const val SelectedAddress = "SelectedAddress"
+    const val SelectedPeroid = "SelectedPeroid"
+    const val Amount = "Amount"
     const val select: String = "Select"
+
+    /**
+     * api names to call house list api
+     */
     const val GetAllRoomList = "GetAllRoomList"
+    const val GetRoomListByCategoryAndTownShip = "GetRoomListByCategoryAndTownShip"
+    const val GetRoomListByCategory = "GetRoomListByCategory"
+    const val GetRoomListByTownship = "GetRoomListByTownship"
+    const val GetRoomListByAmount = "GetRoomListByAmount"
+    const val GetRoomListByPeriod = "GetRoomListByPeriod"
+    const val GetRoomListByCategoryAndAmount = "GetRoomListByCategoryAndAmount"
+    const val GetRoomListByCategoryAndPeriod = "GetRoomListByCategoryAndPeriod"
+    const val GetRoomListByTownShipAndRent = "GetRoomListByTownShipAndRent"
+    const val GetRoomListByTownShipAndPeriod = "GetRoomListByTownShipAndPeriod"
+    const val GetRoomListByAmountAndPeriod = "GetRoomListByAmountAndPeriod"
+    const val GetRoomListByCategoryAndAddressAndPeriod = "GetRoomListByCategoryAndAddressAndPeriod"
+    const val GetRoomListByCategoryAndAddressAndAmount = "GetRoomListByCategoryAndAddressAndAmount"
+    const val GetRoomListByCategoryAndAmountAndPeriod = "GetRoomListByCategoryAndAmountAndPeriod"
+    const val GetRoomListByAddressAndAmountAndPeriod = "GetRoomListByAddressAndAmountAndPeriod"
+    const val GetRoomListByAll = "GetRoomListByAll"
 
-
+    /**
+     * township list use in search ui
+     */
     val townshipArr: ArrayList<String>
         get() {
             val towhshipArr = ArrayList(
@@ -66,6 +97,9 @@ object Constants {
             return towhshipArr
         }
 
+    /**
+     * category list use in search ui
+     */
     val categoryArr: ArrayList<String>
         get() {
             val categoryArr = ArrayList(
@@ -80,6 +114,9 @@ object Constants {
             return categoryArr
         }
 
+    /**
+     * period list use in search ui
+     */
     val periodArr: ArrayList<String>
         get() {
             val periodArr = ArrayList(
@@ -96,7 +133,9 @@ object Constants {
 
 
 
-    //Township
+    /**
+     * township names
+     */
     const val Ahlon: String = "Ahlon"
     const val Bahan: String = "Bahan"
     const val Dagon: String = "Dagon"
@@ -143,19 +182,24 @@ object Constants {
     const val Thongwa: String = "Thongwa"
     const val Twante: String = "Twante"
 
-    //Category
+    /**
+     * Category names
+     */
     const val Condominum: String = "Condominum"
     const val WholeHouse: String = "Whole House"
     const val Apartment: String = "Apartment"
     const val Hostal: String = "Hostal"
 
-    //Period
+    /**
+     * periods
+     */
     const val ThreeMonths: String = "3"
     const val SixMonths: String = "6"
     const val OneYear: String = "12"
     const val TwoYears: String = "24"
 
     //HouseDetail
+    const val HOUSE_DETAIL: String = "house_detail"
     const val NO_OF_GUESTS: String = "no_of_guests"
     const val AREA: String = "area"
     const val NO_OF_TOILET: String = "no_of_toilet"
@@ -165,6 +209,10 @@ object Constants {
     const val NO_OF_AIRCON: String = "no_of_aircon"
     const val NO_OF_FLOOR: String = "no_of_floor"
     const val CONTRACT_RULE: String = "contract_rule"
+    const val LATITUDE: String = "latitude"
+    const val LONGITUDE: String = "longitude"
+
+
 
 
 

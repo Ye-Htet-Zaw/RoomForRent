@@ -1,32 +1,50 @@
+/**
+ *
+ * SearchFragment
+ *
+ * 2021/03/8 KMMN Create New
+ *
+ * search wanted rooms by filling room information
+ */
 package com.example.roomforrent.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.HouseListActivity
 import com.example.roomforrent.adapter.MySpinnerAdapter
-import com.example.roomforrent.models.House
-import com.example.roomforrent.services.SearchRoomService
-import com.example.roomforrent.services.ServiceBuilder
+import com.example.roomforrent.utils.Constants.Amount
 import com.example.roomforrent.utils.Constants.CALLAPI
 import com.example.roomforrent.utils.Constants.GetAllRoomList
+import com.example.roomforrent.utils.Constants.GetRoomListByAddressAndAmountAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByAll
+import com.example.roomforrent.utils.Constants.GetRoomListByAmount
+import com.example.roomforrent.utils.Constants.GetRoomListByAmountAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategory
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAddressAndAmount
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAddressAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAmount
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndAmountAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByCategoryAndTownShip
+import com.example.roomforrent.utils.Constants.GetRoomListByPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByTownShipAndPeriod
+import com.example.roomforrent.utils.Constants.GetRoomListByTownShipAndRent
+import com.example.roomforrent.utils.Constants.GetRoomListByTownship
+import com.example.roomforrent.utils.Constants.SelectedAddress
+import com.example.roomforrent.utils.Constants.SelectedCategory
+import com.example.roomforrent.utils.Constants.SelectedPeroid
 import com.example.roomforrent.utils.Constants.categoryArr
 import com.example.roomforrent.utils.Constants.periodArr
 import com.example.roomforrent.utils.Constants.townshipArr
 import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.android.synthetic.main.fragment_search.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SearchFragment : Fragment() {
 
@@ -36,6 +54,7 @@ class SearchFragment : Fragment() {
     var selectedCategory: String = ""
     var selectedAddress: String = ""
     var selectedPeroid: String = ""
+    var amount: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,40 +120,84 @@ class SearchFragment : Fragment() {
         }
 
         btn_serach.setOnClickListener {
-            val searchRoomService = ServiceBuilder.buildService(SearchRoomService::class.java)
+            amount = edt_amount.text.toString().trim()
             if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
-                && selectedPeroid.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")
             ) {
-
                 showHouseList(GetAllRoomList)
-                /*var callGetAllRoomList: Call<List<House>> =searchRoomService.getAllRoomList()
-                callSearchService(callGetAllRoomList)*/
-            }
-            else{
-                /*var callGetRoomListByCategoryAndTownShip: Call<List<House>> = searchRoomService.getRoomListByCategoryAndTownShip(selectedCategory,selectedAddress)
-                callSearchService(callGetRoomListByCategoryAndTownShip)*/
+            } else if (!selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")
+            ) {
+                showHouseList(GetRoomListByCategory)
+            } else if (selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")
+            ) {
+                showHouseList(GetRoomListByTownship)
+            } else if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")
+            ) {
+                showHouseList(GetRoomListByPeriod)
+            } else if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
+                showHouseList(GetRoomListByAmount)
+            } else if (!selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && amount.equals("")
+            ) {
+                showHouseList(GetRoomListByCategoryAndTownShip)
+            } else if (!selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")
+            ) {
+                showHouseList(GetRoomListByCategoryAndPeriod)
+            } else if (!selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
+                showHouseList(GetRoomListByCategoryAndAmount)
+            } else if (selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
+                showHouseList(GetRoomListByTownShipAndRent)
+            } else if (selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")
+            ) {
+                showHouseList(GetRoomListByTownShipAndPeriod)
+            } else if (selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
+                showHouseList(GetRoomListByAmountAndPeriod)
+            } else if (!selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && amount.equals("")
+            ) {
+                showHouseList(GetRoomListByCategoryAndAddressAndPeriod)
+            } else if (!selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
+                showHouseList(GetRoomListByCategoryAndAddressAndAmount)
+            } else if (!selectedCategory.equals("Select") && selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
+                showHouseList(GetRoomListByCategoryAndAmountAndPeriod)
+            } else if (selectedCategory.equals("Select") && !selectedAddress.equals("Select")
+                && !selectedPeroid.equals("Select") && !amount.equals("")
+            ) {
+                showHouseList(GetRoomListByAddressAndAmountAndPeriod)
+            } else {
+                showHouseList(GetRoomListByAll)
             }
         }
     }
 
-    private fun showHouseList(serviceType : String) {
-        val intent = Intent(context,HouseListActivity::class.java)
-        intent.putExtra(CALLAPI, serviceType)
+    /**
+     * load  house list by clicking search button
+     */
+    private fun showHouseList(serviceName: String) {
+        val intent = Intent(context, HouseListActivity::class.java)
+        intent.putExtra(CALLAPI, serviceName)
+        intent.putExtra(SelectedCategory, selectedCategory)
+        intent.putExtra(SelectedAddress, selectedAddress)
+        intent.putExtra(SelectedPeroid, selectedPeroid)
+        intent.putExtra(Amount, amount)
         startActivity(intent)
-    }
-
-    private fun callSearchService(callGetRoomList: Call<List<House>>) {
-        callGetRoomList.enqueue(object : Callback<List<House>> {
-            override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
-                Log.i("TestingSearchApi", "Success search " + response.body()!!.size)
-                val intent = Intent(context, HouseListActivity::class.java)
-                startActivity(intent)
-            }
-
-            override fun onFailure(call: Call<List<House>>, t: Throwable) {
-                Log.i("TestingSearchApi", "fail search" + t.message)
-            }
-        })
     }
 
     @SuppressLint("UseRequireInsteadOfGet")

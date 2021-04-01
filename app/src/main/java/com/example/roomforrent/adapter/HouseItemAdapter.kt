@@ -9,16 +9,18 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roomforrent.R
+import com.example.roomforrent.models.House
 import com.example.roomforrent.models.HouseList
 import kotlinx.android.synthetic.main.house_item.view.*
+import com.squareup.picasso.Picasso
 
 class HouseItemAdapter(val context: Context) :
     RecyclerView.Adapter<HouseItemAdapter.ViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
-    private var houseData: ArrayList<HouseList>? = null
+    private var houseData: ArrayList<House>? = null
 
-    fun setData(list: ArrayList<HouseList>){
+    fun setData(list: ArrayList<House>) {
         houseData = list
         notifyDataSetChanged()
     }
@@ -32,10 +34,12 @@ class HouseItemAdapter(val context: Context) :
             )
         )
     }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var changeColor:Boolean = true
+        val model = houseData!![position]
+        var changeColor: Boolean = true
         holder.ivHeart.setOnClickListener {
-            changeColor=onClick(holder.ivHeart,changeColor)
+            changeColor = onClick(holder.ivHeart, changeColor)
         }
 
         Log.d("Response", "List Count :${houseData?.size} ")
@@ -43,28 +47,29 @@ class HouseItemAdapter(val context: Context) :
         holder.bindView(item)
 
         holder.itemView.setOnClickListener {
-            if (onClickListener != null){
-                onClickListener!!.onClick()
+            if (onClickListener != null) {
+                onClickListener!!.onClick(position, model)
             }
         }
 
         // Updating the background color according to the odd/even positions in list.
     }
 
-    private fun onClick(heart: ImageView, changedColor:Boolean): Boolean{
-        var changeColor: Boolean=changedColor
-        changeColor = if (changeColor){
+    private fun onClick(heart: ImageView, changedColor: Boolean): Boolean {
+        var changeColor: Boolean = changedColor
+        changeColor = if (changeColor) {
             heart.setColorFilter(ContextCompat.getColor(context, R.color.red))
             false
-        }else{
+        } else {
             heart.setColorFilter(ContextCompat.getColor(context, R.color.white))
             true
         }
 
         return changeColor
     }
+
     override fun getItemCount(): Int {
-        return houseData?.size?:0
+        return houseData?.size ?: 0
     }
 
 
@@ -72,19 +77,19 @@ class HouseItemAdapter(val context: Context) :
         // Holds the TextView that will add each item to
         val ivHeart = view.iv_heart
 
-        fun bindView(item: HouseList?) {
-            itemView.tv_address.text = item?.house_address
+        fun bindView(item: House?) {
+            itemView.tv_address.text = item?.house_ADDRESS.toString()
             itemView.tv_price.text = item?.rent.toString()
-            //Picasso.get().load("http://192.168.100.4:9090/images/${item?.id}.jpg").into(itemView.img_photo)
+            Picasso.get().load("http://192.168.1.4:8080/images/${item?.house_ID}/1.jpg").into(itemView.iv_roomImg)
         }
 
     }
 
     interface OnClickListener {
-        fun onClick()
+        fun onClick(position: Int, model: House)
     }
 
-    fun setOnClickListener(onClickListener: OnClickListener){
+    fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
     }
 }

@@ -169,12 +169,6 @@
                         android:fontFamily="@font/roboto"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
-            <include
-                android:layout_marginTop="10dp"
-                layout="@layout/activity_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
         </LinearLayout>
     </LinearLayout>
 
