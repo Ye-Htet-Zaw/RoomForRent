@@ -8,7 +8,7 @@ import retrofit2.http.Path
 
 interface ChangePasswordService {
     @GET("getPassword/{user_id}")
-    fun getPassword(@Path("user_id") user_id: String):String
+    fun getPassword(@Path("user_id") user_id: String):Call<String>
 
 
     @PUT("updatePassword/{user_id}&{password}")
