@@ -1,5 +1,6 @@
 package com.example.roomforrent.activity
 //NTTT
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.roomforrent.R
+import com.example.roomforrent.fragment.LoginProfileFragment
 import com.example.roomforrent.models.UserLogin
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserLoginService
@@ -61,9 +63,11 @@ class LoginActivity : AppCompatActivity() {
 
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
                         if (response.isSuccessful) {
-                        val intent=Intent(this@LoginActivity,MainActivity::class.java)
-                        intent.putExtra("UserId",response.body()!!.user_id)
-                        startActivity(intent)}
+                            success()
+                        //val intent=Intent(this@LoginActivity,MainActivity::class.java)
+                       //intent.putExtra(MainActivity.USERID,response.body()!!.user_id)
+                        //startActivity(intent)
+                             }
                         //when success use shared preferences
                         val editor: SharedPreferences.Editor = share.edit()
                         editor.putBoolean("isLogin", true)
@@ -80,6 +84,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun success(){
+        supportFragmentManager.beginTransaction()
+            .add(android.R.id.content, LoginProfileFragment()).commit()
+    }
     private fun setUpActionBar() {
         setSupportActionBar(toolBarLogin)
         val actionBar = supportActionBar
