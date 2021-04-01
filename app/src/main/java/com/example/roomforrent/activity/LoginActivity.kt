@@ -1,8 +1,6 @@
 package com.example.roomforrent.activity
 //NTTT
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -17,11 +15,12 @@ import com.example.roomforrent.fragment.LoginProfileFragment
 import com.example.roomforrent.models.UserLogin
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserLoginService
+import com.example.roomforrent.utils.Constants.USERID
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.log
+
 
 class LoginActivity : AppCompatActivity() {
     lateinit var callGetUser: Call<UserLogin>
@@ -63,17 +62,22 @@ class LoginActivity : AppCompatActivity() {
 
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
                         if (response.isSuccessful) {
-                            success()
+
+                            val b = Bundle()
+                            b.putString(USERID,response.body()!!.user_id)
+                            LoginProfileFragment().setArguments(b)
+                            supportFragmentManager.beginTransaction()
+                                .add(android.R.id.content, LoginProfileFragment()).commit()
                         //val intent=Intent(this@LoginActivity,MainActivity::class.java)
                        //intent.putExtra(MainActivity.USERID,response.body()!!.user_id)
                         //startActivity(intent)
-                             }
-                        //when success use shared preferences
-                        val editor: SharedPreferences.Editor = share.edit()
-                        editor.putBoolean("isLogin", true)
-                        editor.commit()
-                        Toast.makeText(this@LoginActivity,"LOGIN SUCCESSFULLY",Toast.LENGTH_LONG).show()
+                            val editor: SharedPreferences.Editor = share.edit()
+                            editor.putBoolean("isLogin", true)
+                            editor.commit()
+                            Toast.makeText(this@LoginActivity,"LOGIN SUCCESSFULLY",Toast.LENGTH_LONG).show()
 
+ }
+                        //when success use shared preferences
                     }
 
                 }
@@ -84,10 +88,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun success(){
-        supportFragmentManager.beginTransaction()
-            .add(android.R.id.content, LoginProfileFragment()).commit()
-    }
+
     private fun setUpActionBar() {
         setSupportActionBar(toolBarLogin)
         val actionBar = supportActionBar
