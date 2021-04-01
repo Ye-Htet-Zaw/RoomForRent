@@ -22,9 +22,7 @@ class MainActivity : AppCompatActivity() {
     var tabIconArr = ArrayList<Int>()
     var activeTabIconArr = ArrayList<Int>()
 
-    companion object{
-        const val USERID="UserId"
-    }
+
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
