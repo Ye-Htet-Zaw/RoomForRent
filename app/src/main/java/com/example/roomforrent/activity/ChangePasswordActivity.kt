@@ -13,6 +13,7 @@ import com.example.roomforrent.R
 import com.example.roomforrent.models.UserLogin
 import com.example.roomforrent.services.ChangePasswordService
 import com.example.roomforrent.services.ServiceBuilder
+import com.example.roomforrent.utils.Constants.USERID
 import kotlinx.android.synthetic.main.activity_change_password.*
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
@@ -20,16 +21,18 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ChangePasswordActivity : AppCompatActivity() {
-    lateinit var callGetPw: Call<UserLogin>
-    var user_id:String= intent.extras?.getString("UserId").toString()
-    val cur_pw=et_current_pw.text.toString().trim()
-    val new_pw=et_new_pw.text.toString().trim()
-    val confirmed_pw=et_confirmPassword.text.toString().trim()
 
+    var cur_pw=""
+    var input_cur_pw=""
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_password)
+        var user_id:String= intent.extras?.getString(USERID).toString()
+        Log.i("TestingApi", user_id)
+        var new_pw=et_new_pw.text.toString().trim()
+        input_cur_pw=et_current_pw.text.toString().trim()
+        var confirmed_pw=et_confirmPassword.text.toString().trim()
         val destinationService = ServiceBuilder.buildService(ChangePasswordService::class.java)
         //For Change status bar color
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -38,11 +41,22 @@ class ChangePasswordActivity : AppCompatActivity() {
         setUpActionBar()
 
         btn_updatePassword.setOnClickListener() {
-            var cur_pw=destinationService.getPassword(user_id)
+            var callGetCurPw=destinationService.getPassword(user_id)
+            callGetCurPw.enqueue(object : Callback<String>{
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.i("TestingApi", "fail"+t.message)
+                }
+
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    cur_pw=response.body().toString()
+                    Log.i("TestingApi", "sucessful")
+                }
+
+            })
             Log.i("TestingApi", "IIII"+cur_pw)
-            if(checkPassword(cur_pw)){
+            if(cur_pw.equals(input_cur_pw)){
             if(new_pw==confirmed_pw){
-                callGetPw=destinationService.updatePassword(user_id,confirmed_pw)
+                var callGetPw=destinationService.updatePassword(user_id,confirmed_pw)
                     callGetPw.enqueue(object : Callback<UserLogin> {
                         override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
                             val intent= Intent(this@ChangePasswordActivity,PersonalInformationActivity::class.java)
@@ -108,14 +122,7 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
     }
 
-        private fun checkPassword(password:String):Boolean{
 
-            when (cur_pw) {
-                password -> return  true
-                else -> return false
-            }
-
-        }
         private fun setUpActionBar() {
         setSupportActionBar(toolBarChangePassword)
         val actionBar = supportActionBar
