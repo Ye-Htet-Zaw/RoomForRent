@@ -46,12 +46,20 @@ class LoginProfileFragment : Fragment() {
         v.ll_owner_personal_info.setOnClickListener {
             startActivity(Intent(context, PersonalInformationActivity::class.java))
         }
+
+        /**
+         *Change Password
+         * 2021/03/10 NTTT Create New
+         */
         v.ll_owner_change_password.setOnClickListener {
             val intent=Intent(context,ChangePasswordActivity::class.java)
             intent.putExtra(USERID,userId)
             startActivity(intent)
         }
-        //NTTT
+        /**
+         *Logout
+         * 2021/03/9 NTTT Create New
+         */
         v.btn_owner_profile_logout.setOnClickListener {
             startActivity(Intent(context, MainActivity::class.java))
             val share: SharedPreferences = context?.getSharedPreferences("myPreference",
