@@ -21,7 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
     lateinit var callGetUser: Call<UserLogin>
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

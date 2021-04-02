@@ -74,7 +74,8 @@
             android:hint="@string/email"
             android:fontFamily="@font/roboto"
             android:padding="@dimen/email_password_btn_padding"
-            android:textSize="@dimen/et_text_size" />
+            android:textSize="@dimen/et_text_size"
+            />
 
 
         <EditText
@@ -89,7 +90,8 @@
             android:padding="@dimen/email_password_btn_padding"
             android:textSize="@dimen/et_text_size"
             android:fontFamily="@font/roboto"
-            android:drawableRight="@drawable/ic_password_black"/>
+            android:drawableRight="@drawable/ic_password_black"
+            android:inputType="textPassword"/>
 
 
         <Button
