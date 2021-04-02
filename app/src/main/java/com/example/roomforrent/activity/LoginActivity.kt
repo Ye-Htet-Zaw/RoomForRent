@@ -63,11 +63,13 @@ class LoginActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
                         if (response.isSuccessful) {
 
+                            var fragment=LoginProfileFragment()
                             val b = Bundle()
                             b.putString(USERID,response.body()!!.user_id)
-                            LoginProfileFragment().setArguments(b)
+                            Log.i("TestingApi", "Login UserId!!!"+response.body()!!.user_id)
+                            fragment.setArguments(b)
                             supportFragmentManager.beginTransaction()
-                                .add(android.R.id.content, LoginProfileFragment()).commit()
+                                .add(android.R.id.content, fragment).commit()
                         //val intent=Intent(this@LoginActivity,MainActivity::class.java)
                        //intent.putExtra(MainActivity.USERID,response.body()!!.user_id)
                         //startActivity(intent)
@@ -99,4 +101,6 @@ class LoginActivity : AppCompatActivity() {
         }
         toolBarLogin.setNavigationOnClickListener { onBackPressed() }
     }
+
+
 }
