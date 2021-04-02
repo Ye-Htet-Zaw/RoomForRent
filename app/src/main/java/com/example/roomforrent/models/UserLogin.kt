@@ -1,3 +1,8 @@
+/**
+ *UserLoginDataClass
+ * 2021/03/05 NTTT Create New
+ * For Login User
+ */
 package com.example.roomforrent.models
 
 import java.sql.Timestamp
