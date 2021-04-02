@@ -40,8 +40,9 @@ object Constants {
     const val GetRoomListByAddressAndAmountAndPeriod = "GetRoomListByAddressAndAmountAndPeriod"
     const val GetRoomListByAll = "GetRoomListByAll"
 
-    //nttt
+    //For transfer data
     const val USERID="UserId"
+
     /**
      * township list use in search ui
      */
