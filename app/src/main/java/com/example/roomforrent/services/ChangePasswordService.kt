@@ -1,8 +1,3 @@
-/**
- *ChangePasswordService
- * 2021/03/10 NTTT Create New
- * For Update Password
- */
 package com.example.roomforrent.services
 
 import com.example.roomforrent.models.UserLogin

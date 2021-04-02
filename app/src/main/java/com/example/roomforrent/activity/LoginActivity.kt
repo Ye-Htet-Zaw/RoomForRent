@@ -1,9 +1,4 @@
 package com.example.roomforrent.activity
-/**
- *LoginActivity
- * 2021/03/08 NTTT Create New
- * For Login User
- */
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build

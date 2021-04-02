@@ -1,8 +1,3 @@
-/**
- *UserLoginService
- * 2021/03/08 NTTT Create New
- * For Login User
- */
 package com.example.roomforrent.services
 
 import com.example.roomforrent.models.UserLogin
