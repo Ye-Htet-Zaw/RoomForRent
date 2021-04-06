@@ -39,6 +39,7 @@ class LoginActivity : BaseActivity() {
 
     //SignInForUser
         btn_sing_up.setOnClickListener() {
+            showProgressDialog("Please wait...")
             if (et_email.text.toString().trim().isEmpty()) {
                 et_email.error = "Email Required"
                 et_email.requestFocus()
@@ -50,6 +51,7 @@ class LoginActivity : BaseActivity() {
                 return@setOnClickListener
             }else
             {
+
                 val destinationService = ServiceBuilder.buildService(UserLoginService::class.java)
                 callGetUser = destinationService.getUserWithEmailAndPassword(et_email.text.toString().trim(),et_password.text.toString().trim())
                 callGetUser.enqueue(object :Callback<UserLogin>{
@@ -61,7 +63,7 @@ class LoginActivity : BaseActivity() {
 
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
                         if (response.isSuccessful) {
-
+                            hideProgressDialog()
                             var fragment=LoginProfileFragment()
                             val b = Bundle()
                             b.putString(USERID,response.body()!!.user_id)
@@ -78,6 +80,7 @@ class LoginActivity : BaseActivity() {
                             Toast.makeText(this@LoginActivity,"LOGIN SUCCESSFULLY",Toast.LENGTH_LONG).show()
 
  }
+
                         //when success use shared preferences
                     }
 
@@ -86,6 +89,7 @@ class LoginActivity : BaseActivity() {
                 )
 
         }
+
         }
     }
 
