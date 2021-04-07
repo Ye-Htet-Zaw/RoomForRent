@@ -1,5 +1,6 @@
 package com.example.roomforrent.fragment
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.ChangePasswordActivity
@@ -24,6 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class LoginProfileFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -31,7 +34,12 @@ class LoginProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                startActivity(Intent(context, MainActivity::class.java))
 
+            }
+        })
     }
 
     override fun onCreateView(
@@ -42,15 +50,15 @@ class LoginProfileFragment : Fragment() {
         val bundle = arguments
         val userId = bundle?.getString(USERID)
         val v = inflater.inflate(R.layout.fragment_login_profile, container, false)
-
         v.ll_owner_personal_info.setOnClickListener {
             startActivity(Intent(context, PersonalInformationActivity::class.java))
         }
 
         v.ll_owner_change_password.setOnClickListener {
-            val intent=Intent(context,ChangePasswordActivity::class.java)
-            intent.putExtra(USERID,userId)
-            startActivity(intent)
+            val i = Intent(activity, ChangePasswordActivity::class.java)
+            i.putExtra(USERID,userId)
+            startActivity(i)
+            (activity as Activity?)!!.overridePendingTransition(0, 0)
         }
 
         v.btn_owner_profile_logout.setOnClickListener {
@@ -63,7 +71,9 @@ class LoginProfileFragment : Fragment() {
         }
         getUserInfoById("USE0000001")
         return v
+            //FragmentManager.OnBackStackChangedListener {  }
     }
+
 
     //get user info from api
     private fun getUserInfoById(user_id: String) {
@@ -81,7 +91,7 @@ class LoginProfileFragment : Fragment() {
                    Log.i("user_name",user.user_name)
 
                     tv_owner_name.text=user.user_name
-                    Picasso.get().load("http://192.168.99.129:9090/image/user/"+user.user_id+".jpg").into(iv_profile_user_image)
+                    Picasso.get().load("http://192.168.1.2:9090/image/user/"+user.user_id+".jpg").into(iv_profile_user_image)
 
                 } else {
                     Log.i("Something", "Something went wrong ${response.message()}")
@@ -93,4 +103,5 @@ class LoginProfileFragment : Fragment() {
             }
         })
     }
+
 }
