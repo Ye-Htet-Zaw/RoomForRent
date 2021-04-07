@@ -56,32 +56,32 @@ class ChangePasswordActivity : BaseActivity() {
 
             if(et_current_pw.text.toString().trim().isEmpty()){
                 et_current_pw.error = "Please Insert Current Password"
-                   et_current_pw.requestFocus()
-                   return@setOnClickListener
+                et_current_pw.requestFocus()
+                return@setOnClickListener
             }
             else if(et_new_pw.text.toString().trim().isEmpty()){
                 et_new_pw.error = "Please New Current Password"
-                   et_new_pw.requestFocus()
-                   return@setOnClickListener
-               }
+                et_new_pw.requestFocus()
+                return@setOnClickListener
+            }
             else if(et_confirmPassword.text.toString().trim().isEmpty()){
-            et_confirmPassword.error = "Please Insert Confirm Password"
-                    et_confirmPassword.requestFocus()
-                   return@setOnClickListener
-                }
+                et_confirmPassword.error = "Please Insert Confirm Password"
+                et_confirmPassword.requestFocus()
+                return@setOnClickListener
+            }
             else if(et_current_pw.text.toString().trim()==et_new_pw.text.toString().trim() ){
 
-                    Toast.makeText(this,"Current Password and New Password is same",Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"Current Password and New Password is same",Toast.LENGTH_LONG).show()
             }
             else if(et_new_pw.text.toString().trim()!=et_confirmPassword.text.toString().trim()){
-                    Toast.makeText(this,"Please enter same with New Password",Toast.LENGTH_LONG).show()
-               }
+                Toast.makeText(this,"Please enter same with New Password",Toast.LENGTH_LONG).show()
+            }
             else if(cur_pw.equals(et_current_pw.text.toString().trim())){
-            if(et_new_pw.text.toString().trim().equals(et_confirmPassword.text.toString().trim())){
-                var callGetPw=destinationService.updatePassword(user_id,et_new_pw.text.toString().trim())
+                if(et_new_pw.text.toString().trim().equals(et_confirmPassword.text.toString().trim())){
+                    var callGetPw=destinationService.updatePassword(user_id,et_new_pw.text.toString().trim())
                     callGetPw.enqueue(object : Callback<UserLogin> {
                         override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
-                            showProgressDialog("Please Wait")
+                            //showProgressDialog("Please Wait")
                             var fragment=LoginProfileFragment()
                             val b = Bundle()
                             b.putString(USERID,response.body()!!.user_id)
@@ -89,7 +89,7 @@ class ChangePasswordActivity : BaseActivity() {
                             fragment.setArguments(b)
                             supportFragmentManager.beginTransaction()
                                 .add(android.R.id.content, fragment).commit()
-                            hideProgressDialog()
+                           // hideProgressDialog()
                             //Log.i("TestingApi", "Update Successful " +response.body()!!.password)
                             Toast.makeText(this@ChangePasswordActivity,"Update Successful",Toast.LENGTH_LONG).show()
                         }
@@ -100,65 +100,18 @@ class ChangePasswordActivity : BaseActivity() {
                         }
 
                     })
-            }
+                }
 
             }
             else{
-                Toast.makeText(this,"FAIL!!!",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@ChangePasswordActivity,"Need to SigIn Again ",Toast.LENGTH_LONG).show()
             }
-
-//            when {
-//
-//
-//                (et_current_pw.text.toString().trim().isEmpty()) ->
-//                {et_current_pw.error = "Please Insert Current Password"
-//                    et_current_pw.requestFocus()
-//                    return@setOnClickListener
-//                }
-//                (et_new_pw.text.toString().trim().isEmpty()) ->
-//                {et_new_pw.error = "Please New Current Password"
-//                    et_new_pw.requestFocus()
-//                    return@setOnClickListener
-//                }
-//                (et_current_pw.text.toString().trim()==et_new_pw.text.toString().trim())->
-//                {
-//                    Toast.makeText(this,"Current Password and New Password is same",Toast.LENGTH_LONG)
-//                }
-//                (et_confirmPassword.text.toString().trim().isEmpty()) ->
-//                {et_confirmPassword.error = "Please Insert Confirm Password"
-//                    et_confirmPassword.requestFocus()
-//                    return@setOnClickListener
-//
-//                }
-//
-//                (et_new_pw.text.toString().trim()!=et_confirmPassword.text.toString().trim())->
-//                {
-//                    Toast.makeText(this,"Your Confirmed Password is Wrong",Toast.LENGTH_LONG)
-//                }
-//                else -> {
-//                    val destinationService = ServiceBuilder.buildService(ChangePasswordService::class.java)
-//
-//                    callGetPw=destinationService.updatePassword("UserId",et_confirmPassword.text.toString().trim())
-//                    callGetPw.enqueue(object : Callback<UserLogin> {
-//                        override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
-//                            val intent= Intent(this@ChangePasswordActivity,PersonalInformationActivity::class.java)
-//                            Log.i("TestingApi", "Update Sucessful" +response.body()!!.password)
-//                        }
-//
-//                        override fun onFailure(call: Call<UserLogin>, t: Throwable) {
-//                            Log.i("TestingApi", "update fail"+t.message)
-//                        }
-//
-//                    })
-//
-//                }
-//            }
 
         }
     }
 
 
-        private fun setUpActionBar() {
+    private fun setUpActionBar() {
         setSupportActionBar(toolBarChangePassword)
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -167,9 +120,9 @@ class ChangePasswordActivity : BaseActivity() {
             actionBar.title = "Change Password"
         }
         toolBarChangePassword.setNavigationOnClickListener { onBackPressed() }
+
     }
 
 
 
 }
-
