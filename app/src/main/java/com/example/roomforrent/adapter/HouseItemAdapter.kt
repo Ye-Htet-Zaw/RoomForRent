@@ -87,7 +87,7 @@ class HouseItemAdapter(val context: Context) :
         fun bindView(item: House?) {
             itemView.tv_address.text = item?.house_ADDRESS.toString()
             itemView.tv_price.text = item?.rent.toString()
-            Picasso.get().load("http://192.168.0.127:9090/image/house/${item?.house_ID}/1.jpg").into(itemView.iv_roomImg)
+            Picasso.get().load("http://192.168.100.4:9090/image/house/${item?.house_ID}/1.jpg").into(itemView.iv_roomImg)
         }
 
     }
