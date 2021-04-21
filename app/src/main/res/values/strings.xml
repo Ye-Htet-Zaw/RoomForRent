@@ -65,4 +65,30 @@
     <string name="female_text">Female</string>
     <string name="other_text">Other</string>
     <string name="title_activity_location">Map</string>
+    
+    <!--Post House info -->
+    <string name="post_house">Post House</string>
+    <string name="photo_of_your_house">Photos of Your House</string>
+    <string name="street_building_floor">Street, Building No., Floor</string>
+    <string name="no_of_guest">No Of Guests</string>
+    <string name="no_of_room">No Of Room</string>
+    <string name="no_of_toilet">No Of Toilet</string>
+    <string name="area">Area (Square feet)</string>
+    <string name="no_of_bathroom">No Of Bathroom</string>
+    <string name="no_of_floor">No Of Floor</string>
+    <string name="no_of_aircon">No Of Air con</string>
+    <string name="contract_rule">Contract Rule</string>
+    <string name="wifi">Wifi</string>
+    <string name="contract_period">Contract Period</string>
+    <string name="rent_per_month">Rent Per Month</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+    <string name="description">description</string>
+    <string name="contact_one">Contact 1</string>
+    <string name="contact_two">Contact 2</string>
+    <string name="deposit">Deposit</string>
+    <string name="available_date">Available Date</string>
+    <string name="recommended_point">Recommended Point</string>
+
+
 </resources>
