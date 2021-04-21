@@ -105,4 +105,10 @@
         <dimen name="house_information_margin_top">15dp</dimen>
         <dimen name="house_information_margin_button">15dp</dimen>
         <dimen name="house_information_padding">30dp</dimen>
+
+        <!-- Post House -->
+        <dimen name="et_text">15dp</dimen>
+        <dimen name="img_height">100dp</dimen>
+        <dimen name="img_width">70dp</dimen>
+
 </resources>
