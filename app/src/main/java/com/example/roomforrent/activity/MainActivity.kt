@@ -2,13 +2,16 @@ package com.example.roomforrent.activity
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.roomforrent.adapter.MyTabAdapter
+import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
+import com.example.roomforrent.adapter.MyTabAdapter
+import com.example.roomforrent.fragment.FavouriteFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -36,10 +39,13 @@ class MainActivity : AppCompatActivity() {
 
         addTabElement()
         addViewPagerForTab()
-
+        viewPager.adapter?.notifyDataSetChanged()
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewPager.setCurrentItem(tab!!.getPosition())
+                val currentFragment : Fragment= supportFragmentManager.fragments.last()
+                val ft = supportFragmentManager.beginTransaction()
+                ft.detach(currentFragment).attach(currentFragment).commit()
+                Log.i("TestFavourite", tab!!.getPosition().toString())
                 tab.customView!!.nav_label.setTextColor(resources.getColor(R.color.activeTabTextColor))
                 tab.customView!!.nav_icon.setImageResource(activeTabIconArr.get(tab.position))
             }
