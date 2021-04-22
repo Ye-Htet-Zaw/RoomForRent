@@ -1,6 +1,7 @@
 package com.example.roomforrent.services
 
 import com.example.roomforrent.models.Favourite
+import com.example.roomforrent.models.House
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -16,4 +17,7 @@ interface FavouriteService {
 
     @DELETE("deleteFavouriteWithId/{USER_ID}&{FAVOURITE_ID}")
     fun deleteFavouriteWithId(@Path("USER_ID")user_id: String,@Path("FAVOURITE_ID")favourite_id: String):Call<List<Favourite>>
+
+    @GET("getFavouritHouseList")
+    fun getFavouritHouseList():Call<List<House>>
 }

@@ -65,7 +65,7 @@
     <string name="female_text">Female</string>
     <string name="other_text">Other</string>
     <string name="title_activity_location">Map</string>
-    
+
     <!--Post House info -->
     <string name="post_house">Post House</string>
     <string name="photo_of_your_house">Photos of Your House</string>

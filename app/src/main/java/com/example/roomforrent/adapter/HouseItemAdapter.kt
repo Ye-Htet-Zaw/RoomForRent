@@ -39,10 +39,7 @@ class HouseItemAdapter(val context: Context) :
     private var houseData: ArrayList<House>? = null
     val favouriteService = ServiceBuilder.buildService(FavouriteService::class.java)
 
-    private val share: SharedPreferences = context?.getSharedPreferences(
-        "myPreference",
-        Context.MODE_PRIVATE
-    )!!
+
 
     fun setData(list: ArrayList<House>) {
         houseData = list
@@ -60,6 +57,10 @@ class HouseItemAdapter(val context: Context) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val share: SharedPreferences = context?.getSharedPreferences(
+            "myPreference",
+            Context.MODE_PRIVATE
+        )!!
         val model = houseData!![position]
         var changeColor: Boolean = true
         //var isLogin = share.getBoolean("isLogin", false)
