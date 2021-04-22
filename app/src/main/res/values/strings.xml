@@ -67,6 +67,8 @@
     <string name="title_activity_location">Map</string>
 
     <!--Post House info -->
+    <string name="choose_category">Please Choose Your House Type</string>
+    <string name="township">Please Choose Township</string>
     <string name="post_house">Post House</string>
     <string name="photo_of_your_house">Photos of Your House</string>
     <string name="street_building_floor">Street, Building No., Floor</string>
