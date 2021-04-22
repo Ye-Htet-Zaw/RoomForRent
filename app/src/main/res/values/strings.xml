@@ -12,6 +12,8 @@
 
     //Favourite
     <string name="favourite">Favourite</string>
+    <string name="nohaveFav">There is no have favourite house!</string>
+    <string name="nologin">Need to login to see your favourite house!</string>
 
     //RenderProfileScreen
     <string name="image_contentDescription">image</string>

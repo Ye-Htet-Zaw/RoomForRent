@@ -20,4 +20,7 @@ interface FavouriteService {
 
     @GET("getFavouritHouseList")
     fun getFavouritHouseList():Call<List<House>>
+
+    @DELETE("deleteFavouriteWithUserAndHouseId/{USER_ID}&{HOUSE_ID}")
+    fun deleteFavouriteWithUserAndHouseId(@Path("USER_ID")user_id: String,@Path("HOUSE_ID")house_id: String):Call<List<House>>
 }
