@@ -124,13 +124,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/address"
+                android:text="@string/choose_category"
                 android:textColor="#7A8089"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto"/>
             <Spinner
-                android:id="@+id/addressSpinner"
+                android:id="@+id/ph_categorySpinner"
+                android:layout_width="200dp"
+                android:layout_height="@dimen/spinner_height"
+                android:layout_weight="1"
+                android:background="@drawable/spinnerbg"
+                android:gravity="center"
+                android:spinnerMode="dropdown" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/township"
+                android:textColor="#7A8089"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto"/>
+            <Spinner
+                android:id="@+id/ph_addressSpinner"
                 android:layout_width="200dp"
                 android:layout_height="@dimen/spinner_height"
                 android:layout_weight="1"
@@ -420,41 +437,6 @@
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_longitude"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/et_longitude"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionGo"
-                    android:hint="@string/longitude"
-                    android:inputType="textCapWords"
-                    android:textColor="@color/black"
-                    android:textColorHint="#7A8089" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_latitude"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/et_latitude"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionGo"
-                    android:hint="@string/latitude"
-                    android:inputType="textCapWords"
-                    android:textColor="@color/black"
-                    android:textColorHint="#7A8089" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_recommended"
@@ -501,7 +483,7 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/roboto"/>
             <Spinner
-                android:id="@+id/periodSpinner"
+                android:id="@+id/ph_periodSpinner"
                 android:layout_width="200dp"
                 android:layout_height="@dimen/spinner_height"
                 android:layout_weight="1"
