@@ -38,6 +38,7 @@ class FavouriteFragment : BaseFragment() {
     var userID : String?=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i("TestFav", "onCreate")
         super.onCreate(savedInstanceState)
     }
 
@@ -51,12 +52,18 @@ class FavouriteFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i("TestFav", "onCreateView")
         return inflater.inflate(R.layout.fragment_favourite, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.i("TestFav", "onViewCreated")
         initAdapter()
+        getFavList()
+    }
+
+    fun getFavList(){
         val share: SharedPreferences = context?.getSharedPreferences(
             "myPreference",
             Context.MODE_PRIVATE
@@ -108,7 +115,6 @@ class FavouriteFragment : BaseFragment() {
             txtBlank.text=resources.getString(R.string.nologin)
         }
     }
-
     private fun getDetailData(mDetailId: String) {
         val destinationService = ServiceBuilder.buildService(RoomForRentService::class.java)
         val requestCall = destinationService.getHouseDetailById(mDetailId)
@@ -126,5 +132,11 @@ class FavouriteFragment : BaseFragment() {
                 Toast.makeText(context, "Something went wrong $t", Toast.LENGTH_SHORT)
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("TestFavourite", "Need to Login")
+        getFavList()
     }
 }
