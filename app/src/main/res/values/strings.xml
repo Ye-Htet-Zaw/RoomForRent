@@ -62,4 +62,8 @@
     <string name="female_text">Female</string>
     <string name="other_text">Other</string>
     <string name="title_activity_location">Map</string>
+
+    //facebookLogin
+    <string name="facebook_app_id">856380178277497</string>
+    <string name="fb_login_protocol_scheme">fb856380178277497</string>
 </resources>
