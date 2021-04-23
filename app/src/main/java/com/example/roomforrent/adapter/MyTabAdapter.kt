@@ -34,8 +34,7 @@ class MyTabAdapter(
         var fragment: Fragment = SearchFragment()
         when (position) {
             0 -> fragment = SearchFragment()
-            //1 -> fragment = FavouriteFragment()
-            1 -> fragment = LoginProfileFragment()
+            1 -> fragment = FavouriteFragment()
             2 -> fragment = PostHouseFragment()
             3 -> {
                 //NTTT

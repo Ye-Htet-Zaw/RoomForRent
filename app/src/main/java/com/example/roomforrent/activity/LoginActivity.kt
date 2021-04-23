@@ -109,6 +109,7 @@ class LoginActivity : BaseActivity() {
                             //startActivity(intent)
                             val editor: SharedPreferences.Editor = share.edit()
                             editor.putBoolean("isLogin", true)
+                            editor.putString(USERID,response.body()!!.user_id)
                             editor.commit()
                             Toast.makeText(this@LoginActivity,"LOGIN SUCCESSFULLY",Toast.LENGTH_LONG).show()
 
