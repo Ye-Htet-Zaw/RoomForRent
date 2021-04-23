@@ -23,6 +23,7 @@ import com.example.roomforrent.models.Favourite
 import com.example.roomforrent.models.House
 import com.example.roomforrent.services.FavouriteService
 import com.example.roomforrent.services.ServiceBuilder
+import com.example.roomforrent.utils.Constants.USERID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.house_item.view.*
 import retrofit2.Call
@@ -39,10 +40,6 @@ class HouseItemAdapter(val context: Context) :
     private var houseData: ArrayList<House>? = null
     val favouriteService = ServiceBuilder.buildService(FavouriteService::class.java)
 
-    private val share: SharedPreferences = context?.getSharedPreferences(
-        "myPreference",
-        Context.MODE_PRIVATE
-    )!!
 
     fun setData(list: ArrayList<House>) {
         houseData = list
@@ -60,55 +57,36 @@ class HouseItemAdapter(val context: Context) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val share: SharedPreferences = context?.getSharedPreferences(
+            "myPreference",
+            Context.MODE_PRIVATE
+        )!!
         val model = houseData!![position]
         var changeColor: Boolean = true
-        //var isLogin = share.getBoolean("isLogin", false)
-        //var userId: String? = ""
-        var isLogin = true
-        var userId = "1"
+        var isLogin = share.getBoolean("isLogin", false)
+        var userId: String? = ""
         holder.ivHeart.setOnClickListener {
             changeColor = onClick(holder.ivHeart, changeColor)
             if (isLogin) {
-                //userId = share.getString(USERID, "")
+                userId = share.getString(USERID, "")
                 when (changeColor) {
                     true -> {
                         Log.i("TestFavourite", "unfavourite")
-                        val callGetFavouriteId =
-                            favouriteService.getFavouriteId(userId, model.house_ID)
-                        callGetFavouriteId.enqueue(object : Callback<Favourite> {
+                        val callDeleteFavouriteItem = favouriteService.deleteFavouriteWithUserAndHouseId(userId!!, model.house_ID)
+                        callDeleteFavouriteItem.enqueue(object :Callback<List<House>>{
                             override fun onResponse(
-                                call: Call<Favourite>,
-                                response: Response<Favourite>
+                                call: Call<List<House>>,
+                                response: Response<List<House>>
                             ) {
-                                Log.i("TestFavourite", "${response.body()!!.favourite_id}")
-                                val callDeleteFavouite = favouriteService.deleteFavouriteWithId(
-                                    userId,
-                                    response.body()!!.favourite_id
-                                )
-                                callDeleteFavouite.enqueue(object : Callback<List<Favourite>> {
-                                    override fun onResponse(
-                                        call: Call<List<Favourite>>,
-                                        response: Response<List<Favourite>>
-                                    ) {
-                                        Log.i("TestFavourite", "success delete")
-                                    }
-
-                                    override fun onFailure(
-                                        call: Call<List<Favourite>>,
-                                        t: Throwable
-                                    ) {
-                                        Log.i("TestFavourite", "fail delete")
-                                    }
-
-                                })
-
+                                Log.i("TestFavourite", "success delete fav")
                             }
 
-                            override fun onFailure(call: Call<Favourite>, t: Throwable) {
-
+                            override fun onFailure(call: Call<List<House>>, t: Throwable) {
+                                Log.i("TestFavourite", "success delete fav")
                             }
 
                         })
+
                     }
                     false -> {
                         Log.i("TestFavourite", "favourite")
@@ -117,9 +95,9 @@ class HouseItemAdapter(val context: Context) :
                             Locale.getDefault()
                         ).format(Date())
                         var favouriteRoom = Favourite(
-                            user_id = userId,
+                            user_id = userId!!,
                             house_id = model.house_ID,
-                            creator_id = userId,
+                            creator_id = userId!!,
                             create_dateTime = currentDate
                         )
                         val callSaveFavourite =
@@ -129,11 +107,11 @@ class HouseItemAdapter(val context: Context) :
                                 call: Call<List<Favourite>>,
                                 response: Response<List<Favourite>>
                             ) {
-                                Log.i("TestFavourite", "success api call")
+                                Log.i("TestFavourite", "success save fav")
                             }
 
                             override fun onFailure(call: Call<List<Favourite>>, t: Throwable) {
-                                Log.i("TestFavourite", "fail api call")
+                                Log.i("TestFavourite", "fail save fav")
                             }
 
                         })
@@ -145,16 +123,20 @@ class HouseItemAdapter(val context: Context) :
 
         Log.d("Response", "List Count :${houseData?.size} ")
         val item = houseData?.get(position)
-        if(isLogin){
+        if (isLogin) {
             //userId = share.getString(USERID, "")
-            val callGetFavouriteItem = favouriteService.getFavouriteId(userId, item!!.house_ID)
-            callGetFavouriteItem.enqueue(object :Callback<Favourite>{
+            val callGetFavouriteItem = favouriteService.getFavouriteId(userId!!, item!!.house_ID)
+            callGetFavouriteItem.enqueue(object : Callback<Favourite> {
                 override fun onResponse(call: Call<Favourite>, response: Response<Favourite>) {
-                    if(response.body()==null){
+                    if (response.body() == null) {
                         changeColor = true
-                        holder.ivHeart.setColorFilter(ContextCompat.getColor(context, R.color.white))
-                    }
-                    else{
+                        holder.ivHeart.setColorFilter(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.white
+                            )
+                        )
+                    } else {
                         changeColor = false
                         holder.ivHeart.setColorFilter(ContextCompat.getColor(context, R.color.red))
                     }

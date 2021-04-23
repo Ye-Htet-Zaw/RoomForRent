@@ -45,8 +45,9 @@ class MainActivity : AppCompatActivity() {
                 val currentFragment : Fragment= supportFragmentManager.fragments.last()
                 val ft = supportFragmentManager.beginTransaction()
                 ft.detach(currentFragment).attach(currentFragment).commit()
-                Log.i("TestFavourite", tab!!.getPosition().toString())
-                tab.customView!!.nav_label.setTextColor(resources.getColor(R.color.activeTabTextColor))
+                Log.i("TestFavourite",tab!!.position.toString()+currentFragment)
+                viewPager.setCurrentItem(tab!!.getPosition())
+                tab?.customView!!.nav_label.setTextColor(resources.getColor(R.color.activeTabTextColor))
                 tab.customView!!.nav_icon.setImageResource(activeTabIconArr.get(tab.position))
             }
 

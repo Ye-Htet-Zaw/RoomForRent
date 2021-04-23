@@ -15,7 +15,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -66,6 +66,12 @@ dependencies {
 
     //Carousel View
     implementation 'com.synnapps:carouselview:0.1.5'
+
+    //Facebook Login
+    implementation 'com.facebook.android:facebook-android-sdk:8.1.0'
+    implementation 'com.facebook.android:facebook-login:8.1.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
 
 
 }
