@@ -24,6 +24,7 @@ import com.example.roomforrent.services.FavouriteService
 import com.example.roomforrent.services.RoomForRentService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
+import com.example.roomforrent.utils.Constants.USERID
 import kotlinx.android.synthetic.main.fragment_favourite.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -68,11 +69,10 @@ class FavouriteFragment : BaseFragment() {
             "myPreference",
             Context.MODE_PRIVATE
         )!!
-        //isLogin = share.getBoolean("isLogin", false)
-        //userID=share.getString(USERID,"")
-        isLogin = true
-        userID = "1"
+        isLogin = share.getBoolean("isLogin", false)
+
         if(isLogin){
+            userID=share.getString(USERID,"")
             blankLayout.visibility=View.GONE
             var callGetFavouriteHouseList = favouriteService.getFavouritHouseList()
             callGetFavouriteHouseList.enqueue(object : Callback<List<House>> {
