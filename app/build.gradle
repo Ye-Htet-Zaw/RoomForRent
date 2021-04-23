@@ -69,7 +69,9 @@ dependencies {
 
     //Facebook Login
     implementation 'com.facebook.android:facebook-android-sdk:8.1.0'
+    implementation 'com.facebook.android:facebook-login:8.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
+
 
 
 }

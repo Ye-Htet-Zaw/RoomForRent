@@ -56,7 +56,7 @@ class LoginActivity : BaseActivity() {
                     }
 
                     override fun onError(error: FacebookException) {
-                        Log.d("MainActivity", "Facebook onError.")
+                        Log.d("MainActivity", "Facebook onError. ${error.message}")
 
                     }
                 })

@@ -94,6 +94,11 @@
     <string name="available_date">Available Date</string>
     <string name="recommended_point">Recommended Point</string>
 
+    //NTTT
     <string name="facebook_app_id">856380178277497</string>
     <string name="fb_login_protocol_scheme">fb856380178277497</string>
+
+    //KMMN
+    <!--<string name="facebook_app_id">857267378334069</string>
+    <string name="fb_login_protocol_scheme">fb857267378334069</string>-->
 </resources>
