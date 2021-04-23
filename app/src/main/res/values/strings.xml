@@ -94,5 +94,6 @@
     <string name="available_date">Available Date</string>
     <string name="recommended_point">Recommended Point</string>
 
-
+    <string name="facebook_app_id">856380178277497</string>
+    <string name="fb_login_protocol_scheme">fb856380178277497</string>
 </resources>
