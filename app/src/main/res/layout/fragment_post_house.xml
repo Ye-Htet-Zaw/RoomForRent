@@ -58,31 +58,36 @@
                     android:id="@+id/img_1"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo"/>
                 <ImageView
                     android:id="@+id/img_2"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
                     android:layout_marginLeft="10dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo" />
                 <ImageView
                     android:id="@+id/img_3"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
                     android:layout_marginLeft="10dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo" />
                 <ImageView
                     android:id="@+id/img_4"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
                     android:layout_marginLeft="10dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo" />
                 <ImageView
                     android:id="@+id/img_5"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
                     android:layout_marginLeft="10dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo" />
             </LinearLayout>
 
             <LinearLayout
@@ -94,31 +99,36 @@
                     android:id="@+id/img_6"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo" />
                 <ImageView
                     android:id="@+id/img_7"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
                     android:layout_marginLeft="10dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo" />
                 <ImageView
                     android:id="@+id/img_8"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
                     android:layout_marginLeft="10dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo" />
                 <ImageView
                     android:id="@+id/img_9"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
                     android:layout_marginLeft="10dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo" />
                 <ImageView
                     android:id="@+id/img_10"
                     android:layout_width="@dimen/img_width"
                     android:layout_height="@dimen/img_height"
                     android:layout_marginLeft="10dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/add_photo" />
             </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
@@ -405,9 +415,9 @@
                     android:textColorHint="#7A8089" />
                     <ImageView
                         android:id="@+id/iv_available_date"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="20dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="10dp"
                         android:src="@drawable/ic_calendar"/>
                 </LinearLayout>
             </com.google.android.material.textfield.TextInputLayout>

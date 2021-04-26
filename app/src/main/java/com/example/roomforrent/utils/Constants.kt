@@ -1,5 +1,11 @@
 package com.example.roomforrent.utils
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import android.webkit.MimeTypeMap
+import androidx.fragment.app.FragmentActivity
+import com.example.roomforrent.fragment.PostHouseFragment
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -217,8 +223,30 @@ object Constants {
     const val LONGITUDE: String = "longitude"
 
 
+    const val READ_STORAGE_PERMISSION_CODE = 1
+
+    const val IMAGE_REQUEST_CODE_ONE = 2
+    const val IMAGE_REQUEST_CODE_TWO = 3
+    const val IMAGE_REQUEST_CODE_THREE = 4
+    const val IMAGE_REQUEST_CODE_FOUR = 5
+    const val IMAGE_REQUEST_CODE_FIVE = 6
+    const val IMAGE_REQUEST_CODE_SIX = 7
+    const val IMAGE_REQUEST_CODE_SEVEN = 8
+    const val IMAGE_REQUEST_CODE_EIGHT = 9
+    const val IMAGE_REQUEST_CODE_NINE = 10
+    const val IMAGE_REQUEST_CODE_TEN = 11
 
 
 
 
+    fun showImageChooser(activity: PostHouseFragment,requestCode: Int){
+        var galleryIntent = Intent(
+            Intent.ACTION_PICK,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        activity.startActivityForResult(galleryIntent,requestCode)
+    }
+
+    fun getFileExtension(activity: FragmentActivity,uri: Uri?): String?{
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(activity.contentResolver.getType(uri!!))
+    }
 }
