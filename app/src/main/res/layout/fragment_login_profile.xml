@@ -130,7 +130,7 @@
                 android:padding="15dp">
 
                 <TextView
-                    android:id="@+id/tv_owner_list_yourspace"
+                    android:id="@+id/tv_owner_list_space"
                     android:fontFamily="@font/roboto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

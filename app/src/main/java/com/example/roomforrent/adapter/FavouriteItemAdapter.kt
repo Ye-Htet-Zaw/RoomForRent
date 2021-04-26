@@ -45,7 +45,7 @@ class FavouriteItemAdapter(val context: Context):RecyclerView.Adapter<FavouriteI
         fun bindView(item: House?) {
             itemView.tv_address.text = item?.house_ADDRESS.toString()
             itemView.tv_price.text = item?.rent.toString()
-            Picasso.get().load("http://192.168.100.21:9097/image/house/${item?.house_ID}/1.jpg")
+            Picasso.get().load("http://192.168.1.3:9097/image/house/${item?.house_ID}/1.jpg")
                 .into(itemView.iv_roomImg)
         }
     }
