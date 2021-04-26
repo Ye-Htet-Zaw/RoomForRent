@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.ChangePasswordActivity
+import com.example.roomforrent.activity.ListYourSpaceActivity
 import com.example.roomforrent.activity.MainActivity
 import com.example.roomforrent.activity.PersonalInformationActivity
 import com.example.roomforrent.models.User
@@ -56,15 +57,24 @@ class LoginProfileFragment : Fragment() {
 
         v.ll_owner_change_password.setOnClickListener {
             val i = Intent(activity, ChangePasswordActivity::class.java)
-            i.putExtra(USERID,userId)
+            i.putExtra(USERID, userId)
             startActivity(i)
             (activity as Activity?)!!.overridePendingTransition(0, 0)
         }
 
+        tv_owner_list_space.setOnClickListener{
+            val i = Intent(context, ListYourSpaceActivity::class.java)
+            i.putExtra(USERID, userId)
+            startActivity(i)
+
+        }
+
         v.btn_owner_profile_logout.setOnClickListener {
             startActivity(Intent(context, MainActivity::class.java))
-            val share: SharedPreferences = context?.getSharedPreferences("myPreference",
-                Context.MODE_PRIVATE)!!
+            val share: SharedPreferences = context?.getSharedPreferences(
+                "myPreference",
+                Context.MODE_PRIVATE
+            )!!
             val editor: SharedPreferences.Editor = share.edit()
             editor.putBoolean("isLogin", false)
             editor.commit()
@@ -88,10 +98,13 @@ class LoginProfileFragment : Fragment() {
                     val user = response.body()!!
                     Log.d("Response", "countrylist size : ${user.user_name}")
                     //Toast.makeText(this@LoginProfileFragment,"user name is ${user.user_name}",Toast.LENGTH_SHORT).show()
-                   Log.i("user_name",user.user_name)
+                    Log.i("user_name", user.user_name)
 
-                    tv_owner_name.text=user.user_name
-                    Picasso.get().load("http://192.168.1.2:9090/image/user/"+user.user_id+".jpg").into(iv_profile_user_image)
+                    tv_owner_name.text = user.user_name
+                    Picasso.get()
+                        .load("http://192.168.1.3:9090/image/user/" + user.user_id + ".jpg").into(
+                        iv_profile_user_image
+                    )
 
                 } else {
                     Log.i("Something", "Something went wrong ${response.message()}")
