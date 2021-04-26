@@ -8,36 +8,83 @@
  */
 package com.example.roomforrent.fragment
 
+import android.Manifest
+import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.icu.number.NumberFormatter.with
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.RadioButton
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.roomforrent.R
 import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.models.House
+import com.example.roomforrent.services.PostHouseService
+import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_house_detail.*
 import kotlinx.android.synthetic.main.activity_personal_information.*
 import kotlinx.android.synthetic.main.fragment_post_house.*
-import kotlinx.android.synthetic.main.fragment_search.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.System.load
 import java.util.*
 import kotlin.collections.ArrayList
 
 class PostHouseFragment : Fragment() {
 
+    private var mSelectedImageFileUri1: Uri? = null
+    private var mSelectedImageFileUri2: Uri? = null
+    private var mSelectedImageFileUri3: Uri? = null
+    private var mSelectedImageFileUri4: Uri? = null
+    private var mSelectedImageFileUri5: Uri? = null
+    private var mSelectedImageFileUri6: Uri? = null
+    private var mSelectedImageFileUri7: Uri? = null
+    private var mSelectedImageFileUri8: Uri? = null
+    private var mSelectedImageFileUri9: Uri? = null
+    private var mSelectedImageFileUri10: Uri? = null
     lateinit var categoryAdapter: MySpinnerAdapter
     lateinit var townshipAdapter: MySpinnerAdapter
     lateinit var periodAdapter: MySpinnerAdapter
     var selectedCategory: String = ""
     var selectedAddress: String = ""
     var selectedPeriod: String = ""
+    var categoryId : String = ""
+    var houseAddress : String = ""
+    var township : String = ""
+    var noOfGuest : String = ""
+    var noOfRoom : String = ""
+    var noOfBath : String = ""
+    var noOfToilet : String = ""
+    var area: String = ""
+    var noOfFloor : String = ""
+    var noOfAircon : String = ""
+    var wifi: Int = 0
+    var phoneOne : String = ""
+    var phoneTwo : String = ""
+    var availableDate: String = ""
+    var rent : String = ""
+    var deposit : String = ""
+    var recommendedPoint : String = ""
+    var contractRule : String = ""
+    var period : String = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +92,7 @@ class PostHouseFragment : Fragment() {
         townshipAdapter = context?.let { createSpinnerAdapter(it, Constants.townshipArr) }!!
         categoryAdapter = context?.let { createSpinnerAdapter(it, Constants.categoryArr) }!!
         periodAdapter = context?.let { createSpinnerAdapter(it, Constants.periodArr) }!!
+        checkHouseData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -102,6 +150,287 @@ class PostHouseFragment : Fragment() {
             }
 
         }
+
+        img_1.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_ONE)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+
+        img_2.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_TWO)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+
+        img_3.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_THREE)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+
+        img_4.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_FOUR)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+
+        img_5.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_FIVE)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+
+        img_6.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_SIX)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+
+        img_7.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_SEVEN)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+
+        img_8.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_EIGHT)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+        img_9.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_NINE)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+        img_10.setOnClickListener{
+            if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this,Constants.IMAGE_REQUEST_CODE_TEN)
+            }
+            else{
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        Constants.READ_STORAGE_PERMISSION_CODE
+                    )
+                }
+            }
+        }
+
+        categoryId = selectedCategory
+        houseAddress = et_address.text.toString().trim()
+        township = selectedAddress
+        noOfGuest = et_guest.text.toString().trim()
+        noOfRoom = et_room.text.toString().trim()
+        noOfBath = et_bath.text.toString().trim()
+        noOfToilet = et_toilet.text.toString().trim()
+        area = et_area.text.toString().trim()
+        noOfFloor = et_floor.text.toString().trim()
+        noOfAircon = et_aircon.text.toString().trim()
+        wifi = onRadioButtonClicked(rg_radio)
+        phoneOne = et_contact1.text.toString().trim()
+        phoneTwo = et_contact2.text.toString().trim()
+
+        iv_available_date.setOnClickListener { view ->
+            clickDataPicker(view)
+        }
+
+        rent = et_rent.text.toString().trim()
+        deposit = et_deposit.text.toString().trim()
+        recommendedPoint = et_recommended.text.toString().trim()
+        contractRule = et_contract_rule.text.toString().trim()
+        period = selectedPeriod
+
+        btn_post_house.setOnClickListener {
+                val house = House()
+                house.category_ID=categoryId
+                house.township=township
+                house.house_ADDRESS=houseAddress
+                house.no_OF_GUESTS=noOfGuest.toInt()
+                house.no_OF_ROOM=noOfRoom.toInt()
+                house.no_OF_BATH=noOfBath.toInt()
+                house.no_OF_TOILET=noOfToilet.toInt()
+                house.area=area.toInt()
+                house.no_OF_FLOOR=noOfFloor.toInt()
+                house.no_OF_AIRCON=noOfAircon.toInt()
+                house.wifi=wifi
+                house.phone_ONE=phoneOne
+                house.phone_TWO=phoneTwo
+                house.available_DATE=Date(availableDate)
+                house.rent=rent.toInt()
+                house.deposit=deposit.toInt()
+                house.recommented_POINTS=recommendedPoint
+                house.contract_RULE=contractRule
+                house.period=period.toInt()
+
+                var createHouseLiveDate: LiveData<House>?=null
+                createHouseLiveDate=createHouse(house)
+                if (createHouseLiveDate!=null){
+                    Toast.makeText(context,"Successful", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Toast.makeText(context,"Something went wrong!", Toast.LENGTH_SHORT).show()
+                }
+
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_ONE && data!!.data != null){
+                mSelectedImageFileUri1 = data.data
+            Picasso.get().load(mSelectedImageFileUri1).noPlaceholder().centerCrop().fit()
+                .into((img_1));
+            }
+       if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_TWO && data!!.data != null){
+            mSelectedImageFileUri2 = data.data
+            Picasso.get().load(mSelectedImageFileUri2).noPlaceholder().centerCrop().fit()
+                .into((img_2));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_THREE && data!!.data != null){
+            mSelectedImageFileUri3 = data.data
+            Picasso.get().load(mSelectedImageFileUri3).noPlaceholder().centerCrop().fit()
+                .into((img_3));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_FOUR && data!!.data != null){
+            mSelectedImageFileUri4 = data.data
+            Picasso.get().load(mSelectedImageFileUri4).noPlaceholder().centerCrop().fit()
+                .into((img_4));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_FIVE && data!!.data != null){
+            mSelectedImageFileUri5 = data.data
+            Picasso.get().load(mSelectedImageFileUri5).noPlaceholder().centerCrop().fit()
+                .into((img_5));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_SIX && data!!.data != null){
+            mSelectedImageFileUri6 = data.data
+            Picasso.get().load(mSelectedImageFileUri6).noPlaceholder().centerCrop().fit()
+                .into((img_6));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_SEVEN && data!!.data != null){
+            mSelectedImageFileUri7 = data.data
+            Picasso.get().load(mSelectedImageFileUri7).noPlaceholder().centerCrop().fit()
+                .into((img_7));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_EIGHT && data!!.data != null){
+            mSelectedImageFileUri8 = data.data
+            Picasso.get().load(mSelectedImageFileUri8).noPlaceholder().centerCrop().fit()
+                .into((img_8));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_NINE && data!!.data != null){
+            mSelectedImageFileUri9 = data.data
+            Picasso.get().load(mSelectedImageFileUri9).noPlaceholder().centerCrop().fit()
+                .into((img_9));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_TEN && data!!.data != null){
+            mSelectedImageFileUri10 = data.data
+            Picasso.get().load(mSelectedImageFileUri10).noPlaceholder().centerCrop().fit()
+                .into((img_10));
+        }
+
+
     }
 
     override fun onCreateView(
@@ -119,50 +448,31 @@ class PostHouseFragment : Fragment() {
     private fun checkHouseData(){
         var createHouseLiveDate: LiveData<House>?=null
 
-        var categoryId = selectedCategory
-        var houseAddress = et_address.text.toString().trim()
-        var township = selectedAddress
-        var noOfGuest = et_guest.text.toString().trim()
-        var noOfRoom = et_room.text.toString().trim()
-        var noOfBath = et_bath.text.toString().trim()
-        var noOfToilet = et_toilet.text.toString().trim()
-        var area = et_area.text.toString().trim()
-        var noOfFloor = et_floor.text.toString().trim()
-        var noOfAircon = et_aircon.text.toString().trim()
-        var wifi: Int= onRadioButtonClicked(rg_radio)
-        var phoneOne = et_phone_num1.text.toString().trim()
-        var phoneTwo = et_phone_num2.text.toString().trim()
-        TODO("add available date and ....")
-
-        var rent = et_rent.text.toString().trim().toInt()
-        var deposit = et_deposit.text.toString().trim().toInt()
-        var recommendedPoint = et_recommended.text.toString().trim()
-        var contractRule = et_contract_rule.text.toString().trim()
-        var period = selectedPeriod
     }
 
-//    private fun clickDataPicker(view: View) {
-//        val c = Calendar.getInstance()
-//        val year =
-//            c.get(Calendar.YEAR) // Returns the value of the given calendar field. This indicates YEAR
-//        val month = c.get(Calendar.MONTH) // This indicates the Month
-//        val day = c.get(Calendar.DAY_OF_MONTH) // This indicates the Day
-//        val dpd = DatePickerDialog(
-//            ,
-//            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-//                val selectedDate = "$dayOfMonth/${monthOfYear + 1}/$year"
-//
-//                // Selected date it set to the TextView to make it visible to user.
-//                et_available_date.setText(selectedDate)
-//            },
-//            year,
-//            month,
-//            day
-//        )
-//        // 86400000 is milliseconds of 24 Hours. Which is used to restrict the user to select today and future day.
-//        dpd.datePicker.setMaxDate(Date().time - 86400000)
-//        dpd.show() // It is used to show the datePicker Dialog.
-//    }
+    private fun clickDataPicker(view: View) {
+        val c = Calendar.getInstance()
+        val year =
+            c.get(Calendar.YEAR) // Returns the value of the given calendar field. This indicates YEAR
+        val month = c.get(Calendar.MONTH) // This indicates the Month
+        val day = c.get(Calendar.DAY_OF_MONTH) // This indicates the Day
+        val dpd = context?.let {
+            DatePickerDialog(
+                it,
+                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                    val selectedDate = "$dayOfMonth/${monthOfYear + 1}/$year"
+
+                    // Selected date it set to the TextView to make it visible to user.
+                    availableDate=et_available_date.setText(selectedDate).toString()
+                },
+                year,
+                month,
+                day
+            )
+        }
+        // 86400000 is milliseconds of 24 Hours. Which is used to restrict the user to select today and future day.
+        dpd?.show() // It is used to show the datePicker Dialog.
+    }
     private fun onRadioButtonClicked(view: View): Int {
         var wifi = 0
         if (view is RadioButton) {
@@ -182,5 +492,26 @@ class PostHouseFragment : Fragment() {
             }
         }
         return wifi
+    }
+
+    private fun createHouse(house: House): LiveData<House> {
+        val data = MutableLiveData<House>()
+        val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
+        destinationService.createHouse(house).enqueue(object : Callback<House>{
+            override fun onFailure(call: Call<House>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(call: Call<House>, response: Response<House>) {
+                val res = response.body()
+                if (response.code() == 200 && res!=null){
+                    data.value = res
+                }else{
+                    data.value = null
+                }
+            }
+
+        })
+        return data
     }
 }

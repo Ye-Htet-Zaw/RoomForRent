@@ -124,7 +124,7 @@ class HouseItemAdapter(val context: Context) :
         Log.d("Response", "List Count :${houseData?.size} ")
         val item = houseData?.get(position)
         if (isLogin) {
-            //userId = share.getString(USERID, "")
+            userId = share.getString(USERID, "")
             val callGetFavouriteItem = favouriteService.getFavouriteId(userId!!, item!!.house_ID)
             callGetFavouriteItem.enqueue(object : Callback<Favourite> {
                 override fun onResponse(call: Call<Favourite>, response: Response<Favourite>) {

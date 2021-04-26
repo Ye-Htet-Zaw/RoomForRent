@@ -1,3 +1,11 @@
+/**
+ *
+ * FavouriteFragment
+ *
+ * 2021/04/20 KMMN Create New
+ *
+ * show favourite list
+ */
 package com.example.roomforrent.fragment
 
 import android.R.attr.endColor
