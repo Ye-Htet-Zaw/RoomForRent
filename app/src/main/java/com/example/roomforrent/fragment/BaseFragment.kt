@@ -1,3 +1,11 @@
+/**
+ *
+ * BaseFragment
+ *
+ * 2021/04/21 KMMN Create New
+ *
+ * Common Fragment Function
+ */
 package com.example.roomforrent.fragment
 
 import android.app.Dialog

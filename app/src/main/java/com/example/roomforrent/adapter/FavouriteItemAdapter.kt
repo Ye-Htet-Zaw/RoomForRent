@@ -1,3 +1,11 @@
+/**
+ *
+ * FavouriteItemAdapter
+ *
+ * 2021/04/20 KMMN Create New
+ *
+ * Adapter to show favourite list
+ */
 package com.example.roomforrent.adapter
 
 import android.content.Context
