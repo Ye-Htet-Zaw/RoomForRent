@@ -5,7 +5,6 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.fragment.app.FragmentActivity
-import com.example.roomforrent.fragment.PostHouseFragment
 import java.util.*
 import kotlin.collections.ArrayList
 
