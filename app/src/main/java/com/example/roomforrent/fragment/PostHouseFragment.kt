@@ -14,20 +14,20 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.icu.number.NumberFormatter.with
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ImageView
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.roomforrent.R
@@ -37,19 +37,16 @@ import com.example.roomforrent.services.PostHouseService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_house_detail.*
-import kotlinx.android.synthetic.main.activity_personal_information.*
 import kotlinx.android.synthetic.main.fragment_post_house.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.System.load
 import java.sql.Timestamp
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 class PostHouseFragment : Fragment() {
 
@@ -101,6 +98,7 @@ class PostHouseFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -157,32 +155,61 @@ class PostHouseFragment : Fragment() {
 
         }
 
-        categoryId = selectedCategory
-        houseAddress = et_address.text.toString().trim()
-        township = selectedAddress
-        noOfGuest = et_guest.text.toString().trim()
-        noOfRoom = et_room.text.toString().trim()
-        noOfBath = et_bath.text.toString().trim()
-        noOfToilet = et_toilet.text.toString().trim()
-        area = et_area.text.toString().trim()
-        noOfFloor = et_floor.text.toString().trim()
-        noOfAircon = et_aircon.text.toString().trim()
-        wifi = onRadioButtonClicked(rg_radio)
-        phoneOne = et_contact1.text.toString().trim()
-        phoneTwo = et_contact2.text.toString().trim()
 
         iv_available_date.setOnClickListener { view ->
             clickDataPicker(view)
         }
 
-        rent = et_rent.text.toString().trim()
-        deposit = et_deposit.text.toString().trim()
-        recommendedPoint = et_recommended.text.toString().trim()
-        contractRule = et_contract_rule.text.toString().trim()
-        period = selectedPeriod
+        rb_group.setOnCheckedChangeListener { group, checkedId ->
+            wifi = if (checkedId==R.id.rb_yes) 1 else 0
+        }
+
+        categoryId = when (selectedCategory) {
+            "Condominum" -> {
+                "1"
+            }
+            "WholeHouse" -> {
+                "2"
+            }
+            "Apartment" -> {
+                "3"
+            }
+            else -> {
+                "4"
+            }
+        }
 
         btn_post_house.setOnClickListener {
-            if (categoryId.isNotEmpty()
+            houseAddress = et_address.text.toString().trim()
+            township = selectedAddress
+            noOfGuest = et_guest.text.toString().trim()
+            noOfRoom = et_room.text.toString().trim()
+            noOfBath = et_bath.text.toString().trim()
+            noOfToilet = et_toilet.text.toString().trim()
+            area = et_area.text.toString().trim()
+            noOfFloor = et_floor.text.toString().trim()
+            noOfAircon = et_aircon.text.toString().trim()
+            phoneOne = et_contact1.text.toString().trim()
+            phoneTwo = et_contact2.text.toString().trim()
+            rent = et_rent.text.toString().trim()
+            availableDate=et_available_date.text.toString().trim()
+            deposit = et_deposit.text.toString().trim()
+            recommendedPoint = et_recommended.text.toString().trim()
+            contractRule = et_contract_rule.text.toString().trim()
+            period = selectedPeriod
+
+
+
+//
+//            val formatter = SimpleDateFormat("dd/MM/yyyy")
+//            val date1 = formatter.parse(availableDate)
+            if (categoryId.isNotEmpty() && township.isNotEmpty() && houseAddress.isNotEmpty() &&
+                noOfGuest.isNotEmpty() && noOfRoom.isNotEmpty() && noOfBath.isNotEmpty() &&
+                noOfToilet.isNotEmpty() && area.isNotEmpty() && noOfFloor.isNotEmpty() &&
+                noOfAircon.isNotEmpty() && wifi !== null && phoneOne.isNotEmpty() &&
+                phoneTwo.isNotEmpty() && availableDate.isNotEmpty() && rent.isNotEmpty() &&
+                deposit.isNotEmpty() && recommendedPoint.isNotEmpty() && contractRule.isNotEmpty() &&
+                period.isNotEmpty()
             ) {
                 val house = House(
                     category_ID = categoryId,
@@ -198,7 +225,7 @@ class PostHouseFragment : Fragment() {
                     wifi = wifi,
                     phone_ONE = phoneOne,
                     phone_TWO = phoneTwo,
-                    available_DATE = Date(availableDate),
+                    available_DATE = availableDate,
                     rent = rent.toInt(),
                     deposit = deposit.toInt(),
                     recommented_POINTS = recommendedPoint,
@@ -207,15 +234,15 @@ class PostHouseFragment : Fragment() {
                     user_ID = "1",
                     longitude = "09",
                     latitude = "93",
-                    expired_DATE = Date("1/1/2020"),
+                    expired_DATE = "2020-2-3",
                     rent_FLAG = 0,
                     delete_FLAG = 0,
-                    delete_DATETIME = Timestamp(System.currentTimeMillis()),
-                    creator_ID = "1",
-                    create_DATETIME = Timestamp(System.currentTimeMillis()),
-                    updator_ID = "1",
-                    update_DATETIME = Timestamp(System.currentTimeMillis()),
-                    house_ID = "001"
+                    delete_DATETIME = "2020-2-3",
+                    creator_ID = "CRD000002",
+                    create_DATETIME = "2020-2-3",
+                    updator_ID = "CRD000002",
+                    update_DATETIME = "2020-2-3",
+                    house_ID = "009"
                 )
 
                 var createHouseLiveDate: LiveData<House>? = null
@@ -487,36 +514,37 @@ class PostHouseFragment : Fragment() {
                     val selectedDate = "$dayOfMonth/${monthOfYear + 1}/$year"
 
                     // Selected date it set to the TextView to make it visible to user.
-                    availableDate=et_available_date.setText(selectedDate).toString()
+                    et_available_date.setText(selectedDate).toString()
                 },
                 year,
                 month,
                 day
             )
         }
-        // 86400000 is milliseconds of 24 Hours. Which is used to restrict the user to select today and future day.
         dpd?.show() // It is used to show the datePicker Dialog.
     }
-    private fun onRadioButtonClicked(view: View): Int {
-        var wifi = 0
-        if (view is RadioButton) {
-            // Is the button now checked?
-            val checked = view.isChecked
-
-            // Check which radio button was clicked
-            when (view.getId()) {
-                R.id.rb_yes ->
-                    if (checked) {
-                        wifi = 1
-                    }
-                R.id.rb_no ->
-                    if (checked) {
-                        wifi = 0
-                    }
-            }
-        }
-        return wifi
-    }
+//    private fun onRadioButtonClicked(view: View): Int {
+//        val radioGroup = (R.id.rb_group)
+//
+//        var wifi = 0
+//        if (view is RadioButton) {
+//            // Is the button now checked?
+//            val checked = view.isClickable
+//
+//            // Check which radio button was clicked
+//            when (view.getId()) {
+//                R.id.rb_yes ->
+//                    if (checked) {
+//                        wifi = 1
+//                    }
+//                R.id.rb_no ->
+//                    if (checked) {
+//                        wifi = 0
+//                    }
+//            }
+//        }
+//        return wifi
+//    }
 
     private fun createHouse(house: House): LiveData<House> {
         val data = MutableLiveData<House>()

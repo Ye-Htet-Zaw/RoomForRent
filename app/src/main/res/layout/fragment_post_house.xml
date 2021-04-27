@@ -316,7 +316,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto"/>
             <RadioGroup
-                android:id="@+id/rg_radio"
+                android:id="@+id/rb_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
@@ -337,7 +337,6 @@
                 android:textSize="13sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/roboto"
-
                 />
 
             <!--No Rdb-->
