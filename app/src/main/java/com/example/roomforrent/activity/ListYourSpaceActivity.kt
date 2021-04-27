@@ -16,10 +16,7 @@ import com.example.roomforrent.adapter.HouseItemAdapter
 import com.example.roomforrent.models.House
 import com.example.roomforrent.models.HouseDetails
 import com.example.roomforrent.models.HouseList
-import com.example.roomforrent.services.ChangePasswordService
-import com.example.roomforrent.services.ListYourSpaceService
-import com.example.roomforrent.services.RoomForRentService
-import com.example.roomforrent.services.ServiceBuilder
+import com.example.roomforrent.services.*
 import com.example.roomforrent.utils.Constants
 import kotlinx.android.synthetic.main.activity_house_list.*
 import kotlinx.android.synthetic.main.fragment_login_profile.*
@@ -30,13 +27,14 @@ import retrofit2.Response
 class ListYourSpaceActivity : BaseActivity() {
     lateinit var adapter: HouseItemAdapter
     private lateinit var houseDetails: HouseDetails
+    var user_id=""
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list_your_space)
+        setContentView(R.layout.activity_house_list)
 
 
-
+        initAdapter()
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
         window.setBackgroundDrawable(resources.getDrawable(R.drawable.toolbarbg))
@@ -50,11 +48,42 @@ class ListYourSpaceActivity : BaseActivity() {
     }
 
     private fun listSpace(){
-        initAdapter()
-        var user_id:String= intent.extras?.getString(Constants.USERID).toString()
+
+        user_id= intent.extras?.getString(Constants.USERID).toString()
         val destinationService = ServiceBuilder.buildService(ListYourSpaceService::class.java)
         val callGetAllRoomList: Call<List<House>> = destinationService.getHouseList(user_id)
-        callSpace(callGetAllRoomList)
+        showProgressDialog("Please Wait...")
+        callGetAllRoomList.enqueue(object : Callback<List<House>> {
+            override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
+                if (response.isSuccessful) {
+                    hideProgressDialog()
+                    val houseList = response.body()!! as List<House>
+                    Log.d("Response", "houseList size : ${houseList}")
+                    adapter.setData(houseList as ArrayList<House>)
+                    adapter.setOnClickListener(object : HouseItemAdapter.OnClickListener{
+                        override fun onClick(position: Int, model: House) {
+                            showProgressDialog("Please Wait...")
+                            getDetailData(model.house_ID)
+                        }
+
+                    })
+                } else {
+                    hideProgressDialog()
+                    Log.d("Response", "fail")
+                    Toast.makeText(
+                        this@ListYourSpaceActivity,
+                        "Something went wrong ${response.message()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<House>>, t: Throwable) {
+                hideProgressDialog()
+                Log.d("Response", "fail service call ${t.message}")
+            }
+        })
+        Log.d("Response","ListYourSpace userId: "+ user_id)
     }
 
     private fun initAdapter() {
@@ -76,39 +105,7 @@ class ListYourSpaceActivity : BaseActivity() {
         }
         toolBarMain.setNavigationOnClickListener { onBackPressed() }
     }
-    //Show house list
-    private fun callSpace(callGetRoomList: Call<List<House>>) {
-        showProgressDialog("Please Wait...")
-        callGetRoomList.enqueue(object : Callback<List<House>> {
-            override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
-                if (response.isSuccessful) {
-                    hideProgressDialog()
-                    val houseList = response.body()!! as List<House>
-                    Log.d("Response", "houseList size : ${houseList.size}")
-                    adapter.setData(houseList as ArrayList<House>)
-                    adapter.setOnClickListener(object : HouseItemAdapter.OnClickListener{
-                        override fun onClick(position: Int, model: House) {
-                            showProgressDialog("Please Wait...")
-                            getDetailData(model.house_ID)
-                        }
 
-                    })
-                } else {
-                    hideProgressDialog()
-                    Toast.makeText(
-                        this@ListYourSpaceActivity,
-                        "Something went wrong ${response.message()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<House>>, t: Throwable) {
-                hideProgressDialog()
-                Log.d("Response", "fail service call ${t.message}")
-            }
-        })
-    }
     private fun getDetailData(mDetailId: String) {
         val destinationService = ServiceBuilder.buildService(RoomForRentService::class.java)
         val requestCall = destinationService.getHouseDetailById(mDetailId)
