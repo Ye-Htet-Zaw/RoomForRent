@@ -90,7 +90,7 @@ class LoginActivity : BaseActivity() {
                 callGetUser.enqueue(object :Callback<UserLogin>{
                     override fun onFailure(call: Call<UserLogin>, t: Throwable) {
                         hideProgressDialog()
-                        Toast.makeText(this@LoginActivity,"Your Email and Password Incorrect",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@LoginActivity,"Something Wrong",Toast.LENGTH_LONG).show()
                         Log.e(t.message, "ERROR")
 
                     }
@@ -101,7 +101,9 @@ class LoginActivity : BaseActivity() {
                             var fragment=LoginProfileFragment()
                             val b = Bundle()
                             b.putString(USERID,response.body()!!.user_id)
-                            Log.i("TestingApi", "Login UserId!!!"+response.body()!!.user_id)
+
+
+                            Log.i("Response", "Login UserId at LoginActivity: "+response.body()!!.user_id)
                             fragment.setArguments(b)
                             supportFragmentManager.beginTransaction()
                                 .add(android.R.id.content, fragment).commit()
