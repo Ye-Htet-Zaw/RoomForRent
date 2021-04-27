@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ListYourSpaceService {
-    @GET("houseLists/{user_id}")
+    @GET("listYourSpace/{user_id}")
     fun getHouseList(@Path("user_id") userId: String): Call<List<House>>
 }
