@@ -62,7 +62,7 @@ class LoginProfileFragment : Fragment() {
             (activity as Activity?)!!.overridePendingTransition(0, 0)
         }
 
-        tv_owner_list_space.setOnClickListener{
+        v.tv_owner_list_space.setOnClickListener{
             val i = Intent(context, ListYourSpaceActivity::class.java)
             i.putExtra(USERID, userId)
             startActivity(i)

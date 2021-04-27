@@ -182,13 +182,7 @@ class PostHouseFragment : Fragment() {
         period = selectedPeriod
 
         btn_post_house.setOnClickListener {
-            if (categoryId.isNotEmpty() && township.isNotEmpty() && houseAddress.isNotEmpty() &&
-                noOfGuest.isNotEmpty() && noOfRoom.isNotEmpty() && noOfBath.isNotEmpty() &&
-                noOfToilet.isNotEmpty() && area.isNotEmpty() && noOfFloor.isNotEmpty() &&
-                noOfAircon.isNotEmpty() && wifi !== null && phoneOne.isNotEmpty() &&
-                phoneTwo.isNotEmpty() && availableDate.isNotEmpty() && rent.isNotEmpty() &&
-                deposit.isNotEmpty() && recommendedPoint.isNotEmpty() && contractRule.isNotEmpty() &&
-                period.isNotEmpty()
+            if (categoryId.isNotEmpty()
             ) {
                 val house = House(
                     category_ID = categoryId,
