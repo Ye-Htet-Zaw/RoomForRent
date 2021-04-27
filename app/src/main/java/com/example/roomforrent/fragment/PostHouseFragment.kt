@@ -44,6 +44,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.System.load
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -65,26 +69,28 @@ class PostHouseFragment : Fragment() {
     var selectedCategory: String = ""
     var selectedAddress: String = ""
     var selectedPeriod: String = ""
-    var categoryId : String = ""
-    var houseAddress : String = ""
-    var township : String = ""
-    var noOfGuest : String = ""
-    var noOfRoom : String = ""
-    var noOfBath : String = ""
-    var noOfToilet : String = ""
+    var availableDate = SimpleDateFormat(
+        "yyyy-MM-dd",
+        Locale.getDefault()
+    ).format(Date())
+    var categoryId: String = ""
+    var houseAddress: String = ""
+    var township: String = ""
+    var noOfGuest: String = ""
+    var noOfRoom: String = ""
+    var noOfBath: String = ""
+    var noOfToilet: String = ""
     var area: String = ""
-    var noOfFloor : String = ""
-    var noOfAircon : String = ""
+    var noOfFloor: String = ""
+    var noOfAircon: String = ""
     var wifi: Int = 0
-    var phoneOne : String = ""
-    var phoneTwo : String = ""
-    var availableDate: String = ""
-    var rent : String = ""
-    var deposit : String = ""
-    var recommendedPoint : String = ""
-    var contractRule : String = ""
-    var period : String = ""
-
+    var phoneOne: String = ""
+    var phoneTwo: String = ""
+    var rent: String = ""
+    var deposit: String = ""
+    var recommendedPoint: String = ""
+    var contractRule: String = ""
+    var period: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +98,7 @@ class PostHouseFragment : Fragment() {
         townshipAdapter = context?.let { createSpinnerAdapter(it, Constants.townshipArr) }!!
         categoryAdapter = context?.let { createSpinnerAdapter(it, Constants.categoryArr) }!!
         periodAdapter = context?.let { createSpinnerAdapter(it, Constants.periodArr) }!!
-        checkHouseData()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -151,6 +157,169 @@ class PostHouseFragment : Fragment() {
 
         }
 
+        categoryId = selectedCategory
+        houseAddress = et_address.text.toString().trim()
+        township = selectedAddress
+        noOfGuest = et_guest.text.toString().trim()
+        noOfRoom = et_room.text.toString().trim()
+        noOfBath = et_bath.text.toString().trim()
+        noOfToilet = et_toilet.text.toString().trim()
+        area = et_area.text.toString().trim()
+        noOfFloor = et_floor.text.toString().trim()
+        noOfAircon = et_aircon.text.toString().trim()
+        wifi = onRadioButtonClicked(rg_radio)
+        phoneOne = et_contact1.text.toString().trim()
+        phoneTwo = et_contact2.text.toString().trim()
+
+        iv_available_date.setOnClickListener { view ->
+            clickDataPicker(view)
+        }
+
+        rent = et_rent.text.toString().trim()
+        deposit = et_deposit.text.toString().trim()
+        recommendedPoint = et_recommended.text.toString().trim()
+        contractRule = et_contract_rule.text.toString().trim()
+        period = selectedPeriod
+
+        btn_post_house.setOnClickListener {
+            if (categoryId.isNotEmpty() && township.isNotEmpty() && houseAddress.isNotEmpty() &&
+                noOfGuest.isNotEmpty() && noOfRoom.isNotEmpty() && noOfBath.isNotEmpty() &&
+                noOfToilet.isNotEmpty() && area.isNotEmpty() && noOfFloor.isNotEmpty() &&
+                noOfAircon.isNotEmpty() && wifi !== null && phoneOne.isNotEmpty() &&
+                phoneTwo.isNotEmpty() && availableDate.isNotEmpty() && rent.isNotEmpty() &&
+                deposit.isNotEmpty() && recommendedPoint.isNotEmpty() && contractRule.isNotEmpty() &&
+                period.isNotEmpty()
+            ) {
+                val house = House(
+                    category_ID = categoryId,
+                    township = township,
+                    house_ADDRESS = houseAddress,
+                    no_OF_GUESTS = noOfGuest.toInt(),
+                    no_OF_ROOM = noOfRoom.toInt(),
+                    no_OF_BATH = noOfBath.toInt(),
+                    no_OF_TOILET = noOfToilet.toInt(),
+                    area = area.toInt(),
+                    no_OF_FLOOR = noOfFloor.toInt(),
+                    no_OF_AIRCON = noOfAircon.toInt(),
+                    wifi = wifi,
+                    phone_ONE = phoneOne,
+                    phone_TWO = phoneTwo,
+                    available_DATE = Date(availableDate),
+                    rent = rent.toInt(),
+                    deposit = deposit.toInt(),
+                    recommented_POINTS = recommendedPoint,
+                    contract_RULE = contractRule,
+                    period = period.toInt(),
+                    user_ID = "1",
+                    longitude = "09",
+                    latitude = "93",
+                    expired_DATE = Date("1/1/2020"),
+                    rent_FLAG = 0,
+                    delete_FLAG = 0,
+                    delete_DATETIME = Timestamp(System.currentTimeMillis()),
+                    creator_ID = "1",
+                    create_DATETIME = Timestamp(System.currentTimeMillis()),
+                    updator_ID = "1",
+                    update_DATETIME = Timestamp(System.currentTimeMillis()),
+                    house_ID = "001"
+                )
+
+                var createHouseLiveDate: LiveData<House>? = null
+                createHouseLiveDate = createHouse(house)
+                if (createHouseLiveDate != null) {
+                    Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show()
+                }
+
+            }else {
+                Toast.makeText(context, "Please fill data successfully!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        checkHouseData()
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_ONE && data!!.data != null){
+                mSelectedImageFileUri1 = data.data
+            Picasso.get().load(mSelectedImageFileUri1).noPlaceholder().centerCrop().fit()
+                .into((img_1));
+            }
+       if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_TWO && data!!.data != null){
+            mSelectedImageFileUri2 = data.data
+            Picasso.get().load(mSelectedImageFileUri2).noPlaceholder().centerCrop().fit()
+                .into((img_2));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_THREE && data!!.data != null){
+            mSelectedImageFileUri3 = data.data
+            Picasso.get().load(mSelectedImageFileUri3).noPlaceholder().centerCrop().fit()
+                .into((img_3));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_FOUR && data!!.data != null){
+            mSelectedImageFileUri4 = data.data
+            Picasso.get().load(mSelectedImageFileUri4).noPlaceholder().centerCrop().fit()
+                .into((img_4));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_FIVE && data!!.data != null){
+            mSelectedImageFileUri5 = data.data
+            Picasso.get().load(mSelectedImageFileUri5).noPlaceholder().centerCrop().fit()
+                .into((img_5));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_SIX && data!!.data != null){
+            mSelectedImageFileUri6 = data.data
+            Picasso.get().load(mSelectedImageFileUri6).noPlaceholder().centerCrop().fit()
+                .into((img_6));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_SEVEN && data!!.data != null){
+            mSelectedImageFileUri7 = data.data
+            Picasso.get().load(mSelectedImageFileUri7).noPlaceholder().centerCrop().fit()
+                .into((img_7));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_EIGHT && data!!.data != null){
+            mSelectedImageFileUri8 = data.data
+            Picasso.get().load(mSelectedImageFileUri8).noPlaceholder().centerCrop().fit()
+                .into((img_8));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_NINE && data!!.data != null){
+            mSelectedImageFileUri9 = data.data
+            Picasso.get().load(mSelectedImageFileUri9).noPlaceholder().centerCrop().fit()
+                .into((img_9));
+        }
+        if (resultCode == RESULT_OK &&
+            requestCode == Constants.IMAGE_REQUEST_CODE_TEN && data!!.data != null){
+            mSelectedImageFileUri10 = data.data
+            Picasso.get().load(mSelectedImageFileUri10).noPlaceholder().centerCrop().fit()
+                .into((img_10));
+        }
+
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_post_house, container, false)
+    }
+
+    private fun createSpinnerAdapter(context: Context, arr: ArrayList<String>): MySpinnerAdapter {
+        return MySpinnerAdapter(context, arr)
+    }
+
+    private fun checkHouseData(){
         img_1.setOnClickListener{
             if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
                 == PackageManager.PERMISSION_GRANTED){
@@ -308,145 +477,6 @@ class PostHouseFragment : Fragment() {
                 }
             }
         }
-
-        categoryId = selectedCategory
-        houseAddress = et_address.text.toString().trim()
-        township = selectedAddress
-        noOfGuest = et_guest.text.toString().trim()
-        noOfRoom = et_room.text.toString().trim()
-        noOfBath = et_bath.text.toString().trim()
-        noOfToilet = et_toilet.text.toString().trim()
-        area = et_area.text.toString().trim()
-        noOfFloor = et_floor.text.toString().trim()
-        noOfAircon = et_aircon.text.toString().trim()
-        wifi = onRadioButtonClicked(rg_radio)
-        phoneOne = et_contact1.text.toString().trim()
-        phoneTwo = et_contact2.text.toString().trim()
-
-        iv_available_date.setOnClickListener { view ->
-            clickDataPicker(view)
-        }
-
-        rent = et_rent.text.toString().trim()
-        deposit = et_deposit.text.toString().trim()
-        recommendedPoint = et_recommended.text.toString().trim()
-        contractRule = et_contract_rule.text.toString().trim()
-        period = selectedPeriod
-
-        btn_post_house.setOnClickListener {
-                val house = House()
-                house.category_ID=categoryId
-                house.township=township
-                house.house_ADDRESS=houseAddress
-                house.no_OF_GUESTS=noOfGuest.toInt()
-                house.no_OF_ROOM=noOfRoom.toInt()
-                house.no_OF_BATH=noOfBath.toInt()
-                house.no_OF_TOILET=noOfToilet.toInt()
-                house.area=area.toInt()
-                house.no_OF_FLOOR=noOfFloor.toInt()
-                house.no_OF_AIRCON=noOfAircon.toInt()
-                house.wifi=wifi
-                house.phone_ONE=phoneOne
-                house.phone_TWO=phoneTwo
-                house.available_DATE=Date(availableDate)
-                house.rent=rent.toInt()
-                house.deposit=deposit.toInt()
-                house.recommented_POINTS=recommendedPoint
-                house.contract_RULE=contractRule
-                house.period=period.toInt()
-
-                var createHouseLiveDate: LiveData<House>?=null
-                createHouseLiveDate=createHouse(house)
-                if (createHouseLiveDate!=null){
-                    Toast.makeText(context,"Successful", Toast.LENGTH_SHORT).show()
-                }
-                else{
-                    Toast.makeText(context,"Something went wrong!", Toast.LENGTH_SHORT).show()
-                }
-
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_ONE && data!!.data != null){
-                mSelectedImageFileUri1 = data.data
-            Picasso.get().load(mSelectedImageFileUri1).noPlaceholder().centerCrop().fit()
-                .into((img_1));
-            }
-       if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_TWO && data!!.data != null){
-            mSelectedImageFileUri2 = data.data
-            Picasso.get().load(mSelectedImageFileUri2).noPlaceholder().centerCrop().fit()
-                .into((img_2));
-        }
-        if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_THREE && data!!.data != null){
-            mSelectedImageFileUri3 = data.data
-            Picasso.get().load(mSelectedImageFileUri3).noPlaceholder().centerCrop().fit()
-                .into((img_3));
-        }
-        if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_FOUR && data!!.data != null){
-            mSelectedImageFileUri4 = data.data
-            Picasso.get().load(mSelectedImageFileUri4).noPlaceholder().centerCrop().fit()
-                .into((img_4));
-        }
-        if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_FIVE && data!!.data != null){
-            mSelectedImageFileUri5 = data.data
-            Picasso.get().load(mSelectedImageFileUri5).noPlaceholder().centerCrop().fit()
-                .into((img_5));
-        }
-        if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_SIX && data!!.data != null){
-            mSelectedImageFileUri6 = data.data
-            Picasso.get().load(mSelectedImageFileUri6).noPlaceholder().centerCrop().fit()
-                .into((img_6));
-        }
-        if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_SEVEN && data!!.data != null){
-            mSelectedImageFileUri7 = data.data
-            Picasso.get().load(mSelectedImageFileUri7).noPlaceholder().centerCrop().fit()
-                .into((img_7));
-        }
-        if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_EIGHT && data!!.data != null){
-            mSelectedImageFileUri8 = data.data
-            Picasso.get().load(mSelectedImageFileUri8).noPlaceholder().centerCrop().fit()
-                .into((img_8));
-        }
-        if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_NINE && data!!.data != null){
-            mSelectedImageFileUri9 = data.data
-            Picasso.get().load(mSelectedImageFileUri9).noPlaceholder().centerCrop().fit()
-                .into((img_9));
-        }
-        if (resultCode == RESULT_OK &&
-            requestCode == Constants.IMAGE_REQUEST_CODE_TEN && data!!.data != null){
-            mSelectedImageFileUri10 = data.data
-            Picasso.get().load(mSelectedImageFileUri10).noPlaceholder().centerCrop().fit()
-                .into((img_10));
-        }
-
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_post_house, container, false)
-    }
-
-    private fun createSpinnerAdapter(context: Context, arr: ArrayList<String>): MySpinnerAdapter {
-        return MySpinnerAdapter(context, arr)
-    }
-
-    private fun checkHouseData(){
-        var createHouseLiveDate: LiveData<House>?=null
 
     }
 

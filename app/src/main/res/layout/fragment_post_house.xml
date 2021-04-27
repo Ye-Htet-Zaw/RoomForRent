@@ -192,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_guest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -209,7 +209,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_room"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -226,7 +226,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_bath"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -244,7 +244,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_toilet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -262,7 +262,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_area"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -279,7 +279,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_floor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -296,7 +296,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_aircon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -364,7 +364,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_contact1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -382,7 +382,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_contact2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -404,7 +404,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_available_date"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
@@ -429,7 +429,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_rent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -447,7 +447,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_deposit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -466,7 +466,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_recommended"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -484,7 +484,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_contract_rule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -542,5 +542,4 @@
         </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
 </FrameLayout>
