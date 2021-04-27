@@ -23,6 +23,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoomForRent"
         android:usesCleartextTraffic="true">
+
+        <activity android:name=".activity.ListYourSpaceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"></activity>
+
         <activity android:name=".activity.BaseActivity" />
         <activity
             android:name=".activity.DescriptionActivity"

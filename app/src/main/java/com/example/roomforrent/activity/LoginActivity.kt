@@ -89,6 +89,7 @@ class LoginActivity : BaseActivity() {
                 callGetUser = destinationService.getUserWithEmailAndPassword(et_email.text.toString().trim(),et_password.text.toString().trim())
                 callGetUser.enqueue(object :Callback<UserLogin>{
                     override fun onFailure(call: Call<UserLogin>, t: Throwable) {
+                        hideProgressDialog()
                         Toast.makeText(this@LoginActivity,"Your Email and Password Incorrect",Toast.LENGTH_LONG).show()
                         Log.e(t.message, "ERROR")
 
