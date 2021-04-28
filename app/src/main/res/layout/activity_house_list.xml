@@ -37,9 +37,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:visibility="gone"
-                android:text="dkfjskdjfksjdfks"
                 android:id="@+id/txtBlank"
+                android:text="@string/nohaveHouse"
                 android:gravity="center"
                 android:textSize="20dp"
                 android:textColor="@color/gradient_start"
