@@ -289,6 +289,7 @@ class HouseListActivity : BaseActivity() {
             }
 
             override fun onFailure(call: Call<HouseDetails>, t: Throwable) {
+                hideProgressDialog()
                 Toast.makeText(this@HouseListActivity, "Something went wrong $t", Toast.LENGTH_SHORT)
             }
         })
