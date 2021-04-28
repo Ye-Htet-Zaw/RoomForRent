@@ -93,6 +93,7 @@
     <string name="deposit">Deposit</string>
     <string name="available_date">Available Date</string>
     <string name="recommended_point">Recommended Point</string>
+    <string name="create_house_login">Need to login to create your house!</string>
 
     //NTTT
     <string name="facebook_app_id">856380178277497</string>
