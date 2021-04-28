@@ -68,7 +68,7 @@ class HouseListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_house_list)
-
+        checkConnection()
         initAdapter()
 
         //get parameter value and service name form SearchFragment
@@ -242,6 +242,11 @@ class HouseListActivity : BaseActivity() {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 if (response.isSuccessful) {
                     hideProgressDialog()
+                    if(response.body()!!.isEmpty()){
+                        txtBlank.visibility = View.VISIBLE
+                    }else {
+                        txtBlank.visibility= View.GONE
+                    }
                     val houseList = response.body()!! as List<House>
                     Log.d("Response", "houseList size : ${houseList.size}")
                     adapter.setData(houseList as ArrayList<House>)
@@ -284,6 +289,7 @@ class HouseListActivity : BaseActivity() {
             }
 
             override fun onFailure(call: Call<HouseDetails>, t: Throwable) {
+                hideProgressDialog()
                 Toast.makeText(this@HouseListActivity, "Something went wrong $t", Toast.LENGTH_SHORT)
             }
         })

@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -32,7 +33,7 @@ class ListYourSpaceActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_house_list)
-
+        checkConnection()
 
         initAdapter()
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -57,6 +58,11 @@ class ListYourSpaceActivity : BaseActivity() {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 if (response.isSuccessful) {
                     hideProgressDialog()
+                    if(response.body()!!.isEmpty()){
+                        txtBlank.visibility = View.VISIBLE
+                    }else {
+                        txtBlank.visibility= View.GONE
+                    }
                     val houseList = response.body()!! as List<House>
                     Log.d("Response", "houseList size : ${houseList}")
                     adapter.setData(houseList as ArrayList<House>)

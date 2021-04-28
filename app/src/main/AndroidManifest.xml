@@ -23,11 +23,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoomForRent"
         android:usesCleartextTraffic="true">
-
-        <activity android:name=".activity.ListYourSpaceActivity"
+        <activity android:name=".activity.OTPVerifyActivity"></activity>
+        <activity android:name=".activity.LoginWithPhoneActivity" />
+        <activity
+            android:name=".activity.ListYourSpaceActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar"></activity>
-
+            android:theme="@style/NoActionBar" />
         <activity android:name=".activity.BaseActivity" />
         <activity
             android:name=".activity.DescriptionActivity"
@@ -118,6 +119,10 @@
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider856380178277497"
             android:exported="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

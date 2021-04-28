@@ -8,11 +8,15 @@
  */
 package com.example.roomforrent.activity
 
+import android.app.AlertDialog
 import android.app.Dialog
-import androidx.appcompat.app.AppCompatActivity
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.example.roomforrent.R
 import kotlinx.android.synthetic.main.dialog_progress.*
+
 
 open class BaseActivity : AppCompatActivity() {
     private lateinit var mProgressDialog: Dialog
@@ -36,5 +40,22 @@ open class BaseActivity : AppCompatActivity() {
 
     fun hideProgressDialog() {
         mProgressDialog.dismiss()
+    }
+
+    fun checkConnection() {
+        val conMgr: ConnectivityManager =
+            getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = conMgr.activeNetworkInfo
+        Log.i("CheckInternet", netInfo.toString())
+        if (netInfo == null) {
+            val builder = AlertDialog.Builder(this)
+            with(builder) {
+                setTitle(resources.getString(R.string.connectionError))
+                setMessage(resources.getString(R.string.checkConnection))
+                setPositiveButton(resources.getString(R.string.ok), null)
+            }
+
+            builder.show()
+        }
     }
 }

@@ -1,4 +1,8 @@
 <resources>
+    //Connection
+    <string name="connectionError">Connection fail!</string>
+    <string name="checkConnection">Please check your internet connection</string>
+    <string name="ok">Ok</string>
     //Search
     <string name="app_name">RoomForRent</string>
     <string name="category">Category</string>
@@ -12,7 +16,8 @@
 
     //Favourite
     <string name="favourite">Favourite</string>
-    <string name="nohaveFav">There is no have favourite house!</string>
+    <string name="nohaveFav">There is no  favourite house!</string>
+    <string name="nohaveHouse">There is no house!</string>
     <string name="nologin">Need to login to see your favourite house!</string>
 
     //RenderProfileScreen

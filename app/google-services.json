@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "806972962598",
+    "project_id": "roomforrent-84248",
+    "storage_bucket": "roomforrent-84248.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806972962598:android:0bf6194481670ea45cf3e7",
+        "android_client_info": {
+          "package_name": "com.example.roomforrent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "806972962598-os3io0l17hm2cgn4i36cuo286p7icuef.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.roomforrent",
+            "certificate_hash": "a276d522595e56ae24c2cbe100b489d5927ccb84"
+          }
+        },
+        {
+          "client_id": "806972962598-k7fogvq5om3hgctkj86d2im7tlngc7kc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkbGTDi2opQg-D_rgN1jUhSptWxcgi1X0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "806972962598-k7fogvq5om3hgctkj86d2im7tlngc7kc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

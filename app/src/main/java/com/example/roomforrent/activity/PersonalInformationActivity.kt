@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PersonalInformationActivity : AppCompatActivity() {
+class PersonalInformationActivity : BaseActivity() {
 
      var dateFromDbString: String?=null
      var dateString:String?=null
