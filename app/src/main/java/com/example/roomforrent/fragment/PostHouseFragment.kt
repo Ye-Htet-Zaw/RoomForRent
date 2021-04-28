@@ -15,6 +15,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -22,9 +23,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.RadioGroup
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -32,7 +31,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.roomforrent.R
-import com.example.roomforrent.activity.HouseListActivity
 import com.example.roomforrent.activity.ListYourSpaceActivity
 import com.example.roomforrent.activity.MainActivity
 import com.example.roomforrent.adapter.MySpinnerAdapter
@@ -41,10 +39,9 @@ import com.example.roomforrent.services.PostHouseService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_house_list.*
-import kotlinx.android.synthetic.main.fragment_favourite.*
 import kotlinx.android.synthetic.main.fragment_post_house.*
-import kotlinx.android.synthetic.main.fragment_post_house.toolBarMain
+import kotlinx.android.synthetic.main.fragment_post_house.view.*
+import kotlinx.android.synthetic.main.fragment_search.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -87,7 +84,7 @@ class PostHouseFragment : Fragment() {
     var noOfAircon: String = ""
     var wifi: Int = 0
     var phoneOne: String = ""
-    var phoneTwo: String = ""
+    var phoneTwo: String? = null
     var rent: String = ""
     var deposit: String = ""
     var recommendedPoint: String = ""
@@ -471,20 +468,6 @@ class PostHouseFragment : Fragment() {
     }
 
     private fun setHouseData(){
-        categoryId = when (selectedCategory) {
-            "Condominum" -> {
-                "1"
-            }
-            "WholeHouse" -> {
-                "2"
-            }
-            "Apartment" -> {
-                "3"
-            }
-            else -> {
-                "4"
-            }
-        }
 
         houseAddress = et_address.text.toString().trim()
         township = selectedAddress
@@ -509,28 +492,102 @@ class PostHouseFragment : Fragment() {
 //
 //            val formatter = SimpleDateFormat("dd/MM/yyyy")
 //            val date1 = formatter.parse(availableDate)
-        if (categoryId.isNotEmpty() && township.isNotEmpty() && houseAddress.isNotEmpty() &&
-            noOfGuest.isNotEmpty() && noOfRoom.isNotEmpty() && noOfBath.isNotEmpty() &&
-            noOfToilet.isNotEmpty() && area.isNotEmpty() && noOfFloor.isNotEmpty() &&
-            noOfAircon.isNotEmpty() && wifi !== null && phoneOne.isNotEmpty() &&
-            phoneTwo.isNotEmpty() && availableDate.isNotEmpty() && rent.isNotEmpty() &&
-            deposit.isNotEmpty() && recommendedPoint.isNotEmpty() && contractRule.isNotEmpty() &&
-            period.isNotEmpty()
-        ) {
+        if (selectedCategory == "Select"){
+            tv_catSpinner.text = "Need to select category!"
+            tv_catSpinner.setTextColor(Color.RED)
+            tv_catSpinner.isFocusable=true
+            tv_catSpinner.isFocusableInTouchMode=true
+            tv_catSpinner.requestFocus()
+        }else if (selectedAddress == "Select"){
+            tv_towSpinner.text = "Need to select Township!"
+            tv_towSpinner.setTextColor(Color.RED)
+            tv_towSpinner.isFocusable=true
+            tv_towSpinner.isFocusableInTouchMode=true
+            tv_towSpinner.requestFocus()
+        }else if(houseAddress.isEmpty()){
+            et_address.error = "Need to fill house address!"
+            et_address.requestFocus()
+        }else if(noOfGuest.isEmpty()){
+            et_guest.error = "Need to fill guest!"
+            et_guest.requestFocus()
+        }else if(noOfBath.isEmpty()){
+            et_bath.error = "Need to fill bathroom!"
+            et_bath.requestFocus()
+        }else if(noOfToilet.isEmpty()){
+            et_toilet.error = "Need to fill toilet!"
+            et_toilet.requestFocus()
+        }else if(area.isEmpty()){
+            et_area.error = "Need to fill house area!"
+            et_area.requestFocus()
+        }else if(phoneOne.isEmpty()){
+            et_contact1.error = "Need to fill Phone No!"
+            et_contact1.requestFocus()
+        }else if(availableDate.isEmpty()){
+            et_available_date.error = "Need to fill available date!"
+            et_available_date.requestFocus()
+        }else if(rent.isEmpty()){
+            et_rent.error = "Need to fill house rent!"
+            et_rent.requestFocus()
+        }else if(deposit.isEmpty()){
+            et_deposit.error = "Need to fill deposit!"
+            et_deposit.requestFocus()
+        }else if(recommendedPoint.isEmpty()){
+            et_recommended.error = "Need to fill recommended point of house!"
+            et_recommended.requestFocus()
+        }else if(contractRule.isEmpty()){
+            et_contract_rule.error = "Need to fill contract rule!"
+            et_contract_rule.requestFocus()
+        }else if (selectedPeriod == "Select") {
+            tv_perSpinner.text = "Need to select Period!"
+            tv_perSpinner.setTextColor(Color.RED)
+            tv_perSpinner.isFocusable = true
+            tv_perSpinner.isFocusableInTouchMode = true
+            tv_perSpinner.requestFocus()
+        }
+
+       else {
+            categoryId = when (selectedCategory) {
+                "Condominum" -> {
+                    "1"
+                }
+                "WholeHouse" -> {
+                    "2"
+                }
+                "Apartment" -> {
+                    "3"
+                }
+                else -> {
+                    "4"
+                }
+            }
+            var noOfRoomInt: Int? = null
+            noOfRoomInt = if (noOfRoom==""){
+                0
+            }else noOfRoom.toInt()
+
+            var noOfFloorInt: Int? = null
+            noOfFloorInt = if (noOfFloor==""){
+                0
+            }else noOfFloor.toInt()
+
+            var noOfAirconInt: Int? = null
+            noOfAirconInt = if (noOfAircon==""){
+                0
+            }else noOfAircon.toInt()
             val house = House(
                 category_ID = categoryId,
                 township = township,
                 house_ADDRESS = houseAddress,
                 no_OF_GUESTS = noOfGuest.toInt(),
-                no_OF_ROOM = noOfRoom.toInt(),
+                no_OF_ROOM = noOfRoomInt!!,
                 no_OF_BATH = noOfBath.toInt(),
                 no_OF_TOILET = noOfToilet.toInt(),
                 area = area.toInt(),
-                no_OF_FLOOR = noOfFloor.toInt(),
-                no_OF_AIRCON = noOfAircon.toInt(),
-                wifi = wifi,
+                no_OF_FLOOR = noOfFloorInt,
+                no_OF_AIRCON = noOfAirconInt,
+                wifi = wifi!!,
                 phone_ONE = phoneOne,
-                phone_TWO = phoneTwo,
+                phone_TWO = phoneTwo!!,
                 available_DATE = availableDate,
                 rent = rent.toInt(),
                 deposit = deposit.toInt(),
@@ -555,14 +612,14 @@ class PostHouseFragment : Fragment() {
             createHouseLiveDate = createHouse(house)
             if (createHouseLiveDate != null) {
                 val intent = Intent(context, ListYourSpaceActivity::class.java)
-                 startActivity(intent)
+                startActivity(intent)
             } else {
                 Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show()
             }
-
-        }else {
-            Toast.makeText(context, "Please fill data successfully!", Toast.LENGTH_SHORT).show()
         }
+//        }else {
+//            Toast.makeText(context, "Please fill data successfully!", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     private fun createHouse(house: House): LiveData<House> {
