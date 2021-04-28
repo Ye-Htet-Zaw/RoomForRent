@@ -68,7 +68,7 @@ class HouseListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_house_list)
-
+        checkConnection()
         initAdapter()
 
         //get parameter value and service name form SearchFragment
@@ -242,7 +242,7 @@ class HouseListActivity : BaseActivity() {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 if (response.isSuccessful) {
                     hideProgressDialog()
-                    if(response.body()!!.size==0){
+                    if(response.body()!!.isEmpty()){
                         txtBlank.visibility = View.VISIBLE
                     }else {
                         txtBlank.visibility= View.GONE
