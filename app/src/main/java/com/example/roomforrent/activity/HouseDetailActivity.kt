@@ -12,6 +12,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
@@ -114,15 +115,19 @@ class HouseDetailActivity : BaseActivity(), OnMapReadyCallback {
         }
 
         location.setOnClickListener {
-            var intent = Intent(this@HouseDetailActivity, LocationActivity::class.java)
-            intent.putExtra(Constants.LATITUDE, houseDetails.latitude)
-            intent.putExtra(Constants.LONGITUDE, houseDetails.longitude)
-            startActivity(intent)
+            showDetailMap()
         }
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.miniMap) as SupportMapFragment
         mapFragment.getMapAsync(this)
+    }
+
+    private fun showDetailMap() {
+        var intent = Intent(this@HouseDetailActivity, LocationActivity::class.java)
+        intent.putExtra(Constants.LATITUDE, houseDetails.latitude)
+        intent.putExtra(Constants.LONGITUDE, houseDetails.longitude)
+        startActivity(intent)
     }
 
     private fun setupActionBar(){
@@ -152,5 +157,8 @@ class HouseDetailActivity : BaseActivity(), OnMapReadyCallback {
                 .title("Current Location")
         )
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 16.0f));
+        mMap.setOnMapClickListener {
+           showDetailMap()
+        }
     }
 }
