@@ -55,7 +55,10 @@ class LoginProfileFragment : Fragment() {
         var userId= share.getString(USERID,"")
         val v = inflater.inflate(R.layout.fragment_login_profile, container, false)
         v.ll_owner_personal_info.setOnClickListener {
-            startActivity(Intent(context, PersonalInformationActivity::class.java))
+            val i = Intent(context, PersonalInformationActivity::class.java)
+            i.putExtra(USERID, userId)
+            startActivity(i)
+            //startActivity(Intent(context, PersonalInformationActivity::class.java))
         }
 
         v.ll_owner_change_password.setOnClickListener {
@@ -84,7 +87,7 @@ class LoginProfileFragment : Fragment() {
             editor.putBoolean("isLogin", false)
             editor.commit()
         }
-        getUserInfoById("USE0000001")
+        getUserInfoById(userId!!.toString())//changes for numberformat
         return v
         //FragmentManager.OnBackStackChangedListener {  }
     }
@@ -94,7 +97,7 @@ class LoginProfileFragment : Fragment() {
     private fun getUserInfoById(user_id: String) {
         //initiate the service
         val destinationService  = ServiceBuilder.buildService(UserProfileService::class.java)
-        val requestCall =destinationService.getUserInfo(user_id)
+        val requestCall =destinationService.getUserInfo(user_id.toString())
         //make network call asynchronously
         requestCall.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -107,7 +110,7 @@ class LoginProfileFragment : Fragment() {
 
                     tv_owner_name.text = user.user_name
                     Picasso.get()
-                        .load("http://192.168.1.3:9090/image/user/" + user.user_id + ".jpg").into(
+                        .load("http://192.168.99.129:9090/image/user/" + user.user_id + ".jpg").into(
                             iv_profile_user_image
                         )
 

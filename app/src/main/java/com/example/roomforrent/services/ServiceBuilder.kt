@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ServiceBuilder {
     //private const val URL ="http://localhost:9090/"
-    private const val URL ="http://192.168.100.21:9097/"
+    private const val URL ="http://192.168.99.129:9090/"
     //CREATE HTTP CLIENT
     private val okHttp = OkHttpClient.Builder()
 

@@ -47,7 +47,7 @@ object Constants {
     const val GetRoomListByAll = "GetRoomListByAll"
 
     //For transfer data
-    const val USERID="UserId"
+    const val USERID: String= "UserId"
 
     /**
      * township list use in search ui

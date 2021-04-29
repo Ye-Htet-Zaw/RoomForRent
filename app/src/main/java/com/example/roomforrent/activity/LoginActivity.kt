@@ -99,7 +99,7 @@ class LoginActivity : BaseActivity() {
                 callGetUser.enqueue(object :Callback<UserLogin>{
                     override fun onFailure(call: Call<UserLogin>, t: Throwable) {
                         hideProgressDialog()
-                        Toast.makeText(this@LoginActivity,"Something Wrong",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@LoginActivity,t.message,Toast.LENGTH_LONG).show()
                         Log.e(t.message, "ERROR")
 
                     }
