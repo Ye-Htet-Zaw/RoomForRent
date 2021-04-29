@@ -23,8 +23,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RoomForRent"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.OTPVerifyActivity"></activity>
-        <activity android:name=".activity.LoginWithPhoneActivity" />
+        <activity android:name=".activity.OTPVerifyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".activity.LoginWithPhoneActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"/>
         <activity
             android:name=".activity.ListYourSpaceActivity"
             android:screenOrientation="portrait"

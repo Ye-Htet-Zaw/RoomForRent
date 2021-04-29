@@ -1,11 +1,15 @@
 package com.example.roomforrent.activity
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import com.example.roomforrent.R
 import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
 import com.facebook.login.Login
@@ -14,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import kotlinx.android.synthetic.main.activity_house_detail.*
 import kotlinx.android.synthetic.main.activity_login_with_phone.*
 import java.util.concurrent.TimeUnit
 
@@ -23,9 +28,15 @@ class LoginWithPhoneActivity : AppCompatActivity() {
     lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_with_phone)
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        window.setBackgroundDrawable(resources.getDrawable(R.drawable.toolbarbg))
+        setupActionBar()
 
         auth=FirebaseAuth.getInstance()
 
@@ -58,13 +69,27 @@ class LoginWithPhoneActivity : AppCompatActivity() {
 
                 Log.d("TAG","onCodeSent:$verificationId")
                 storedVerificationId = verificationId
+                var number="+95"+phoneNumber.text.toString().trim()
                 resendToken = token
 
                 var intent = Intent(applicationContext,OTPVerifyActivity::class.java)
                 intent.putExtra("storedVerificationId",storedVerificationId)
+                intent.putExtra("phoneNo",number)
                 startActivity(intent)
             }
         }
+    }
+
+    private fun setupActionBar(){
+        setSupportActionBar(toolbar_login_with_phone)
+        var actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_backward_icon)
+            actionBar.title= "Login With Phone"
+        }
+
+        toolbar_login_with_phone.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun login() {
