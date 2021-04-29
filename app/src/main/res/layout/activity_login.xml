@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/authentication_screen_marginStartEnd"
-            android:layout_marginTop="@dimen/email_tv_marginTop"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="@dimen/authentication_screen_marginStartEnd"
             android:background="@drawable/text_rounded"
             android:drawableRight="@drawable/ic_email_black"
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/authentication_screen_marginStartEnd"
-            android:layout_marginTop="@dimen/password_tv_marginTop"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="@dimen/authentication_screen_marginStartEnd"
             android:background="@drawable/text_rounded"
             android:hint="@string/password"
@@ -126,19 +126,15 @@
 
         <Button
             android:id="@+id/btn_phone_otp"
-            android:layout_width="220dp"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:paddingTop="15dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             android:textColor="@color/white"
-            android:paddingBottom="15dp"
             android:backgroundTint="#66CDAA"
             android:text="Continue with Phone"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:textSize="14sp" />
 
     </LinearLayout>
 

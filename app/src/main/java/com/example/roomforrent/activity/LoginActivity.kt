@@ -63,7 +63,6 @@ class LoginActivity : BaseActivity() {
         })
 
         btn_phone_otp.setOnClickListener {
-            Toast.makeText(this, "Test", Toast.LENGTH_SHORT).show()
             var intent = Intent(
                 this,
                 LoginWithPhoneActivity::class.java
