@@ -1,3 +1,11 @@
+/**
+ *
+ * FavouriteService
+ *
+ * 2021/04/20 KMMN Create New
+ *
+ * call favourite api to get favourite list
+ */
 package com.example.roomforrent.services
 
 import com.example.roomforrent.models.Favourite
