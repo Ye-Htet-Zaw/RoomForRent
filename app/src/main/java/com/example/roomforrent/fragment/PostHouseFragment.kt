@@ -764,40 +764,37 @@ class PostHouseFragment : Fragment() {
                 house_ID = "HOU"
             )
 
-            var createHouseLiveDate: LiveData<House>? = null
+            var createHouseLiveDate: LiveData<List<House>>? = null
             createHouseLiveDate = createHouse(house)
-            if (createHouseLiveDate != null) {
-                Log.i("ImageList",list.toString()+"list")
-                uploadImage(list)
-                val intent = Intent(context, ListYourSpaceActivity::class.java)
-                startActivity(intent)
-            } else {
-                Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show()
-            }
+
         }
 //        }else {
 //            Toast.makeText(context, "Please fill data successfully!", Toast.LENGTH_SHORT).show()
 //        }
     }
 
-    private fun createHouse(house: House): LiveData<House> {
-        val data = MutableLiveData<House>()
+    private fun createHouse(house: House):MutableLiveData<List<House>>{
+        val data = MutableLiveData<List<House>>()
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
-        destinationService.createHouse(house).enqueue(object : Callback<House>{
-            override fun onFailure(call: Call<House>, t: Throwable) {
-                data.value = null
+        destinationService.createHouse(house).enqueue(object: Callback<List<House>>{
+            override fun onFailure(call: Call<List<House>>, t: Throwable) {
+                Toast.makeText(context,"Fail to insert house data",Toast.LENGTH_SHORT).show()
             }
 
-            override fun onResponse(call: Call<House>, response: Response<House>) {
+            override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 val res = response.body()
                 if (response.code() == 200 && res!=null){
                     data.value = res
+                    uploadImage(list)
+                    val intent = Intent(context, ListYourSpaceActivity::class.java)
+                    startActivity(intent)
                 }else{
                     data.value = null
                 }
             }
 
         })
+
         return data
     }
 

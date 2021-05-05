@@ -12,7 +12,7 @@ import retrofit2.http.Part
 interface PostHouseService {
 
     @POST("createHouse")
-    fun createHouse(@Body house: House): Call<House>
+    fun createHouse(@Body house: House): Call<List<House>>
 
     @Multipart
     @POST("uploadMultipleFiles")
