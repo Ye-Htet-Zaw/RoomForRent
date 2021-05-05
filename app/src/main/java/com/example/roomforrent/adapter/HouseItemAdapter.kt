@@ -95,6 +95,7 @@ class HouseItemAdapter(val context: Context) :
                             Locale.getDefault()
                         ).format(Date())
                         var favouriteRoom = Favourite(
+                            favourite_id = "FAV",
                             user_id = userId!!,
                             house_id = model.house_ID,
                             creator_id = userId!!,
