@@ -11,14 +11,19 @@ package com.example.roomforrent.fragment
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.CalendarContract.EventDays.query
+import android.provider.CalendarContract.Instances.query
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +31,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentResolverCompat.query
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -35,6 +41,7 @@ import com.example.roomforrent.activity.ListYourSpaceActivity
 import com.example.roomforrent.activity.MainActivity
 import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.models.House
+import com.example.roomforrent.models.ServerResponse
 import com.example.roomforrent.services.PostHouseService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
@@ -42,16 +49,24 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_post_house.*
 import kotlinx.android.synthetic.main.fragment_post_house.view.*
 import kotlinx.android.synthetic.main.fragment_search.*
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 class PostHouseFragment : Fragment() {
 
+    var list: ArrayList<MultipartBody.Part> = ArrayList()
     var isLogin = false
     var userID : String?=""
+    var userPosition : Int?=null
     private var mSelectedImageFileUri1: Uri? = null
     private var mSelectedImageFileUri2: Uri? = null
     private var mSelectedImageFileUri3: Uri? = null
@@ -112,9 +127,10 @@ class PostHouseFragment : Fragment() {
             Context.MODE_PRIVATE
         )!!
         isLogin = share.getBoolean("isLogin", false)
-
+        isLogin=true
         if(isLogin) {
-            userID=share.getString(Constants.USERID,"")
+            //userID=share.getString(Constants.USERID,"")
+            userID ="USE0000001"
             ph_createLayout.visibility=View.VISIBLE
             ph_blankLayout.visibility = View.GONE
             //set Adapter for spinner
@@ -191,66 +207,199 @@ class PostHouseFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        val contentResolver: ContentResolver= activity?.contentResolver!!
+
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_ONE && data!!.data != null){
                 mSelectedImageFileUri1 = data.data
             Picasso.get().load(mSelectedImageFileUri1).noPlaceholder().centerCrop().fit()
-                .into((img_1));
+                .into((img_1))
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri1!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                Log.i("cursor","cursor is not null")
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
             }
+        }
        if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_TWO && data!!.data != null){
             mSelectedImageFileUri2 = data.data
             Picasso.get().load(mSelectedImageFileUri2).noPlaceholder().centerCrop().fit()
                 .into((img_2));
+           val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+           val cursor: Cursor? =
+               contentResolver.query(mSelectedImageFileUri2!!, imageprojection,null,null,null)
+
+           if (cursor != null)
+           {
+               cursor.moveToFirst();
+               var indexImage = cursor.getColumnIndex(imageprojection[0]);
+               var partImage = cursor.getString(indexImage)
+               val imageRequest = prepareFilePart(partImage)
+               list.add(imageRequest)
+           }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_THREE && data!!.data != null){
             mSelectedImageFileUri3 = data.data
             Picasso.get().load(mSelectedImageFileUri3).noPlaceholder().centerCrop().fit()
                 .into((img_3));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri3!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_FOUR && data!!.data != null){
             mSelectedImageFileUri4 = data.data
             Picasso.get().load(mSelectedImageFileUri4).noPlaceholder().centerCrop().fit()
                 .into((img_4));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri4!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_FIVE && data!!.data != null){
             mSelectedImageFileUri5 = data.data
             Picasso.get().load(mSelectedImageFileUri5).noPlaceholder().centerCrop().fit()
                 .into((img_5));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri5!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_SIX && data!!.data != null){
             mSelectedImageFileUri6 = data.data
             Picasso.get().load(mSelectedImageFileUri6).noPlaceholder().centerCrop().fit()
                 .into((img_6));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri6!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_SEVEN && data!!.data != null){
             mSelectedImageFileUri7 = data.data
             Picasso.get().load(mSelectedImageFileUri7).noPlaceholder().centerCrop().fit()
                 .into((img_7));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri7!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_EIGHT && data!!.data != null){
             mSelectedImageFileUri8 = data.data
             Picasso.get().load(mSelectedImageFileUri8).noPlaceholder().centerCrop().fit()
                 .into((img_8));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri8!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_NINE && data!!.data != null){
             mSelectedImageFileUri9 = data.data
             Picasso.get().load(mSelectedImageFileUri9).noPlaceholder().centerCrop().fit()
                 .into((img_9));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri9!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_TEN && data!!.data != null){
             mSelectedImageFileUri10 = data.data
             Picasso.get().load(mSelectedImageFileUri10).noPlaceholder().centerCrop().fit()
                 .into((img_10));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri10!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
 
 
@@ -268,6 +417,7 @@ class PostHouseFragment : Fragment() {
     private fun createSpinnerAdapter(context: Context, arr: ArrayList<String>): MySpinnerAdapter {
         return MySpinnerAdapter(context, arr)
     }
+
 
     private fun checkImageAndRadioData(){
 
@@ -467,6 +617,12 @@ class PostHouseFragment : Fragment() {
         dpd?.show() // It is used to show the datePicker Dialog.
     }
 
+    private fun prepareFilePart(partName: String): MultipartBody.Part {
+        val imageFile = File(partName)
+        val reqBody = imageFile.asRequestBody("multipart/form-file".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("imageupload", imageFile.name, reqBody)
+    }
+
     private fun setHouseData(){
 
         houseAddress = et_address.text.toString().trim()
@@ -548,16 +704,16 @@ class PostHouseFragment : Fragment() {
        else {
             categoryId = when (selectedCategory) {
                 "Condominum" -> {
-                    "1"
+                    "CAT0000001"
                 }
                 "WholeHouse" -> {
-                    "2"
+                    "CAT0000002"
                 }
                 "Apartment" -> {
-                    "3"
+                    "CAT0000003"
                 }
                 else -> {
-                    "4"
+                    "CAT0000004"
                 }
             }
             var noOfRoomInt: Int? = null
@@ -605,12 +761,14 @@ class PostHouseFragment : Fragment() {
                 create_DATETIME = "2020-2-3",
                 updator_ID = "CRD000002",
                 update_DATETIME = "2020-2-3",
-                house_ID = "009"
+                house_ID = "HOU"
             )
 
             var createHouseLiveDate: LiveData<House>? = null
             createHouseLiveDate = createHouse(house)
             if (createHouseLiveDate != null) {
+                Log.i("ImageList",list.toString()+"list")
+                uploadImage(list)
                 val intent = Intent(context, ListYourSpaceActivity::class.java)
                 startActivity(intent)
             } else {
@@ -641,6 +799,28 @@ class PostHouseFragment : Fragment() {
 
         })
         return data
+    }
+
+    private fun uploadImage(list: ArrayList<MultipartBody.Part>){
+        val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
+        //val requestCall =destinationService.createAccount()
+        destinationService.uploadImages(list).enqueue(object : Callback<ServerResponse> {
+            override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+                t.message?.let { Log.i("UploadImageError", it+"UploadError") }
+            }
+
+            override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>) {
+                val serverResponse = response.body()
+                if (serverResponse != null) {
+                    if (serverResponse.getSuccess()) {
+                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+        })
     }
 
 }

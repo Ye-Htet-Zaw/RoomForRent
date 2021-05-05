@@ -102,7 +102,7 @@ class PersonalInformationActivity : BaseActivity() {
         }//end of dateTime
 
         //if save text is clicked ,updatefun is worked
-        tv_title.setOnClickListener { view->
+        tv_titlePI.setOnClickListener { view->
             updatePersonalInfo(view, userId)
         }
 
