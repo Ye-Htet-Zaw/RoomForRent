@@ -11,48 +11,62 @@ package com.example.roomforrent.fragment
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.icu.number.NumberFormatter.with
+import android.database.Cursor
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.provider.CalendarContract.EventDays.query
+import android.provider.CalendarContract.Instances.query
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.Toast
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentResolverCompat.query
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.roomforrent.R
+import com.example.roomforrent.activity.ListYourSpaceActivity
+import com.example.roomforrent.activity.MainActivity
 import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.models.House
+import com.example.roomforrent.models.ServerResponse
 import com.example.roomforrent.services.PostHouseService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_house_detail.*
-import kotlinx.android.synthetic.main.activity_personal_information.*
 import kotlinx.android.synthetic.main.fragment_post_house.*
+import kotlinx.android.synthetic.main.fragment_post_house.view.*
+import kotlinx.android.synthetic.main.fragment_search.*
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.System.load
-import java.sql.Timestamp
+import java.io.File
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
-import kotlin.collections.ArrayList
 
 class PostHouseFragment : Fragment() {
 
+    var list: ArrayList<MultipartBody.Part> = ArrayList()
+    var isLogin = false
+    var userID : String?=""
+    var userPosition : Int?=null
     private var mSelectedImageFileUri1: Uri? = null
     private var mSelectedImageFileUri2: Uri? = null
     private var mSelectedImageFileUri3: Uri? = null
@@ -85,7 +99,7 @@ class PostHouseFragment : Fragment() {
     var noOfAircon: String = ""
     var wifi: Int = 0
     var phoneOne: String = ""
-    var phoneTwo: String = ""
+    var phoneTwo: String? = null
     var rent: String = ""
     var deposit: String = ""
     var recommendedPoint: String = ""
@@ -101,201 +115,291 @@ class PostHouseFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //set Adapter for spinner
-        ph_categorySpinner.adapter = categoryAdapter
-        ph_addressSpinner.adapter = townshipAdapter
-        ph_periodSpinner.adapter = periodAdapter
+        val intent = Intent(context, MainActivity::class.java)
+        toolBarMain.setNavigationOnClickListener { startActivity(intent) }
 
-        ph_categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedCategory = Constants.categoryArr.get(position)
-            }
+        val share: SharedPreferences = context?.getSharedPreferences(
+            "myPreference",
+            Context.MODE_PRIVATE
+        )!!
+        isLogin = share.getBoolean("isLogin", false)
+        isLogin=true
+        if(isLogin) {
+            //userID=share.getString(Constants.USERID,"")
+            userID ="USE0000001"
+            ph_createLayout.visibility=View.VISIBLE
+            ph_blankLayout.visibility = View.GONE
+            //set Adapter for spinner
+            ph_categorySpinner.adapter = categoryAdapter
+            ph_addressSpinner.adapter = townshipAdapter
+            ph_periodSpinner.adapter = periodAdapter
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+            ph_categorySpinner.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        selectedCategory = Constants.categoryArr.get(position)
+                    }
 
-            }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
 
-        }
+                    }
 
-        ph_addressSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedAddress = Constants.townshipArr.get(position)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-        }
-
-        ph_periodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedPeriod = Constants.periodArr.get(position)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-        }
-
-        categoryId = selectedCategory
-        houseAddress = et_address.text.toString().trim()
-        township = selectedAddress
-        noOfGuest = et_guest.text.toString().trim()
-        noOfRoom = et_room.text.toString().trim()
-        noOfBath = et_bath.text.toString().trim()
-        noOfToilet = et_toilet.text.toString().trim()
-        area = et_area.text.toString().trim()
-        noOfFloor = et_floor.text.toString().trim()
-        noOfAircon = et_aircon.text.toString().trim()
-        wifi = onRadioButtonClicked(rg_radio)
-        phoneOne = et_contact1.text.toString().trim()
-        phoneTwo = et_contact2.text.toString().trim()
-
-        iv_available_date.setOnClickListener { view ->
-            clickDataPicker(view)
-        }
-
-        rent = et_rent.text.toString().trim()
-        deposit = et_deposit.text.toString().trim()
-        recommendedPoint = et_recommended.text.toString().trim()
-        contractRule = et_contract_rule.text.toString().trim()
-        period = selectedPeriod
-
-        btn_post_house.setOnClickListener {
-            if (categoryId.isNotEmpty()
-            ) {
-                val house = House(
-                    category_ID = categoryId,
-                    township = township,
-                    house_ADDRESS = houseAddress,
-                    no_OF_GUESTS = noOfGuest.toInt(),
-                    no_OF_ROOM = noOfRoom.toInt(),
-                    no_OF_BATH = noOfBath.toInt(),
-                    no_OF_TOILET = noOfToilet.toInt(),
-                    area = area.toInt(),
-                    no_OF_FLOOR = noOfFloor.toInt(),
-                    no_OF_AIRCON = noOfAircon.toInt(),
-                    wifi = wifi,
-                    phone_ONE = phoneOne,
-                    phone_TWO = phoneTwo,
-                    available_DATE = Date(availableDate),
-                    rent = rent.toInt(),
-                    deposit = deposit.toInt(),
-                    recommented_POINTS = recommendedPoint,
-                    contract_RULE = contractRule,
-                    period = period.toInt(),
-                    user_ID = "1",
-                    longitude = "09",
-                    latitude = "93",
-                    expired_DATE = Date("1/1/2020"),
-                    rent_FLAG = 0,
-                    delete_FLAG = 0,
-                    delete_DATETIME = Timestamp(System.currentTimeMillis()),
-                    creator_ID = "1",
-                    create_DATETIME = Timestamp(System.currentTimeMillis()),
-                    updator_ID = "1",
-                    update_DATETIME = Timestamp(System.currentTimeMillis()),
-                    house_ID = "001"
-                )
-
-                var createHouseLiveDate: LiveData<House>? = null
-                createHouseLiveDate = createHouse(house)
-                if (createHouseLiveDate != null) {
-                    Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show()
                 }
 
-            }else {
-                Toast.makeText(context, "Please fill data successfully!", Toast.LENGTH_SHORT).show()
-            }
-        }
+            ph_addressSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedAddress = Constants.townshipArr.get(position)
+                }
 
-        checkHouseData()
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+            }
+
+            ph_periodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedPeriod = Constants.periodArr.get(position)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+            }
+
+
+            iv_available_date.setOnClickListener { view ->
+                clickDataPicker(view)
+            }
+
+            btn_post_house.setOnClickListener {
+                setHouseData()
+            }
+
+            checkImageAndRadioData()
+        }else{
+            ph_createLayout.visibility=View.GONE
+            Log.i("TestFavourite", "Need to Login")
+            ph_blankLayout.visibility=View.VISIBLE
+            ph_txtBlank.text=resources.getString(R.string.create_house_login)
+        }
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        val contentResolver: ContentResolver= activity?.contentResolver!!
+
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_ONE && data!!.data != null){
                 mSelectedImageFileUri1 = data.data
             Picasso.get().load(mSelectedImageFileUri1).noPlaceholder().centerCrop().fit()
-                .into((img_1));
+                .into((img_1))
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri1!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                Log.i("cursor","cursor is not null")
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
             }
+        }
        if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_TWO && data!!.data != null){
             mSelectedImageFileUri2 = data.data
             Picasso.get().load(mSelectedImageFileUri2).noPlaceholder().centerCrop().fit()
                 .into((img_2));
+           val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+           val cursor: Cursor? =
+               contentResolver.query(mSelectedImageFileUri2!!, imageprojection,null,null,null)
+
+           if (cursor != null)
+           {
+               cursor.moveToFirst();
+               var indexImage = cursor.getColumnIndex(imageprojection[0]);
+               var partImage = cursor.getString(indexImage)
+               val imageRequest = prepareFilePart(partImage)
+               list.add(imageRequest)
+           }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_THREE && data!!.data != null){
             mSelectedImageFileUri3 = data.data
             Picasso.get().load(mSelectedImageFileUri3).noPlaceholder().centerCrop().fit()
                 .into((img_3));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri3!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_FOUR && data!!.data != null){
             mSelectedImageFileUri4 = data.data
             Picasso.get().load(mSelectedImageFileUri4).noPlaceholder().centerCrop().fit()
                 .into((img_4));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri4!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_FIVE && data!!.data != null){
             mSelectedImageFileUri5 = data.data
             Picasso.get().load(mSelectedImageFileUri5).noPlaceholder().centerCrop().fit()
                 .into((img_5));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri5!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_SIX && data!!.data != null){
             mSelectedImageFileUri6 = data.data
             Picasso.get().load(mSelectedImageFileUri6).noPlaceholder().centerCrop().fit()
                 .into((img_6));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri6!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_SEVEN && data!!.data != null){
             mSelectedImageFileUri7 = data.data
             Picasso.get().load(mSelectedImageFileUri7).noPlaceholder().centerCrop().fit()
                 .into((img_7));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri7!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_EIGHT && data!!.data != null){
             mSelectedImageFileUri8 = data.data
             Picasso.get().load(mSelectedImageFileUri8).noPlaceholder().centerCrop().fit()
                 .into((img_8));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri8!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_NINE && data!!.data != null){
             mSelectedImageFileUri9 = data.data
             Picasso.get().load(mSelectedImageFileUri9).noPlaceholder().centerCrop().fit()
                 .into((img_9));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri9!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
         if (resultCode == RESULT_OK &&
             requestCode == Constants.IMAGE_REQUEST_CODE_TEN && data!!.data != null){
             mSelectedImageFileUri10 = data.data
             Picasso.get().load(mSelectedImageFileUri10).noPlaceholder().centerCrop().fit()
                 .into((img_10));
+
+            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                contentResolver.query(mSelectedImageFileUri10!!, imageprojection,null,null,null)
+
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+                var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                var partImage = cursor.getString(indexImage)
+                val imageRequest = prepareFilePart(partImage)
+                list.add(imageRequest)
+            }
         }
 
 
@@ -305,6 +409,7 @@ class PostHouseFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_post_house, container, false)
     }
@@ -313,7 +418,22 @@ class PostHouseFragment : Fragment() {
         return MySpinnerAdapter(context, arr)
     }
 
-    private fun checkHouseData(){
+
+    private fun checkImageAndRadioData(){
+
+        val radioGroup = view?.findViewById(R.id.rb_group) as RadioGroup
+
+        radioGroup.setOnCheckedChangeListener { group, checkedId -> // checkedId is the RadioButton selected
+            when (checkedId) {
+                R.id.rb_yes -> {
+                    wifi = 1
+                }
+                R.id.rb_no -> {
+                    wifi = 0
+                }
+            }
+        }
+
         img_1.setOnClickListener{
             if(context?.let { it1 -> ContextCompat.checkSelfPermission(it1, Manifest.permission.READ_EXTERNAL_STORAGE) }
                 == PackageManager.PERMISSION_GRANTED){
@@ -487,55 +607,217 @@ class PostHouseFragment : Fragment() {
                     val selectedDate = "$dayOfMonth/${monthOfYear + 1}/$year"
 
                     // Selected date it set to the TextView to make it visible to user.
-                    availableDate=et_available_date.setText(selectedDate).toString()
+                    et_available_date.setText(selectedDate).toString()
                 },
                 year,
                 month,
                 day
             )
         }
-        // 86400000 is milliseconds of 24 Hours. Which is used to restrict the user to select today and future day.
         dpd?.show() // It is used to show the datePicker Dialog.
     }
-    private fun onRadioButtonClicked(view: View): Int {
-        var wifi = 0
-        if (view is RadioButton) {
-            // Is the button now checked?
-            val checked = view.isChecked
 
-            // Check which radio button was clicked
-            when (view.getId()) {
-                R.id.rb_yes ->
-                    if (checked) {
-                        wifi = 1
-                    }
-                R.id.rb_no ->
-                    if (checked) {
-                        wifi = 0
-                    }
-            }
-        }
-        return wifi
+    private fun prepareFilePart(partName: String): MultipartBody.Part {
+        val imageFile = File(partName)
+        val reqBody = imageFile.asRequestBody("multipart/form-file".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("imageupload", imageFile.name, reqBody)
     }
 
-    private fun createHouse(house: House): LiveData<House> {
-        val data = MutableLiveData<House>()
+    private fun setHouseData(){
+
+        houseAddress = et_address.text.toString().trim()
+        township = selectedAddress
+        noOfGuest = et_guest.text.toString().trim()
+        noOfRoom = et_room.text.toString().trim()
+        noOfBath = et_bath.text.toString().trim()
+        noOfToilet = et_toilet.text.toString().trim()
+        area = et_area.text.toString().trim()
+        noOfFloor = et_floor.text.toString().trim()
+        noOfAircon = et_aircon.text.toString().trim()
+        phoneOne = et_contact1.text.toString().trim()
+        phoneTwo = et_contact2.text.toString().trim()
+        rent = et_rent.text.toString().trim()
+        availableDate=et_available_date.text.toString().trim()
+        deposit = et_deposit.text.toString().trim()
+        recommendedPoint = et_recommended.text.toString().trim()
+        contractRule = et_contract_rule.text.toString().trim()
+        period = selectedPeriod
+
+
+
+//
+//            val formatter = SimpleDateFormat("dd/MM/yyyy")
+//            val date1 = formatter.parse(availableDate)
+        if (selectedCategory == "Select"){
+            tv_catSpinner.text = "Need to select category!"
+            tv_catSpinner.setTextColor(Color.RED)
+            tv_catSpinner.isFocusable=true
+            tv_catSpinner.isFocusableInTouchMode=true
+            tv_catSpinner.requestFocus()
+        }else if (selectedAddress == "Select"){
+            tv_towSpinner.text = "Need to select Township!"
+            tv_towSpinner.setTextColor(Color.RED)
+            tv_towSpinner.isFocusable=true
+            tv_towSpinner.isFocusableInTouchMode=true
+            tv_towSpinner.requestFocus()
+        }else if(houseAddress.isEmpty()){
+            et_address.error = "Need to fill house address!"
+            et_address.requestFocus()
+        }else if(noOfGuest.isEmpty()){
+            et_guest.error = "Need to fill guest!"
+            et_guest.requestFocus()
+        }else if(noOfBath.isEmpty()){
+            et_bath.error = "Need to fill bathroom!"
+            et_bath.requestFocus()
+        }else if(noOfToilet.isEmpty()){
+            et_toilet.error = "Need to fill toilet!"
+            et_toilet.requestFocus()
+        }else if(area.isEmpty()){
+            et_area.error = "Need to fill house area!"
+            et_area.requestFocus()
+        }else if(phoneOne.isEmpty()){
+            et_contact1.error = "Need to fill Phone No!"
+            et_contact1.requestFocus()
+        }else if(availableDate.isEmpty()){
+            et_available_date.error = "Need to fill available date!"
+            et_available_date.requestFocus()
+        }else if(rent.isEmpty()){
+            et_rent.error = "Need to fill house rent!"
+            et_rent.requestFocus()
+        }else if(deposit.isEmpty()){
+            et_deposit.error = "Need to fill deposit!"
+            et_deposit.requestFocus()
+        }else if(recommendedPoint.isEmpty()){
+            et_recommended.error = "Need to fill recommended point of house!"
+            et_recommended.requestFocus()
+        }else if(contractRule.isEmpty()){
+            et_contract_rule.error = "Need to fill contract rule!"
+            et_contract_rule.requestFocus()
+        }else if (selectedPeriod == "Select") {
+            tv_perSpinner.text = "Need to select Period!"
+            tv_perSpinner.setTextColor(Color.RED)
+            tv_perSpinner.isFocusable = true
+            tv_perSpinner.isFocusableInTouchMode = true
+            tv_perSpinner.requestFocus()
+        }
+
+       else {
+            categoryId = when (selectedCategory) {
+                "Condominum" -> {
+                    "CAT0000001"
+                }
+                "WholeHouse" -> {
+                    "CAT0000002"
+                }
+                "Apartment" -> {
+                    "CAT0000003"
+                }
+                else -> {
+                    "CAT0000004"
+                }
+            }
+            var noOfRoomInt: Int? = null
+            noOfRoomInt = if (noOfRoom==""){
+                0
+            }else noOfRoom.toInt()
+
+            var noOfFloorInt: Int? = null
+            noOfFloorInt = if (noOfFloor==""){
+                0
+            }else noOfFloor.toInt()
+
+            var noOfAirconInt: Int? = null
+            noOfAirconInt = if (noOfAircon==""){
+                0
+            }else noOfAircon.toInt()
+            val house = House(
+                category_ID = categoryId,
+                township = township,
+                house_ADDRESS = houseAddress,
+                no_OF_GUESTS = noOfGuest.toInt(),
+                no_OF_ROOM = noOfRoomInt!!,
+                no_OF_BATH = noOfBath.toInt(),
+                no_OF_TOILET = noOfToilet.toInt(),
+                area = area.toInt(),
+                no_OF_FLOOR = noOfFloorInt,
+                no_OF_AIRCON = noOfAirconInt,
+                wifi = wifi!!,
+                phone_ONE = phoneOne,
+                phone_TWO = phoneTwo!!,
+                available_DATE = availableDate,
+                rent = rent.toInt(),
+                deposit = deposit.toInt(),
+                recommented_POINTS = recommendedPoint,
+                contract_RULE = contractRule,
+                period = period.toInt(),
+                user_ID = userID!!,
+                longitude = "09",
+                latitude = "93",
+                expired_DATE = "2020-2-3",
+                rent_FLAG = 0,
+                delete_FLAG = 0,
+                delete_DATETIME = "2020-2-3",
+                creator_ID = userID!!,
+                create_DATETIME = "2020-2-3",
+                updator_ID = "CRD000002",
+                update_DATETIME = "2020-2-3",
+                house_ID = "HOU"
+            )
+
+            var createHouseLiveDate: LiveData<List<House>>? = null
+            createHouseLiveDate = createHouse(house)
+
+        }
+//        }else {
+//            Toast.makeText(context, "Please fill data successfully!", Toast.LENGTH_SHORT).show()
+//        }
+    }
+
+    private fun createHouse(house: House):MutableLiveData<List<House>>{
+        val data = MutableLiveData<List<House>>()
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
-        destinationService.createHouse(house).enqueue(object : Callback<House>{
-            override fun onFailure(call: Call<House>, t: Throwable) {
-                data.value = null
+        destinationService.createHouse(house).enqueue(object: Callback<List<House>>{
+            override fun onFailure(call: Call<List<House>>, t: Throwable) {
+                Toast.makeText(context,"Fail to insert house data",Toast.LENGTH_SHORT).show()
             }
 
-            override fun onResponse(call: Call<House>, response: Response<House>) {
+            override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 val res = response.body()
                 if (response.code() == 200 && res!=null){
                     data.value = res
+                    uploadImage(list)
+                    val intent = Intent(context, ListYourSpaceActivity::class.java)
+                    startActivity(intent)
                 }else{
                     data.value = null
                 }
             }
 
         })
+
         return data
     }
+
+    private fun uploadImage(list: ArrayList<MultipartBody.Part>){
+        val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
+        //val requestCall =destinationService.createAccount()
+        destinationService.uploadImages(list).enqueue(object : Callback<ServerResponse> {
+            override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+                t.message?.let { Log.i("UploadImageError", it+"UploadError") }
+            }
+
+            override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>) {
+                val serverResponse = response.body()
+                if (serverResponse != null) {
+                    if (serverResponse.getSuccess()) {
+                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+        })
+    }
+
 }

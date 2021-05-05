@@ -5,6 +5,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.fragment.app.FragmentActivity
+import com.example.roomforrent.fragment.PostHouseFragment
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -46,7 +47,7 @@ object Constants {
     const val GetRoomListByAll = "GetRoomListByAll"
 
     //For transfer data
-    const val USERID="UserId"
+    const val USERID: String= "UserId"
 
     /**
      * township list use in search ui
@@ -238,7 +239,7 @@ object Constants {
 
 
 
-    fun showImageChooser(activity: PostHouseFragment,requestCode: Int){
+    fun showImageChooser(activity: PostHouseFragment, requestCode: Int){
         var galleryIntent = Intent(
             Intent.ACTION_PICK,
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI)

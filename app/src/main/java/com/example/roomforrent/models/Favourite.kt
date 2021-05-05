@@ -1,3 +1,11 @@
+/**
+ *
+ * Favourite Data
+ *
+ * 2021/04/20 KMMN Create New
+ *
+ * include favourite table fields
+ */
 package com.example.roomforrent.models
 
 import java.sql.Timestamp

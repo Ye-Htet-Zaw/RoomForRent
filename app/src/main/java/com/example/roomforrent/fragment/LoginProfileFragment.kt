@@ -22,6 +22,8 @@ import com.example.roomforrent.utils.Constants.USERID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_login_profile.*
 import kotlinx.android.synthetic.main.fragment_login_profile.view.*
+import kotlinx.android.synthetic.main.fragment_login_profile.view.btn_sign_in_profile
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,10 +54,24 @@ class LoginProfileFragment : Fragment() {
             "myPreference",
             Context.MODE_PRIVATE
         )!!
-        var userId= share.getString(USERID,"")
+        val isLogin = share.getBoolean("isLogin",false)
+        val userId= share.getString(USERID,"")
         val v = inflater.inflate(R.layout.fragment_login_profile, container, false)
+        if(isLogin){
+            v.ll_loginedProfile.visibility = View.VISIBLE
+            v.ll_unloginProfile.visibility = View.GONE
+        }else{
+            v.ll_loginedProfile.visibility = View.GONE
+            v.ll_unloginProfile.visibility = View.VISIBLE
+        }
+        v.btn_sign_in_profile.setOnClickListener {
+            startActivity(Intent(context, LoginActivity::class.java))
+        }
         v.ll_owner_personal_info.setOnClickListener {
-            startActivity(Intent(context, PersonalInformationActivity::class.java))
+            val i = Intent(context, PersonalInformationActivity::class.java)
+            i.putExtra(USERID, userId)
+            startActivity(i)
+            //startActivity(Intent(context, PersonalInformationActivity::class.java))
         }
 
         v.ll_owner_change_password.setOnClickListener {
@@ -84,7 +100,7 @@ class LoginProfileFragment : Fragment() {
             editor.putBoolean("isLogin", false)
             editor.commit()
         }
-        getUserInfoById("USE0000001")
+        getUserInfoById(userId!!.toString())//changes for numberformat
         return v
         //FragmentManager.OnBackStackChangedListener {  }
     }
@@ -94,7 +110,7 @@ class LoginProfileFragment : Fragment() {
     private fun getUserInfoById(user_id: String) {
         //initiate the service
         val destinationService  = ServiceBuilder.buildService(UserProfileService::class.java)
-        val requestCall =destinationService.getUserInfo(user_id)
+        val requestCall =destinationService.getUserInfo(user_id.toString())
         //make network call asynchronously
         requestCall.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -107,7 +123,7 @@ class LoginProfileFragment : Fragment() {
 
                     tv_owner_name.text = user.user_name
                     Picasso.get()
-                        .load("http://192.168.1.3:9090/image/user/" + user.user_id + ".jpg").into(
+                        .load("http://192.168.99.129:9090/image/user/" + user.user_id + ".jpg").into(
                             iv_profile_user_image
                         )
 

@@ -28,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@drawable/toolbarbg"
-                app:popupTheme="@style/PopupOverlay" >
+                app:popupTheme="@style/PopupOverlay"
+                app:navigationIcon="@drawable/ic_backward_icon">
             <TextView
                 style="@style/ToolBarTitle"
                 android:text="@string/post_house"
@@ -36,11 +37,31 @@
                 android:layout_height="wrap_content"/>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
+            <LinearLayout
+                android:id="@+id/ph_blankLayout"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                >
+                <TextView
+                    android:id="@+id/ph_txtBlank"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    android:textColor="@color/gradient_start"
+                    android:fontFamily="@font/roboto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         <LinearLayout
+            android:id="@+id/ph_createLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/cardview_layout_padding">
+            android:padding="@dimen/cardview_layout_padding"
+            android:layout_marginBottom="50dp"
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -131,6 +152,7 @@
                     android:src="@drawable/add_photo" />
             </LinearLayout>
             <TextView
+                android:id="@+id/tv_catSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -148,6 +170,7 @@
                 android:gravity="center"
                 android:spinnerMode="dropdown" />
             <TextView
+                android:id="@+id/tv_towSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -198,9 +221,9 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/no_of_guest"
-                    android:inputType="textCapWords"
                     android:textColor="@color/black"
-                    android:textColorHint="#7A8089" />
+                    android:textColorHint="#7A8089"
+                    android:inputType="number"/>
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_room"
@@ -215,7 +238,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/no_of_room"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -232,7 +255,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/no_of_bathroom"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -250,7 +273,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/no_of_toilet"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -268,7 +291,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/area"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -285,7 +308,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/no_of_floor"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -302,7 +325,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/no_of_aircon"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -316,14 +339,11 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto"/>
             <RadioGroup
-                android:id="@+id/rg_radio"
+                android:id="@+id/rb_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                android:orientation="horizontal" >
+
             <!--Yes Rdb-->
             <RadioButton
                 android:id="@+id/rb_yes"
@@ -337,7 +357,6 @@
                 android:textSize="13sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/roboto"
-
                 />
 
             <!--No Rdb-->
@@ -354,7 +373,6 @@
                 android:textColor="@color/black"
                 android:fontFamily="@font/roboto"
                 />
-                </LinearLayout>
             </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -370,7 +388,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/contact_one"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -388,7 +406,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/contact_two"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -435,7 +453,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/rent_per_month"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -453,7 +471,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:hint="@string/deposit"
-                    android:inputType="textCapWords"
+                    android:inputType="number"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -496,6 +514,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                android:id="@+id/tv_perSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -513,21 +532,6 @@
                 android:layout_marginBottom="10dp"
                 android:spinnerMode="dropdown" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginBottom="50dp">
-                <Button
-                    android:id="@+id/btn_cancel"
-                    android:layout_width="@dimen/search_btn_width"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/search_button_margin"
-                    android:background="@drawable/buttonbg"
-                    android:text="Cancel"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/roboto"/>
                 <Button
                     android:id="@+id/btn_post_house"
                     android:layout_width="@dimen/search_btn_width"
@@ -537,8 +541,9 @@
                     android:background="@drawable/buttonbg"
                     android:text="@string/post_house"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/roboto"/>
-            </LinearLayout>
+                    android:fontFamily="@font/roboto"
+                    />
+
         </LinearLayout>
         </LinearLayout>
     </ScrollView>

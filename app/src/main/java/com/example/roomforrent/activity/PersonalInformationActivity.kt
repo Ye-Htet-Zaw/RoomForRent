@@ -22,6 +22,7 @@ import com.example.roomforrent.R
 import com.example.roomforrent.models.User
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserProfileService
+import com.example.roomforrent.utils.Constants
 import kotlinx.android.synthetic.main.activity_personal_information.*
 import kotlinx.android.synthetic.main.fragment_login_profile.*
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +39,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PersonalInformationActivity : AppCompatActivity() {
+class PersonalInformationActivity : BaseActivity() {
 
      var dateFromDbString: String?=null
      var dateString:String?=null
@@ -52,8 +53,9 @@ class PersonalInformationActivity : AppCompatActivity() {
         window.setBackgroundDrawable(resources.getDrawable(R.drawable.toolbarbg))
         setUpToolbar()
 
-        //getUserPersonalInfo
-         getUserInfoById("USE0000001")
+        //getUserPersonalInfo USE0000001
+        var userId=intent.getStringExtra(Constants.USERID)
+         getUserInfoById(userId!!)
 
         //to change gender when click on gender edittext
         et_gender.setOnClickListener {
@@ -100,8 +102,8 @@ class PersonalInformationActivity : AppCompatActivity() {
         }//end of dateTime
 
         //if save text is clicked ,updatefun is worked
-        tv_title.setOnClickListener { view->
-            updatePersonalInfo(view, "USE0000001")
+        tv_titlePI.setOnClickListener { view->
+            updatePersonalInfo(view, userId)
         }
 
         //if user name is inputed error msg is showed
