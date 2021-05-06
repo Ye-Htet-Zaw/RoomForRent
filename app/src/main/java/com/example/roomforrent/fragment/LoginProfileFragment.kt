@@ -34,6 +34,9 @@ class LoginProfileFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private var isLogin:Boolean = false
+    private var userId: String? = null
+    private var share : SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,12 +53,12 @@ class LoginProfileFragment : Fragment() {
         savedInstanceState: Bundle?
 
     ): View? {
-        val share: SharedPreferences = context?.getSharedPreferences(
+        share = context?.getSharedPreferences(
             "myPreference",
             Context.MODE_PRIVATE
         )!!
-        val isLogin = share.getBoolean("isLogin",false)
-        val userId= share.getString(USERID,"")
+        isLogin = share!!.getBoolean("isLogin",false)
+        userId= share!!.getString(USERID,"")
         val v = inflater.inflate(R.layout.fragment_login_profile, container, false)
         if(isLogin){
             v.ll_loginedProfile.visibility = View.VISIBLE
@@ -136,6 +139,19 @@ class LoginProfileFragment : Fragment() {
                 Log.i("errorM", t.message.toString())
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isLogin = share!!.getBoolean("isLogin",false)
+        userId= share!!.getString(USERID,"")
+        if(isLogin){
+            ll_loginedProfile.visibility = View.VISIBLE
+            ll_unloginProfile.visibility = View.GONE
+        }else{
+            ll_loginedProfile.visibility = View.GONE
+            ll_unloginProfile.visibility = View.VISIBLE
+        }
     }
 
 }

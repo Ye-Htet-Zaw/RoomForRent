@@ -36,14 +36,13 @@ class MyTabAdapter(
             0 -> fragment = SearchFragment()
             1 -> fragment = FavouriteFragment()
             2 -> fragment = PostHouseFragment()
-            3 -> fragment = LoginProfileFragment()
-        /*{
+            3 -> {
                 //NTTT
                 fragment = when (share.getBoolean("isLogin",false)) {
                     true -> LoginProfileFragment()
                     false -> ProfileFragment()
-                }*/
-
+                }
+            }
         }
         return fragment
     }

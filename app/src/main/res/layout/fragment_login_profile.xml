@@ -7,18 +7,17 @@
     tools:context=".fragment.LoginProfileFragment"
     >
 
-<ScrollView
-    android:id="@+id/ll_loginedProfile"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="50dp"
-    android:fillViewport="true"
-    android:background="@color/white"
+    <ScrollView
+        android:id="@+id/ll_loginedProfile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:fillViewport="true"
+        android:background="@color/white"
 
-   >
+        >
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -39,7 +38,7 @@
                     android:src="@drawable/ic_owner_profile_image"
                     app:civ_border_color="@color/grey"
                     app:civ_border_width="@dimen/owner_profile_border_width"
-                   />
+                    />
 
                 <TextView
                     android:id="@+id/tv_owner_name"
@@ -299,21 +298,21 @@
                 android:textSize="@dimen/owner_personal_info_text_size" />
 
             <!--Owner profile Logout-->
-               <Button
-                   android:id="@+id/btn_owner_profile_logout"
-                   android:layout_width="@dimen/owner_profile_logout_width"
-                   android:layout_height="@dimen/owner_profile_logout_height"
-                   android:layout_marginTop="@dimen/owner_profile_layout_marginTop"
-                   android:background="@drawable/shape_rounded_button"
-                   android:text="@string/owner_profile_logout"
-                   android:textColor="@color/white"
-                   android:layout_gravity="center"
-                   app:backgroundTint="@color/white"
-                   app:backgroundTintMode="multiply" />
+            <Button
+                android:id="@+id/btn_owner_profile_logout"
+                android:layout_width="@dimen/owner_profile_logout_width"
+                android:layout_height="@dimen/owner_profile_logout_height"
+                android:layout_marginTop="@dimen/owner_profile_layout_marginTop"
+                android:background="@drawable/shape_rounded_button"
+                android:text="@string/owner_profile_logout"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                app:backgroundTint="@color/white"
+                app:backgroundTintMode="multiply" />
 
 
         </LinearLayout>
-</ScrollView>
+    </ScrollView>
     <LinearLayout
         android:visibility="gone"
         android:id="@+id/ll_unloginProfile"
