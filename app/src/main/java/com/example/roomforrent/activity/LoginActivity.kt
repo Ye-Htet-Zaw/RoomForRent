@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.BaseActivity
 import com.example.roomforrent.fragment.LoginProfileFragment
+import com.example.roomforrent.fragment.ProfileFragment
 import com.example.roomforrent.models.UserLogin
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserLoginService
@@ -92,13 +93,13 @@ class LoginActivity : BaseActivity() {
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
                         if (response.isSuccessful) {
                             hideProgressDialog()
-                            var fragment = LoginProfileFragment()
+                            /*var fragment = ProfileFragment()
                             Log.i(
                                 "Response",
                                 "Login UserId at LoginActivity: " + response.body()!!.user_id
                             )
                             supportFragmentManager.beginTransaction()
-                                .add(android.R.id.content, fragment).commit()
+                                .add(android.R.id.content, fragment).commit()*/
                             val editor: SharedPreferences.Editor = share.edit()
                             editor.putBoolean("isLogin", true)
                             editor.putString(USERID, response.body()!!.user_id)
@@ -108,6 +109,7 @@ class LoginActivity : BaseActivity() {
                                 "LOGIN SUCCESSFULLY",
                                 Toast.LENGTH_LONG
                             ).show()
+                            finish()
 
                         }
                     }
