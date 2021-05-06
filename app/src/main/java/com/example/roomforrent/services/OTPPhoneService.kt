@@ -10,7 +10,7 @@ import retrofit2.http.Path
 
 interface OTPPhoneService {
     @GET("getPhoneUserCount/{PHONE_ONE}")
-    fun getPhoneUserCount(@Path("PHONE_ONE") phone_one: String): Call<List<Phone>>
+    fun getPhoneUserCount(@Path("PHONE_ONE") phone_one: String): Call<Phone>
 
     @POST("savePhoneUser")
     fun createPhoneUser(@Body phone: Phone): Call<Phone>
