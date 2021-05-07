@@ -43,6 +43,7 @@ class LoginActivity : BaseActivity() {
     lateinit var callGetUser: Call<UserLogin>
     lateinit var callCreateAccount: Call<List<UserLogin>>
     lateinit var callfbCount:Call<Int>
+    lateinit var callFbForUserId:Call<UserLogin>
     var share: SharedPreferences?=null
     var editor: SharedPreferences.Editor ?=null
     @ExperimentalStdlibApi
@@ -97,7 +98,7 @@ class LoginActivity : BaseActivity() {
                             hideProgressDialog()
                             editor!!.putBoolean("isLogin", true)
                             editor!!.putString(USERID, response.body()!!.user_id)
-                            editor!!.putString(POSITION, response.body()!!.user_position.toString())
+                            editor!!.putInt(POSITION, response.body()!!.user_position)
                             editor!!.commit()
                             Toast.makeText(
                                 this@LoginActivity,
@@ -186,6 +187,7 @@ class LoginActivity : BaseActivity() {
                         update_datetime= date
                     )
                     callfbCount=facebookService.getFacebookId(fb_id)
+                    callFbForUserId=facebookService.getUserId(fb_id)
                     Log.i("TAG", callfbCount.toString())
 
                     callfbCount.enqueue(object : Callback<Int> {
@@ -196,21 +198,16 @@ class LoginActivity : BaseActivity() {
                             if(response.body()==0){
                                 callCreateAccount=facebookService.createUser(account)
                                 getAccountList()
-                                editor!!.putBoolean("isLogin", true)
-                                // editor!!.putString(USERID, response.body()!!.user_id)
-                                editor!!.commit()
-                                finish()
+
                             }
                             else{
-                                editor!!.putBoolean("isLogin", true)
-                                //editor!!.putString(USERID, response.body()!!.user_id)
-                                editor!!.commit()
-                                finish()
+                                getUserId()
+
                             }
                         }
 
                         override fun onFailure(call: Call<Int>, t: Throwable) {
-
+                            Log.i("TAG", "COUNT fail")
                         }
 
 
@@ -250,9 +247,34 @@ class LoginActivity : BaseActivity() {
         callCreateAccount.enqueue(object : Callback<List<UserLogin>> {
             override fun onResponse(call: Call<List<UserLogin>>, response: Response<List<UserLogin>>) {
                 Log.i("TAG", "Retrieve" +response.body()!!.size.toString())
+                getUserId()
             }
 
             override fun onFailure(call: Call<List<UserLogin>>, t: Throwable) {
+
+            }
+
+        })
+    }
+
+    private fun getUserId(){
+        callFbForUserId.enqueue(object : Callback<UserLogin> {
+            override fun onResponse(
+                call: Call<UserLogin>,
+                response: Response<UserLogin>
+            ) {
+                Log.d("TAG", "USERIDSUCESS:"+response.body()!!.user_id)
+
+                editor!!.putBoolean("isLogin", true)
+                editor!!.putString(USERID, response.body()!!.user_id)
+                editor!!.putInt(POSITION, response.body()!!.user_position)
+                editor!!.commit()
+                finish()
+
+            }
+
+            override fun onFailure(call: Call<UserLogin>, t: Throwable) {
+                Log.d("TAG", "USERID FAIL")
 
             }
 
