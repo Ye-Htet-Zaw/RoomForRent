@@ -14,8 +14,10 @@ import com.example.roomforrent.activity.BaseActivity
 import com.example.roomforrent.fragment.LoginProfileFragment
 import com.example.roomforrent.fragment.ProfileFragment
 import com.example.roomforrent.models.UserLogin
+import com.example.roomforrent.services.FacebookLoginService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserLoginService
+import com.example.roomforrent.utils.Constants.POSITION
 import com.example.roomforrent.utils.Constants.USERID
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -40,20 +42,22 @@ class LoginActivity : BaseActivity() {
     var callbackManager: CallbackManager?=null
     lateinit var callGetUser: Call<UserLogin>
     lateinit var callCreateAccount: Call<List<UserLogin>>
-
+    lateinit var callfbCount:Call<Int>
+    var share: SharedPreferences?=null
+    var editor: SharedPreferences.Editor ?=null
     @ExperimentalStdlibApi
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         auth = FirebaseAuth.getInstance()
-        //firebaseauth= FirebaseAuth.getInstance()
         callbackManager = CallbackManager.Factory.create()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val share: SharedPreferences = getSharedPreferences(
+        share = getSharedPreferences(
             "myPreference",
             Context.MODE_PRIVATE
         )
+        editor= share!!.edit()
         //For Change status bar color
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
@@ -91,17 +95,10 @@ class LoginActivity : BaseActivity() {
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
                         if (response.isSuccessful) {
                             hideProgressDialog()
-                            /*var fragment = ProfileFragment()
-                            Log.i(
-                                "Response",
-                                "Login UserId at LoginActivity: " + response.body()!!.user_id
-                            )
-                            supportFragmentManager.beginTransaction()
-                                .add(android.R.id.content, fragment).commit()*/
-                            val editor: SharedPreferences.Editor = share.edit()
-                            editor.putBoolean("isLogin", true)
-                            editor.putString(USERID, response.body()!!.user_id)
-                            editor.commit()
+                            editor!!.putBoolean("isLogin", true)
+                            editor!!.putString(USERID, response.body()!!.user_id)
+                            editor!!.putString(POSITION, response.body()!!.user_position.toString())
+                            editor!!.commit()
                             Toast.makeText(
                                 this@LoginActivity,
                                 "LOGIN SUCCESSFULLY",
@@ -127,6 +124,7 @@ class LoginActivity : BaseActivity() {
             override fun onSuccess(loginResult: LoginResult) {
                 Log.d("TAG", "facebook:onSuccess:$loginResult")
                 handleFacebookAccessToken(loginResult.accessToken)
+
             }
 
             override fun onCancel() {
@@ -156,13 +154,71 @@ class LoginActivity : BaseActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    val facebookService = ServiceBuilder.buildService(FacebookLoginService::class.java)
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
+                    Log.d("TAG", "signInWithCredential:success")
                     val user = auth.currentUser
                     updateUI(user)
+                    val user_email=user.email
+                    val fb_id=user.uid
+                    val user_name=user.displayName
+                    var date = SimpleDateFormat(
+                        "yyyy-MM-dd",
+                        Locale.getDefault()
+                    ).format(Date())
+                    val account=UserLogin(
+                        user_id="USE",
+                        user_name=user_name,
+                        user_email= user_email,
+                        facebook_id= fb_id,
+                        password="",
+                        phone_one="",
+                        phone_two= "",
+                        user_address ="",
+                        user_gender=0,
+                        user_dob =date,
+                        user_position=0,
+                        delete_flag= 0,
+                        delete_datetime=date,
+                        creator_id=fb_id,
+                        create_datetime=date,
+                        updator_id="",
+                        update_datetime= date
+                    )
+                    callfbCount=facebookService.getFacebookId(fb_id)
+                    Log.i("TAG", callfbCount.toString())
+
+                    callfbCount.enqueue(object : Callback<Int> {
+
+                        override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                            Log.i("TAG", "$user_email&$user_name&$fb_id")
+                            Log.i("TAG", response.body().toString()+"COUNT SUCESS")
+                            if(response.body()==0){
+                                callCreateAccount=facebookService.createUser(account)
+                                getAccountList()
+                                editor!!.putBoolean("isLogin", true)
+                                // editor!!.putString(USERID, response.body()!!.user_id)
+                                editor!!.commit()
+                                finish()
+                            }
+                            else{
+                                editor!!.putBoolean("isLogin", true)
+                                //editor!!.putString(USERID, response.body()!!.user_id)
+                                editor!!.commit()
+                                finish()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Int>, t: Throwable) {
+
+                        }
+
+
+                    })
+
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Log.w("TAG", "signInWithCredential:failure", task.exception)
                     Toast.makeText(baseContext, "Authentication failed.",
                         Toast.LENGTH_SHORT).show()
                     updateUI(null)
@@ -190,8 +246,16 @@ class LoginActivity : BaseActivity() {
 
     }
 
-    companion object {
-        private const val TAG = "FacebookLogin"
-    }
+    private fun getAccountList() {
+        callCreateAccount.enqueue(object : Callback<List<UserLogin>> {
+            override fun onResponse(call: Call<List<UserLogin>>, response: Response<List<UserLogin>>) {
+                Log.i("TAG", "Retrieve" +response.body()!!.size.toString())
+            }
 
+            override fun onFailure(call: Call<List<UserLogin>>, t: Throwable) {
+
+            }
+
+        })
+    }
 }
