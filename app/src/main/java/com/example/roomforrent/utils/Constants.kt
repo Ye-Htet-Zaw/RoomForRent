@@ -48,6 +48,7 @@ object Constants {
 
     //For transfer data
     const val USERID: String= "UserId"
+    const val POSITION="user_position"
 
     /**
      * township list use in search ui
