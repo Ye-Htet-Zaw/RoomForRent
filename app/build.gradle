@@ -69,6 +69,7 @@ dependencies {
     //PinView
     implementation 'com.chaos.view:pinview:1.4.3'
     implementation 'androidx.browser:browser:1.2.0'
+
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:27.1.0')
     implementation 'com.google.firebase:firebase-auth:20.0.4'
