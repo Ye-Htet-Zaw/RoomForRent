@@ -1,5 +1,6 @@
 package com.example.roomforrent.services
 
+import com.example.roomforrent.models.User
 import com.example.roomforrent.models.UserLogin
 import retrofit2.Call
 import retrofit2.http.Body
@@ -14,5 +15,7 @@ interface FacebookLoginService {
     @GET("getFacebookId/{facebook_id}")
     fun getFacebookId(@Path("facebook_id") facebook_id: String):Call<Int>
 
+    @GET("getUserId/{facebook_id}")
+    fun getUserId(@Path("facebook_id") facebook_id: String): Call<UserLogin>
 
 }
