@@ -66,7 +66,7 @@ class PostHouseFragment : Fragment() {
     var list: ArrayList<MultipartBody.Part> = ArrayList()
     var isLogin = false
     var userID : String?=""
-    var userPosition : Int?=null
+    var userPosition :  Int?=0
     private var mSelectedImageFileUri1: Uri? = null
     private var mSelectedImageFileUri2: Uri? = null
     private var mSelectedImageFileUri3: Uri? = null
@@ -115,7 +115,6 @@ class PostHouseFragment : Fragment() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -127,26 +126,42 @@ class PostHouseFragment : Fragment() {
             Context.MODE_PRIVATE
         )!!
         isLogin = share.getBoolean("isLogin", false)
-        isLogin=true
         if(isLogin) {
-            //userID=share.getString(Constants.USERID,"")
-            userID ="USE0000001"
-            ph_createLayout.visibility=View.VISIBLE
-            ph_blankLayout.visibility = View.GONE
-            //set Adapter for spinner
-            ph_categorySpinner.adapter = categoryAdapter
-            ph_addressSpinner.adapter = townshipAdapter
-            ph_periodSpinner.adapter = periodAdapter
+            userID=share.getString(Constants.USERID,"")
+            userPosition=share.getInt(Constants.POSITION,0)
+            if (userPosition==1){
+                ph_createLayout.visibility=View.VISIBLE
+                ph_blankLayout.visibility = View.GONE
+                //set Adapter for spinner
+                ph_categorySpinner.adapter = categoryAdapter
+                ph_addressSpinner.adapter = townshipAdapter
+                ph_periodSpinner.adapter = periodAdapter
 
-            ph_categorySpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
+                ph_categorySpinner.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            selectedCategory = Constants.categoryArr.get(position)
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                        }
+
+                    }
+
+                ph_addressSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
                         parent: AdapterView<*>?,
                         view: View?,
                         position: Int,
                         id: Long
                     ) {
-                        selectedCategory = Constants.categoryArr.get(position)
+                        selectedAddress = Constants.townshipArr.get(position)
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -155,51 +170,41 @@ class PostHouseFragment : Fragment() {
 
                 }
 
-            ph_addressSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedAddress = Constants.townshipArr.get(position)
-                }
+                ph_periodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        selectedPeriod = Constants.periodArr.get(position)
+                    }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
 
-                }
-
-            }
-
-            ph_periodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedPeriod = Constants.periodArr.get(position)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
 
                 }
 
+                iv_available_date.setOnClickListener { view ->
+                    clickDataPicker(view)
+                }
+
+                btn_post_house.setOnClickListener {
+                    setHouseData()
+                }
+
+                checkImageAndRadioData()
+            }else{
+                ph_createLayout.visibility=View.GONE
+                Log.i("TestHouse", "User Position Owner")
+                ph_blankLayout.visibility=View.VISIBLE
+                ph_txtBlank.text=resources.getString(R.string.create_house_login_with_owner)
             }
 
-
-            iv_available_date.setOnClickListener { view ->
-                clickDataPicker(view)
-            }
-
-            btn_post_house.setOnClickListener {
-                setHouseData()
-            }
-
-            checkImageAndRadioData()
         }else{
             ph_createLayout.visibility=View.GONE
-            Log.i("TestFavourite", "Need to Login")
+            Log.i("TestHouse", "Need to Login")
             ph_blankLayout.visibility=View.VISIBLE
             ph_txtBlank.text=resources.getString(R.string.create_house_login)
         }
@@ -643,11 +648,6 @@ class PostHouseFragment : Fragment() {
         contractRule = et_contract_rule.text.toString().trim()
         period = selectedPeriod
 
-
-
-//
-//            val formatter = SimpleDateFormat("dd/MM/yyyy")
-//            val date1 = formatter.parse(availableDate)
         if (selectedCategory == "Select"){
             tv_catSpinner.text = "Need to select category!"
             tv_catSpinner.setTextColor(Color.RED)
@@ -759,64 +759,45 @@ class PostHouseFragment : Fragment() {
                 delete_DATETIME = "2020-2-3",
                 creator_ID = userID!!,
                 create_DATETIME = "2020-2-3",
-                updator_ID = "CRD000002",
+                updator_ID = userID!!,
                 update_DATETIME = "2020-2-3",
                 house_ID = "HOU"
             )
-
-            var createHouseLiveDate: LiveData<List<House>>? = null
-            createHouseLiveDate = createHouse(house)
-
+             createHouse(house)
         }
-//        }else {
-//            Toast.makeText(context, "Please fill data successfully!", Toast.LENGTH_SHORT).show()
-//        }
     }
 
-    private fun createHouse(house: House):MutableLiveData<List<House>>{
-        val data = MutableLiveData<List<House>>()
+    private fun createHouse(house: House){
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
         destinationService.createHouse(house).enqueue(object: Callback<List<House>>{
             override fun onFailure(call: Call<List<House>>, t: Throwable) {
                 Toast.makeText(context,"Fail to insert house data",Toast.LENGTH_SHORT).show()
             }
-
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 val res = response.body()
                 if (response.code() == 200 && res!=null){
-                    data.value = res
                     uploadImage(list)
                     val intent = Intent(context, ListYourSpaceActivity::class.java)
+                    intent.putExtra(Constants.USERID, userID)
                     startActivity(intent)
                 }else{
-                    data.value = null
+                    Toast.makeText(context,"Fail to insert house data",Toast.LENGTH_SHORT).show()
                 }
             }
 
         })
-
-        return data
     }
 
     private fun uploadImage(list: ArrayList<MultipartBody.Part>){
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
-        //val requestCall =destinationService.createAccount()
-        destinationService.uploadImages(list).enqueue(object : Callback<ServerResponse> {
-            override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+        destinationService.uploadImages(list).enqueue(object : Callback<Void> {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
                 t.message?.let { Log.i("UploadImageError", it+"UploadError") }
             }
 
-            override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>) {
-                val serverResponse = response.body()
-                if (serverResponse != null) {
-                    if (serverResponse.getSuccess()) {
-                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show();
-                    }
-                }
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                Log.i("UploadImageSuccess","Upload image to server")
             }
-
         })
     }
 
