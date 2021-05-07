@@ -2,16 +2,16 @@ package com.example.roomforrent.activity
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.adapter.MyTabAdapter
-import com.example.roomforrent.fragment.FavouriteFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,7 +24,7 @@ class MainActivity : BaseActivity() {
     var tabNameArr = ArrayList<String>()
     var tabIconArr = ArrayList<Int>()
     var activeTabIconArr = ArrayList<Int>()
-
+    var isdoubleBack: Boolean = false
 
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -42,10 +42,10 @@ class MainActivity : BaseActivity() {
         viewPager.adapter?.notifyDataSetChanged()
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                val currentFragment : Fragment= supportFragmentManager.fragments.last()
+                val currentFragment: Fragment = supportFragmentManager.fragments.last()
                 val ft = supportFragmentManager.beginTransaction()
                 ft.detach(currentFragment).attach(currentFragment).commit()
-                Log.i("TestFavourite",tab!!.position.toString()+currentFragment)
+                Log.i("TestFavourite", tab!!.position.toString() + currentFragment)
                 viewPager.setCurrentItem(tab!!.getPosition())
                 tab?.customView!!.nav_label.setTextColor(resources.getColor(R.color.activeTabTextColor))
                 tab.customView!!.nav_icon.setImageResource(activeTabIconArr.get(tab.position))
@@ -96,5 +96,19 @@ class MainActivity : BaseActivity() {
         }
         tabLayout.nav_label.setTextColor(resources.getColor(R.color.activeTabTextColor))
         tabLayout.nav_icon.setImageResource(R.drawable.active_search)
+    }
+
+    override fun onBackPressed() {
+        if(isdoubleBack){
+            super.onBackPressed()
+            return
+        }
+
+        isdoubleBack = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed(Runnable { isdoubleBack = false }, 2000)
+
+
     }
 }
