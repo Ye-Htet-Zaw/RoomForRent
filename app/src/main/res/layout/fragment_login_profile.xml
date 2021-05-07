@@ -161,6 +161,7 @@
                 </LinearLayout>
             </LinearLayout>
             <View
+                android:id="@+id/ll_owner_list_space_line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/owner_profile_divider_height"
                 android:layout_marginLeft="10dp"

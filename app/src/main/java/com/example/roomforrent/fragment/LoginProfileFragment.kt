@@ -59,13 +59,20 @@ class LoginProfileFragment : Fragment() {
             "myPreference",
             Context.MODE_PRIVATE
         )!!
-        position=share!!.getInt(POSITION,0)
+        position=share!!.getInt(POSITION,3)
         isLogin = share!!.getBoolean("isLogin",false)
         userId= share!!.getString(USERID,"")
         val v = inflater.inflate(R.layout.fragment_login_profile, container, false)
         if(isLogin){
             v.ll_loginedProfile.visibility = View.VISIBLE
             v.ll_unloginProfile.visibility = View.GONE
+            if(position==1){
+                v.ll_owner_list_space.visibility=View.VISIBLE
+                v.ll_owner_list_space_line.visibility=View.VISIBLE
+            } else{
+                v.ll_owner_list_space.visibility=View.GONE
+                v.ll_owner_list_space_line.visibility=View.GONE
+            }
         }else{
             v.ll_loginedProfile.visibility = View.GONE
             v.ll_unloginProfile.visibility = View.VISIBLE
