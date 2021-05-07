@@ -1,3 +1,12 @@
+/**
+ *
+ * PostHouseService
+ *
+ * 2021/04/22 HNT Create New
+ *
+ * call post house api to create house
+ */
+
 package com.example.roomforrent.services
 
 import com.example.roomforrent.models.House
@@ -16,5 +25,5 @@ interface PostHouseService {
 
     @Multipart
     @POST("uploadMultipleFiles")
-    fun uploadImages(@Part images: ArrayList<MultipartBody.Part>): Call<ServerResponse>
+    fun uploadImages(@Part images: ArrayList<MultipartBody.Part>): Call<Void>
 }

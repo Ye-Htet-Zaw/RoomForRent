@@ -99,6 +99,7 @@
     <string name="available_date">Available Date</string>
     <string name="recommended_point">Recommended Point</string>
     <string name="create_house_login">Need to login to create your house!</string>
+    <string name="create_house_login_with_owner">Need to login with owner to create house!</string>
 
     //fb
     <string name="facebook_app_id">247575357151339</string>
