@@ -18,6 +18,7 @@ import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserProfileService
 import com.example.roomforrent.utils.Constants
 import com.example.roomforrent.utils.Constants.GetAllRoomList
+import com.example.roomforrent.utils.Constants.POSITION
 import com.example.roomforrent.utils.Constants.USERID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_login_profile.*
@@ -36,6 +37,7 @@ class LoginProfileFragment : Fragment() {
 
     private var isLogin:Boolean = false
     private var userId: String? = null
+    private var position: Int? = null
     private var share : SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +59,7 @@ class LoginProfileFragment : Fragment() {
             "myPreference",
             Context.MODE_PRIVATE
         )!!
+        position=share!!.getInt(POSITION,0)
         isLogin = share!!.getBoolean("isLogin",false)
         userId= share!!.getString(USERID,"")
         val v = inflater.inflate(R.layout.fragment_login_profile, container, false)
@@ -83,6 +86,7 @@ class LoginProfileFragment : Fragment() {
             startActivity(i)
             (activity as Activity?)!!.overridePendingTransition(0, 0)
         }
+
 
         v.tv_owner_list_space.setOnClickListener{
 
@@ -126,7 +130,7 @@ class LoginProfileFragment : Fragment() {
 
                     tv_owner_name.text = user.user_name
                     Picasso.get()
-                        .load("http://192.168.99.129:9090/image/user/" + user.user_id + ".jpg").into(
+                        .load("http://192.168.1.3:9090/image/user/" + user.user_id + ".jpg").into(
                             iv_profile_user_image
                         )
 
