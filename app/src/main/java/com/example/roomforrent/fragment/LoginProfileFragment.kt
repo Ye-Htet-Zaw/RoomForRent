@@ -159,6 +159,13 @@ class LoginProfileFragment : Fragment() {
         if(isLogin){
             ll_loginedProfile.visibility = View.VISIBLE
             ll_unloginProfile.visibility = View.GONE
+            if(position==1){
+                ll_owner_list_space.visibility=View.VISIBLE
+                ll_owner_list_space_line.visibility=View.VISIBLE
+            } else{
+                ll_owner_list_space.visibility=View.GONE
+                ll_owner_list_space_line.visibility=View.GONE
+            }
         }else{
             ll_loginedProfile.visibility = View.GONE
             ll_unloginProfile.visibility = View.VISIBLE
