@@ -19,29 +19,21 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.CalendarContract.EventDays.query
-import android.provider.CalendarContract.Instances.query
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentResolverCompat.query
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.ListYourSpaceActivity
 import com.example.roomforrent.activity.MainActivity
 import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.models.House
-import com.example.roomforrent.models.ServerResponse
 import com.example.roomforrent.services.PostHouseService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
@@ -49,12 +41,8 @@ import com.example.roomforrent.utils.Constants.POSITION
 import com.example.roomforrent.utils.Constants.USERID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_post_house.*
-import kotlinx.android.synthetic.main.fragment_post_house.view.*
-import kotlinx.android.synthetic.main.fragment_search.*
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -65,10 +53,10 @@ import java.util.*
 
 class PostHouseFragment : Fragment() {
 
-    var list: ArrayList<MultipartBody.Part> = ArrayList()
-    var isLogin = false
-    var userID : String?=""
-    var userPosition :  Int?=null
+    private var list: ArrayList<MultipartBody.Part> = ArrayList()
+    private var isLogin = false
+    private var userID : String?=""
+    private var userPosition :  Int?=null
     private var mSelectedImageFileUri1: Uri? = null
     private var mSelectedImageFileUri2: Uri? = null
     private var mSelectedImageFileUri3: Uri? = null
@@ -85,28 +73,28 @@ class PostHouseFragment : Fragment() {
     var selectedCategory: String = ""
     var selectedAddress: String = ""
     var selectedPeriod: String = ""
-    var availableDate = SimpleDateFormat(
+    private var availableDate = SimpleDateFormat(
         "yyyy-MM-dd",
         Locale.getDefault()
     ).format(Date())
-    var categoryId: String = ""
-    var houseAddress: String = ""
-    var township: String = ""
-    var noOfGuest: String = ""
-    var noOfRoom: String = ""
-    var noOfBath: String = ""
-    var noOfToilet: String = ""
-    var area: String = ""
-    var noOfFloor: String = ""
-    var noOfAircon: String = ""
-    var wifi: Int = 0
-    var phoneOne: String = ""
-    var phoneTwo: String? = null
-    var rent: String = ""
-    var deposit: String = ""
-    var recommendedPoint: String = ""
-    var contractRule: String = ""
-    var period: String = ""
+    private var categoryId: String = ""
+    private var houseAddress: String = ""
+    private var township: String = ""
+    private var noOfGuest: String = ""
+    private var noOfRoom: String = ""
+    private var noOfBath: String = ""
+    private var noOfToilet: String = ""
+    private var area: String = ""
+    private var noOfFloor: String = ""
+    private var noOfAircon: String = ""
+    private var wifi: Int = 0
+    private var phoneOne: String = ""
+    private var phoneTwo: String? = null
+    private var rent: String = ""
+    private var deposit: String = ""
+    private var recommendedPoint: String = ""
+    private var contractRule: String = ""
+    private var period: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,29 +111,7 @@ class PostHouseFragment : Fragment() {
         val intent = Intent(context, MainActivity::class.java)
         toolBarMain.setNavigationOnClickListener { startActivity(intent) }
 
-        val share: SharedPreferences = context?.getSharedPreferences(
-            "myPreference",
-            Context.MODE_PRIVATE
-        )!!
-        isLogin = share.getBoolean("isLogin", false)
-        if(isLogin) {
-            userID=share.getString(USERID,"")
-            userPosition=share.getInt(POSITION,3)
-            if (userPosition==1){
-                loadPostHouseScreen()
-            }else{
-                ph_createLayout.visibility=View.GONE
-                Log.i("TestHouse", "User Position Owner")
-                ph_blankLayout.visibility=View.VISIBLE
-                ph_txtBlank.text=resources.getString(R.string.create_house_login_with_owner)
-            }
-
-        }else{
-            ph_createLayout.visibility=View.GONE
-            Log.i("TestHouse", "Need to Login")
-            ph_blankLayout.visibility=View.VISIBLE
-            ph_txtBlank.text=resources.getString(R.string.create_house_login)
-        }
+        loadPostHouseScreen()
 
     }
 
@@ -357,78 +323,104 @@ class PostHouseFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_post_house, container, false)
     }
 
-    private fun loadPostHouseScreen(){
-        ph_createLayout.visibility=View.VISIBLE
-        ph_blankLayout.visibility = View.GONE
-        //set Adapter for spinner
-        ph_categorySpinner.adapter = categoryAdapter
-        ph_addressSpinner.adapter = townshipAdapter
-        ph_periodSpinner.adapter = periodAdapter
-
-        ph_categorySpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedCategory = Constants.categoryArr.get(position)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                }
-
-            }
-
-        ph_addressSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedAddress = Constants.townshipArr.get(position)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-        }
-
-        ph_periodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedPeriod = Constants.periodArr.get(position)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-        }
-
-        iv_available_date.setOnClickListener { view ->
-            clickDataPicker(view)
-        }
-
-        btn_post_house.setOnClickListener {
-            setHouseData()
-        }
-
-        checkImageAndRadioData()
-    }
-
     override fun onResume() {
         super.onResume()
         loadPostHouseScreen()
     }
+
+    private fun loadPostHouseScreen(){
+        val share: SharedPreferences = context?.getSharedPreferences(
+            "myPreference",
+            Context.MODE_PRIVATE
+        )!!
+        isLogin = share.getBoolean("isLogin", false)
+        if(isLogin) {
+            userID=share.getString(USERID,"")
+            userPosition=share.getInt(POSITION,3)
+            if (userPosition==1){
+                ph_createLayout.visibility=View.VISIBLE
+                ph_blankLayout.visibility = View.GONE
+                //set Adapter for spinner
+                ph_categorySpinner.adapter = categoryAdapter
+                ph_addressSpinner.adapter = townshipAdapter
+                ph_periodSpinner.adapter = periodAdapter
+
+                ph_categorySpinner.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            selectedCategory = Constants.categoryArr.get(position)
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                        }
+
+                    }
+
+                ph_addressSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        selectedAddress = Constants.townshipArr.get(position)
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+
+                }
+
+                ph_periodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        selectedPeriod = Constants.periodArr.get(position)
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+
+                }
+
+                iv_available_date.setOnClickListener { view ->
+                    clickDataPicker(view)
+                }
+
+                btn_post_house.setOnClickListener {
+                    setHouseData()
+                }
+
+                checkImageAndRadioData()
+            }else{
+                ph_createLayout.visibility=View.GONE
+                Log.i("TestHouse", "User Position Owner")
+                ph_blankLayout.visibility=View.VISIBLE
+                ph_txtBlank.text=resources.getString(R.string.create_house_login_with_owner)
+            }
+
+        }else{
+            ph_createLayout.visibility=View.GONE
+            Log.i("TestHouse", "Need to Login")
+            ph_blankLayout.visibility=View.VISIBLE
+            ph_txtBlank.text=resources.getString(R.string.create_house_login)
+        }
+
+
+    }
+
+
     private fun createSpinnerAdapter(context: Context, arr: ArrayList<String>): MySpinnerAdapter {
         return MySpinnerAdapter(context, arr)
     }
@@ -658,7 +650,14 @@ class PostHouseFragment : Fragment() {
         contractRule = et_contract_rule.text.toString().trim()
         period = selectedPeriod
 
-        if (selectedCategory == "Select"){
+        if (mSelectedImageFileUri1==null){
+            tv_house_item.text = "Need to upload first photo of your house!"
+            tv_house_item.setTextColor(Color.RED)
+            tv_house_item.isFocusable=true
+            tv_house_item.isFocusableInTouchMode=true
+            tv_house_item.requestFocus()
+        }
+        else if (selectedCategory == "Select"){
             tv_catSpinner.text = "Need to select category!"
             tv_catSpinner.setTextColor(Color.RED)
             tv_catSpinner.isFocusable=true
