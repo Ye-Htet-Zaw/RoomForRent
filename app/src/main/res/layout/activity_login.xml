@@ -85,6 +85,8 @@
             android:layout_marginLeft="@dimen/authentication_screen_marginStartEnd"
             android:layout_marginTop="30dp"
             android:layout_marginRight="@dimen/authentication_screen_marginStartEnd"
+            android:paddingTop="25dp"
+            android:paddingBottom="25dp"
             android:background="@drawable/text_rounded"
             android:hint="@string/password"
             android:padding="@dimen/email_password_btn_padding"
@@ -99,9 +101,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="80dp"
             android:layout_marginTop="40dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="80dp"
             android:background="@drawable/shape_button_rounded"
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
@@ -114,11 +116,11 @@
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
-            android:layout_width="wrap_content"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginTop="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"/>
 
         <Button
             android:id="@+id/btn_phone_otp"
