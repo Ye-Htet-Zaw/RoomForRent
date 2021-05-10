@@ -45,6 +45,8 @@ import com.example.roomforrent.models.ServerResponse
 import com.example.roomforrent.services.PostHouseService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
+import com.example.roomforrent.utils.Constants.POSITION
+import com.example.roomforrent.utils.Constants.USERID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_post_house.*
 import kotlinx.android.synthetic.main.fragment_post_house.view.*
@@ -66,7 +68,7 @@ class PostHouseFragment : Fragment() {
     var list: ArrayList<MultipartBody.Part> = ArrayList()
     var isLogin = false
     var userID : String?=""
-    var userPosition :  Int?=0
+    var userPosition :  Int?=null
     private var mSelectedImageFileUri1: Uri? = null
     private var mSelectedImageFileUri2: Uri? = null
     private var mSelectedImageFileUri3: Uri? = null
@@ -127,74 +129,10 @@ class PostHouseFragment : Fragment() {
         )!!
         isLogin = share.getBoolean("isLogin", false)
         if(isLogin) {
-            userID=share.getString(Constants.USERID,"")
-            userPosition=share.getInt(Constants.POSITION,0)
+            userID=share.getString(USERID,"")
+            userPosition=share.getInt(POSITION,3)
             if (userPosition==1){
-                ph_createLayout.visibility=View.VISIBLE
-                ph_blankLayout.visibility = View.GONE
-                //set Adapter for spinner
-                ph_categorySpinner.adapter = categoryAdapter
-                ph_addressSpinner.adapter = townshipAdapter
-                ph_periodSpinner.adapter = periodAdapter
-
-                ph_categorySpinner.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            selectedCategory = Constants.categoryArr.get(position)
-                        }
-
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                        }
-
-                    }
-
-                ph_addressSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        selectedAddress = Constants.townshipArr.get(position)
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
-
-                ph_periodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        selectedPeriod = Constants.periodArr.get(position)
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
-
-                iv_available_date.setOnClickListener { view ->
-                    clickDataPicker(view)
-                }
-
-                btn_post_house.setOnClickListener {
-                    setHouseData()
-                }
-
-                checkImageAndRadioData()
+                loadPostHouseScreen()
             }else{
                 ph_createLayout.visibility=View.GONE
                 Log.i("TestHouse", "User Position Owner")
@@ -419,6 +357,78 @@ class PostHouseFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_post_house, container, false)
     }
 
+    private fun loadPostHouseScreen(){
+        ph_createLayout.visibility=View.VISIBLE
+        ph_blankLayout.visibility = View.GONE
+        //set Adapter for spinner
+        ph_categorySpinner.adapter = categoryAdapter
+        ph_addressSpinner.adapter = townshipAdapter
+        ph_periodSpinner.adapter = periodAdapter
+
+        ph_categorySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedCategory = Constants.categoryArr.get(position)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+            }
+
+        ph_addressSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedAddress = Constants.townshipArr.get(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
+
+        ph_periodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedPeriod = Constants.periodArr.get(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
+
+        iv_available_date.setOnClickListener { view ->
+            clickDataPicker(view)
+        }
+
+        btn_post_house.setOnClickListener {
+            setHouseData()
+        }
+
+        checkImageAndRadioData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadPostHouseScreen()
+    }
     private fun createSpinnerAdapter(context: Context, arr: ArrayList<String>): MySpinnerAdapter {
         return MySpinnerAdapter(context, arr)
     }
