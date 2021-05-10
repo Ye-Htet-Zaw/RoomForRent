@@ -1,3 +1,11 @@
+/**
+ *
+ * ChangePasswordController
+ *
+ * 2021/03/10 NTTT Create New
+ *
+ * Change Password for User Owner
+ */
 package com.example.roomforrent.activity
 
 import android.content.Intent
