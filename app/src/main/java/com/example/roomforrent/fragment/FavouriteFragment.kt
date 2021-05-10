@@ -25,6 +25,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.HouseDetailActivity
+import com.example.roomforrent.activity.MainActivity
 import com.example.roomforrent.adapter.FavouriteItemAdapter
 import com.example.roomforrent.models.House
 import com.example.roomforrent.models.HouseDetails
@@ -34,6 +35,7 @@ import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
 import com.example.roomforrent.utils.Constants.USERID
 import kotlinx.android.synthetic.main.fragment_favourite.*
+import kotlinx.android.synthetic.main.fragment_post_house.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -68,6 +70,8 @@ class FavouriteFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.i("TestFav", "onViewCreated")
+        val intent = Intent(context, MainActivity::class.java)
+        toolbarFav.setNavigationOnClickListener { startActivity(intent) }
         initAdapter()
         getFavList()
     }
