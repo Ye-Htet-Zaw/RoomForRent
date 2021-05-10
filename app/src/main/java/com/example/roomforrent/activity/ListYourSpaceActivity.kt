@@ -1,3 +1,11 @@
+/**
+ *
+ * ListYourSpaceActivity
+ *
+ * 2021/04/22 NTTT Create New
+ *
+ * To show Hosue List For Owner
+ */
 package com.example.roomforrent.activity
 
 import android.annotation.SuppressLint

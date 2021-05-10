@@ -20,11 +20,12 @@
             android:theme="@style/AppBarOverLay">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolBarSearch"
+                android:id="@+id/toolbarFav"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@drawable/toolbarbg"
-                app:popupTheme="@style/PopupOverlay" >
+                app:popupTheme="@style/PopupOverlay"
+                app:navigationIcon="@drawable/ic_backward_icon">
                 <TextView
                     style="@style/ToolBarTitle"
                     android:text="@string/favourite"
