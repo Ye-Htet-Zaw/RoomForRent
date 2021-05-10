@@ -1,3 +1,11 @@
+/**
+ *
+ * LoginActivity
+ *
+ * 2021/03/8 NTTT Create New
+ *
+ * UserLogin
+ */
 package com.example.roomforrent.activity
 import android.content.Context
 import android.content.Intent
@@ -10,9 +18,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.roomforrent.R
-import com.example.roomforrent.activity.BaseActivity
-import com.example.roomforrent.fragment.LoginProfileFragment
-import com.example.roomforrent.fragment.ProfileFragment
 import com.example.roomforrent.models.UserLogin
 import com.example.roomforrent.services.FacebookLoginService
 import com.example.roomforrent.services.ServiceBuilder
@@ -28,11 +33,9 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
-import okhttp3.internal.userAgent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -65,7 +68,7 @@ class LoginActivity : BaseActivity() {
         window.setBackgroundDrawable(resources.getDrawable(R.drawable.toolbarbg))
         setUpActionBar()
 
-        //SignInForUser
+        //SignInForOwnerUser
         btn_sing_up.setOnClickListener() {
             showProgressDialog("Please wait...")
             if (et_email.text.toString().trim().isEmpty()) {
@@ -118,6 +121,7 @@ class LoginActivity : BaseActivity() {
 
         }
         // Initialize Facebook Login button
+        //SignInForRenderUserWithFacebook
         callbackManager = CallbackManager.Factory.create()
 
         login_button.setReadPermissions("email", "public_profile")
@@ -138,9 +142,6 @@ class LoginActivity : BaseActivity() {
         })
 
     }
-
-
-
 
     public override fun onStart() {
         super.onStart()
@@ -181,7 +182,7 @@ class LoginActivity : BaseActivity() {
                         user_position=0,
                         delete_flag= 0,
                         delete_datetime=date,
-                        creator_id=fb_id,
+                        creator_id="USE",
                         create_datetime=date,
                         updator_id="",
                         update_datetime= date
@@ -196,6 +197,7 @@ class LoginActivity : BaseActivity() {
                             Log.i("TAG", "$user_email&$user_name&$fb_id")
                             Log.i("TAG", response.body().toString()+"COUNT SUCESS")
                             if(response.body()==0){
+                                //Register Fb User in database
                                 callCreateAccount=facebookService.createUser(account)
                                 getAccountList()
 
@@ -243,6 +245,7 @@ class LoginActivity : BaseActivity() {
 
     }
 
+    //CallApiForFacebookUserRegister
     private fun getAccountList() {
         callCreateAccount.enqueue(object : Callback<List<UserLogin>> {
             override fun onResponse(call: Call<List<UserLogin>>, response: Response<List<UserLogin>>) {
@@ -257,13 +260,14 @@ class LoginActivity : BaseActivity() {
         })
     }
 
+    //Call Api for callFbForUserId
     private fun getUserId(){
         callFbForUserId.enqueue(object : Callback<UserLogin> {
             override fun onResponse(
                 call: Call<UserLogin>,
                 response: Response<UserLogin>
             ) {
-                Log.d("TAG", "USERIDSUCESS:"+response.body()!!.user_id)
+                Log.d("TAG", "USERIDSUCESSFUL:"+response.body()!!.user_id)
 
                 editor!!.putBoolean("isLogin", true)
                 editor!!.putString(USERID, response.body()!!.user_id)
