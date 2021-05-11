@@ -1,14 +1,12 @@
 package com.example.roomforrent.services
 
 import com.example.roomforrent.models.User
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface UserProfileService {
     @GET("/getUserInfo/{user_id}")
@@ -16,4 +14,8 @@ interface UserProfileService {
 
     @PUT("updateUserInfo")
     suspend fun updateUserInfo(@Body requestBody: RequestBody): Response<ResponseBody>
+
+    @Multipart
+    @POST("uploadUserMultipleFiles")
+    fun uploadUserImages(@Part images: MultipartBody.Part): Call<Void>
 }

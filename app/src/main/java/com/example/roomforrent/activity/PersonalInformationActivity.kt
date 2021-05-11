@@ -1,21 +1,28 @@
 package com.example.roomforrent.activity
 
+import android.Manifest
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.example.roomforrent.R
@@ -23,26 +30,36 @@ import com.example.roomforrent.models.User
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserProfileService
 import com.example.roomforrent.utils.Constants
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_personal_information.*
 import kotlinx.android.synthetic.main.fragment_login_profile.*
+import kotlinx.android.synthetic.main.fragment_post_house.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class PersonalInformationActivity : BaseActivity() {
 
      var dateFromDbString: String?=null
      var dateString:String?=null
+     var multiPartImage: MultipartBody.Part? = null
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +70,12 @@ class PersonalInformationActivity : BaseActivity() {
         window.setBackgroundDrawable(resources.getDrawable(R.drawable.toolbarbg))
         setUpToolbar()
 
-        //getUserPersonalInfo USE0000001
         var userId=intent.getStringExtra(Constants.USERID)
          getUserInfoById(userId!!)
+
+        add_image_floating_btn.setOnClickListener {
+            chooseImage()
+        }
 
         //to change gender when click on gender edittext
         et_gender.setOnClickListener {
@@ -72,7 +92,6 @@ class PersonalInformationActivity : BaseActivity() {
                 var genderText = findViewById<TextView>(R.id.et_gender)
                 genderText.text = rbm.text
                 dialog.dismiss()
-
             }
 
             //when choose female radio button
@@ -103,6 +122,7 @@ class PersonalInformationActivity : BaseActivity() {
 
         //if save text is clicked ,updatefun is worked
         tv_titlePI.setOnClickListener { view->
+            showProgressDialog("Please Wait.....")
             updatePersonalInfo(view, userId)
         }
 
@@ -119,11 +139,86 @@ class PersonalInformationActivity : BaseActivity() {
             }
 
         })
-
-
-
-
     }//end of onCreate
+
+    //choose photo from gallery
+    private fun chooseImage() {
+        Dexter.withActivity(this).withPermissions(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ).withListener(object : MultiplePermissionsListener {
+            override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+
+                // Here after all the permission are granted launch the gallery to select and image.
+                if (report!!.areAllPermissionsGranted()) {
+
+                    val galleryIntent = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
+                    startActivityForResult(galleryIntent, GALLERY)
+                }
+            }
+
+            override fun onPermissionRationaleShouldBeShown(
+                permissions: MutableList<PermissionRequest>?,
+                token: PermissionToken?
+            ) {
+                showRationalDialogForPermissions()
+            }
+        }).onSameThread()
+            .check()
+    }
+
+    //permission
+    private fun showRationalDialogForPermissions() {
+        AlertDialog.Builder(this).setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
+            .setPositiveButton("GO TO SETTINGS")
+            { _, _ ->
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                }
+            }.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
+    }
+
+    private fun prepareFilePart(partName: String): MultipartBody.Part {
+        val imageFile = File(partName)
+        val reqBody = imageFile.asRequestBody("multipart/form-file".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("imageupload", imageFile.name, reqBody)
+    }
+
+    public  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GALLERY){
+                if (data != null){
+                    var contentURL = data.data
+                    Picasso.get().load(contentURL).noPlaceholder().centerCrop().fit()
+                        .into((cv_information_profile))
+                    val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
+                    val cursor: Cursor? =
+                        contentResolver.query(contentURL!!, imageprojection,null,null,null)
+
+                    if (cursor != null)
+                    {
+                        Log.i("cursor","cursor is not null")
+                        cursor.moveToFirst();
+                        var indexImage = cursor.getColumnIndex(imageprojection[0]);
+                        var partImage = cursor.getString(indexImage)
+                        val imageRequest = prepareFilePart(partImage)
+                        multiPartImage = imageRequest
+                    }
+                }
+            }
+        }
+    }
 
     //toolbar
     private fun setUpToolbar(){
@@ -131,8 +226,7 @@ class PersonalInformationActivity : BaseActivity() {
         val actionBar=supportActionBar
         if(actionBar !=null){
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_backward_icon)
-            //actionBar.title = "Personal Information"
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24)
         }
         toolbar_personal_info.setNavigationOnClickListener{onBackPressed()}
     }
@@ -190,6 +284,11 @@ class PersonalInformationActivity : BaseActivity() {
                         "user name is ${user.user_name}",
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    Picasso.get()
+                        .load("http://192.168.101.12:9090/image/user/" + user.user_id + ".jpg").into(
+                            cv_information_profile
+                        )
                     et_user_name.setText(user.user_name)
                     when (user.user_gender) {
                         0 -> et_gender.setText("Male")
@@ -288,15 +387,16 @@ class PersonalInformationActivity : BaseActivity() {
                val response =destinationService.updateUserInfo(requestBody)
                withContext(Dispatchers.Main) {
                    if (response.isSuccessful) {
+                       uploadUserImage(multiPartImage)
+                       hideProgressDialog()
                        Toast.makeText(
                            this@PersonalInformationActivity,
                            "successful updated",
                            Toast.LENGTH_SHORT
                        ).show()
-                       //val intent= Intent(this@PersonalInformationActivity,MainActivity::class.java)
-                       //startActivity(intent)
                        //tv_owner_name.text=et_user_name.text.toString()
                    } else {
+                       hideProgressDialog()
                        Log.e("RETROFIT_ERROR", response.code().toString())
                        Toast.makeText(
                            this@PersonalInformationActivity,
@@ -307,12 +407,24 @@ class PersonalInformationActivity : BaseActivity() {
                    }
                }
            }
-
        }
-
-
     }
 
+    private fun uploadUserImage(multiPartImage: MultipartBody.Part?) {
+        val destinationService  = ServiceBuilder.buildService(UserProfileService::class.java)
+        if (multiPartImage != null) {
+            destinationService.uploadUserImages(multiPartImage).enqueue(object : Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    t.message?.let { Log.i("UploadImageError", it+"UploadError") }
+                }
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    Log.i("UploadImageSuccess","Upload image to server")
+                }
+            })
+        }
+    }
 
-
+    companion object {
+        private const val GALLERY = 1
+    }
 }

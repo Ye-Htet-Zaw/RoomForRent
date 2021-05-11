@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_background"
     tools:context=".fragment.LoginProfileFragment"
     >
 
@@ -12,45 +13,56 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="50dp"
-        android:fillViewport="true"
-        android:background="@color/white"
-
-        >
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
-            <LinearLayout
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/iv_profile_user_image"
-                    android:layout_width="@dimen/owner_profile_user_image_size"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="@dimen/owner_profile_image_marginTop"
-                    android:contentDescription="@string/owner_image_contentDescription"
-                    android:src="@drawable/ic_owner_profile_image"
-                    app:civ_border_color="@color/grey"
-                    app:civ_border_width="@dimen/owner_profile_border_width"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_owner_name"
-                    android:layout_width="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:elevation="@dimen/card_view_elevation"
+                app:cardCornerRadius="@dimen/card_view_corner_radius">
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto"
                     android:gravity="center_horizontal"
-                    android:text="Chaw Suu Hlaing"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/owner_name_text_size"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_profile_user_image"
+                        android:layout_width="@dimen/owner_profile_user_image_size"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="10dp"
+                        android:contentDescription="@string/owner_image_contentDescription"
+                        android:src="@drawable/ic_owner_profile_image"
+                        app:civ_border_color="@color/grey"
+                        app:civ_border_width="@dimen/owner_profile_border_width"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_owner_name"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:gravity="center_horizontal"
+                        android:text="Chaw Suu Hlaing"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/owner_name_text_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <!--Owner profile personfal info -->
 
@@ -58,7 +70,7 @@
                 android:id="@+id/ll_owner_personal_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/owner_personal_info_layout_marginTop"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal"
                 android:padding="15dp">
 
@@ -201,6 +213,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/ll_owner_change_password_line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/owner_profile_divider_height"
                 android:layout_marginLeft="10dp"

@@ -16,15 +16,12 @@ import com.example.roomforrent.activity.*
 import com.example.roomforrent.models.User
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserProfileService
-import com.example.roomforrent.utils.Constants
-import com.example.roomforrent.utils.Constants.GetAllRoomList
 import com.example.roomforrent.utils.Constants.POSITION
 import com.example.roomforrent.utils.Constants.USERID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_login_profile.*
 import kotlinx.android.synthetic.main.fragment_login_profile.view.*
 import kotlinx.android.synthetic.main.fragment_login_profile.view.btn_sign_in_profile
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,9 +66,13 @@ class LoginProfileFragment : Fragment() {
             if(position==1){
                 v.ll_owner_list_space.visibility=View.VISIBLE
                 v.ll_owner_list_space_line.visibility=View.VISIBLE
+                v.ll_owner_change_password.visibility = View.VISIBLE
+                v.ll_owner_change_password_line.visibility = View.VISIBLE
             } else{
                 v.ll_owner_list_space.visibility=View.GONE
                 v.ll_owner_list_space_line.visibility=View.GONE
+                v.ll_owner_change_password.visibility = View.GONE
+                v.ll_owner_change_password_line.visibility = View.GONE
             }
         }else{
             v.ll_loginedProfile.visibility = View.GONE
@@ -135,9 +136,15 @@ class LoginProfileFragment : Fragment() {
                     //Toast.makeText(this@LoginProfileFragment,"user name is ${user.user_name}",Toast.LENGTH_SHORT).show()
                     Log.i("user_name", user.user_name)
 
-                    tv_owner_name.text = user.user_name
+                    if(user.user_name == null){
+                        tv_owner_name.text = ""
+                    } else {
+                        tv_owner_name.text = user.user_name
+                    }
+
+
                     Picasso.get()
-                        .load("http://192.168.1.3:9090/image/user/" + user.user_id + ".jpg").into(
+                        .load("http://192.168.101.12:9090/image/user/" + user.user_id + ".jpg").into(
                             iv_profile_user_image
                         )
 
@@ -162,14 +169,18 @@ class LoginProfileFragment : Fragment() {
             if(position==1){
                 ll_owner_list_space.visibility=View.VISIBLE
                 ll_owner_list_space_line.visibility=View.VISIBLE
+                ll_owner_change_password.visibility = View.VISIBLE
+                ll_owner_change_password_line.visibility = View.VISIBLE
             } else{
                 ll_owner_list_space.visibility=View.GONE
                 ll_owner_list_space_line.visibility=View.GONE
+                ll_owner_change_password.visibility = View.GONE
+                ll_owner_change_password_line.visibility = View.GONE
             }
         }else{
             ll_loginedProfile.visibility = View.GONE
             ll_unloginProfile.visibility = View.VISIBLE
         }
+        getUserInfoById(userId!!.toString())
     }
-
 }
