@@ -121,6 +121,7 @@ class OTPVerifyActivity : AppCompatActivity() {
                     val editor: SharedPreferences.Editor = share.edit()
                     editor.putBoolean("isLogin", true)
                     editor.putString(Constants.USERID,response.body()!!.user_id)
+                    editor.putInt(Constants.POSITION, response.body()!!.user_position)
                     editor.commit()
                 }
             }
