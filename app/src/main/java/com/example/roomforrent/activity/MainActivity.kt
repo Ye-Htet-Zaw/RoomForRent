@@ -1,6 +1,5 @@
 package com.example.roomforrent.activity
 
-import android.app.PendingIntent.getActivity
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -11,11 +10,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.example.roomforrent.R
 import com.example.roomforrent.adapter.MyTabAdapter
-import com.example.roomforrent.fragment.PostHouseFragment
-import com.example.roomforrent.fragment.SearchFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -103,9 +99,14 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        //getSupportFragmentManager().beginTransaction().remove(PostHouseFragment()).commitAllowingStateLoss()
-        Log.i("FragmentCheck","onBack")
-        finishAffinity()
+        if (isdoubleBack) {
+            finish()
+            finishAffinity()
+            return
+        }
+
+        isdoubleBack = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+        Handler().postDelayed({ isdoubleBack = false }, 2000)
     }
 }
