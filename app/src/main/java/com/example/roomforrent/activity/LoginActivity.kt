@@ -28,11 +28,14 @@ import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.login.LoginBehavior
+import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
+import okhttp3.internal.platform.Platform
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -123,7 +126,9 @@ class LoginActivity : BaseActivity() {
         // Initialize Facebook Login button
         //SignInForRenderUserWithFacebook
         callbackManager = CallbackManager.Factory.create()
-
+        if(Platform.isAndroid){
+            LoginManager.getInstance().loginBehavior = LoginBehavior.WEB_ONLY
+        }
         login_button.setReadPermissions("email", "public_profile")
         login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
