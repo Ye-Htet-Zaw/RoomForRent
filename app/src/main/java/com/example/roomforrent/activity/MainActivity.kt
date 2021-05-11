@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.adapter.MyTabAdapter
+import com.example.roomforrent.fragment.PostHouseFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,6 +46,9 @@ class MainActivity : BaseActivity() {
                 val currentFragment: Fragment = supportFragmentManager.fragments.last()
                 val ft = supportFragmentManager.beginTransaction()
                 ft.detach(currentFragment).attach(currentFragment).commit()
+                supportFragmentManager.beginTransaction().detach(PostHouseFragment()).attach(
+                    PostHouseFragment()
+                ).commit()
                 Log.i("TestFavourite", tab!!.position.toString() + currentFragment)
                 viewPager.setCurrentItem(tab!!.getPosition())
                 tab?.customView!!.nav_label.setTextColor(resources.getColor(R.color.activeTabTextColor))

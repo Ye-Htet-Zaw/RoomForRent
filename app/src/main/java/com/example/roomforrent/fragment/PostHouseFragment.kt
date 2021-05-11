@@ -18,6 +18,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Color
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -25,13 +26,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.ListYourSpaceActivity
-import com.example.roomforrent.activity.MainActivity
 import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.models.House
 import com.example.roomforrent.services.PostHouseService
@@ -48,6 +50,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -95,7 +98,11 @@ class PostHouseFragment : Fragment() {
     private var recommendedPoint: String = ""
     private var contractRule: String = ""
     private var period: String = ""
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
 
+
+    private var allowRefresh: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -323,6 +330,10 @@ class PostHouseFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         loadPostHouseScreen()
+        if (allowRefresh){
+            allowRefresh=false
+            requireFragmentManager().beginTransaction().detach(PostHouseFragment()).attach(PostHouseFragment()).commit()
+        }
     }
 
     private fun loadPostHouseScreen(){
@@ -632,6 +643,9 @@ class PostHouseFragment : Fragment() {
     private fun setHouseData(){
 
         houseAddress = et_address.text.toString().trim()
+
+        getLocationFromAddress(houseAddress)
+
         township = selectedAddress
         noOfGuest = et_guest.text.toString().trim()
         noOfRoom = et_room.text.toString().trim()
@@ -759,8 +773,8 @@ class PostHouseFragment : Fragment() {
                 contract_RULE = contractRule,
                 period = period.toInt(),
                 user_ID = userID!!,
-                longitude = "09",
-                latitude = "93",
+                longitude = longitude.toString(),
+                latitude = latitude.toString(),
                 expired_DATE = "2020-2-3",
                 rent_FLAG = 0,
                 delete_FLAG = 0,
@@ -775,6 +789,24 @@ class PostHouseFragment : Fragment() {
         }
     }
 
+    private fun getLocationFromAddress(address: String){
+
+        //37.769970321158 and -79.97360445621
+        val geoCoder = Geocoder(context)
+        try {
+            val addresses = geoCoder.getFromLocationName(address, 1)
+            Log.i("CheckLatAndLon",addresses.size.toString())
+            if (addresses.size > 0) {
+                 latitude = addresses[0].latitude
+                 longitude = addresses[0].longitude
+                Log.i("CheckLatAndLon","$latitude and $longitude")
+            }
+        } catch (e: IOException) { // TODO Auto-generated catch block
+            e.printStackTrace()
+            Log.i("CheckLatAndLon",e.message.toString()+"error")
+        }
+    }
+
     private fun createHouse(house: House){
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
         destinationService.createHouse(house).enqueue(object: Callback<List<House>>{
@@ -785,9 +817,11 @@ class PostHouseFragment : Fragment() {
                 val res = response.body()
                 if (response.code() == 200 && res!=null){
                     uploadImage(list)
+                    allowRefresh=true
                     val intent = Intent(context, ListYourSpaceActivity::class.java)
                     intent.putExtra(USERID, userID)
                     startActivity(intent)
+
                 }else{
                     Toast.makeText(context,"Fail to insert house data",Toast.LENGTH_SHORT).show()
                 }
@@ -795,6 +829,7 @@ class PostHouseFragment : Fragment() {
 
         })
     }
+
 
     private fun uploadImage(list: ArrayList<MultipartBody.Part>){
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)

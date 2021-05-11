@@ -113,11 +113,14 @@ class ListYourSpaceActivity : BaseActivity() {
         setSupportActionBar(toolBarMain)
         val actionBar = supportActionBar
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
+            //actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_backward_icon)
             actionBar.title = "House List"
         }
-        toolBarMain.setNavigationOnClickListener { onBackPressed() }
+        toolBarMain.setNavigationOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun getDetailData(mDetailId: String) {
