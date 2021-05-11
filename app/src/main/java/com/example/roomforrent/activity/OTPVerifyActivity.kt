@@ -28,8 +28,6 @@ import java.util.*
 
 class OTPVerifyActivity : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
-    /*val share:SharedPreferences  = getSharedPreferences("myPreference",
-        Context.MODE_PRIVATE)*/
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,6 +96,7 @@ class OTPVerifyActivity : AppCompatActivity() {
                     val editor: SharedPreferences.Editor = share.edit()
                     editor.putBoolean("isLogin", true)
                     editor.putString(Constants.USERID,response.body()!!.user_id)
+                    editor.putInt(Constants.POSITION, response.body()!!.user_position)
                     editor.commit()
                     Toast.makeText(this@OTPVerifyActivity, "Already User", Toast.LENGTH_SHORT).show()
                 }
@@ -111,7 +110,7 @@ class OTPVerifyActivity : AppCompatActivity() {
 
     private fun createPhoneUser(phoneNo: String) {
         val destinationService = ServiceBuilder.buildService(OTPPhoneService::class.java)
-        var phone = Phone("",phoneNo, "0", "0")
+        var phone = Phone("",phoneNo, 0, 0)
         val requestCall = destinationService.createPhoneUser(phone)
         val share:SharedPreferences  = getSharedPreferences("myPreference",
             Context.MODE_PRIVATE)
@@ -122,6 +121,7 @@ class OTPVerifyActivity : AppCompatActivity() {
                     val editor: SharedPreferences.Editor = share.edit()
                     editor.putBoolean("isLogin", true)
                     editor.putString(Constants.USERID,response.body()!!.user_id)
+                    editor.putInt(Constants.POSITION, response.body()!!.user_position)
                     editor.commit()
                 }
             }

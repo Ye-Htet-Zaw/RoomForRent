@@ -74,6 +74,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:27.1.0')
     implementation 'com.google.firebase:firebase-auth:20.0.4'
 
-
-
+    //Permission
+    implementation 'com.karumi:dexter:6.2.2'
 }
