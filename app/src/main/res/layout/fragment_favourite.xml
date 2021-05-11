@@ -12,29 +12,6 @@
         android:background="@color/white"
         android:orientation="vertical"
         tools:context=".activity.HouseListActivity">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppBarOverLay">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbarFav"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@drawable/toolbarbg"
-                app:popupTheme="@style/PopupOverlay"
-                app:navigationIcon="@drawable/ic_backward_icon">
-                <TextView
-                    style="@style/ToolBarTitle"
-                    android:text="@string/favourite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
-
-
         <LinearLayout
             android:id="@+id/blankLayout"
             android:orientation="vertical"

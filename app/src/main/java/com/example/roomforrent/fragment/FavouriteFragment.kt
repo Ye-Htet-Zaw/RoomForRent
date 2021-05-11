@@ -70,8 +70,6 @@ class FavouriteFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.i("TestFav", "onViewCreated")
-        val intent = Intent(context, MainActivity::class.java)
-        toolbarFav.setNavigationOnClickListener { startActivity(intent) }
         initAdapter()
         getFavList()
     }

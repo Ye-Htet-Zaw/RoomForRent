@@ -67,9 +67,9 @@ class PostHouseFragment : Fragment() {
     private var mSelectedImageFileUri8: Uri? = null
     private var mSelectedImageFileUri9: Uri? = null
     private var mSelectedImageFileUri10: Uri? = null
-    lateinit var categoryAdapter: MySpinnerAdapter
-    lateinit var townshipAdapter: MySpinnerAdapter
-    lateinit var periodAdapter: MySpinnerAdapter
+    private lateinit var categoryAdapter: MySpinnerAdapter
+    private lateinit var townshipAdapter: MySpinnerAdapter
+    private lateinit var periodAdapter: MySpinnerAdapter
     var selectedCategory: String = ""
     var selectedAddress: String = ""
     var selectedPeriod: String = ""
@@ -108,9 +108,6 @@ class PostHouseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val intent = Intent(context, MainActivity::class.java)
-        toolBarMain.setNavigationOnClickListener { startActivity(intent) }
-
         loadPostHouseScreen()
 
     }
@@ -132,9 +129,9 @@ class PostHouseFragment : Fragment() {
             if (cursor != null)
             {
                 Log.i("cursor","cursor is not null")
-                cursor.moveToFirst();
-                var indexImage = cursor.getColumnIndex(imageprojection[0]);
-                var partImage = cursor.getString(indexImage)
+                cursor.moveToFirst()
+                val indexImage = cursor.getColumnIndex(imageprojection[0])
+                val partImage = cursor.getString(indexImage)
                 val imageRequest = prepareFilePart(partImage)
                 list.add(imageRequest)
             }
@@ -143,16 +140,16 @@ class PostHouseFragment : Fragment() {
             requestCode == Constants.IMAGE_REQUEST_CODE_TWO && data!!.data != null){
             mSelectedImageFileUri2 = data.data
             Picasso.get().load(mSelectedImageFileUri2).noPlaceholder().centerCrop().fit()
-                .into((img_2));
+                .into((img_2))
            val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
            val cursor: Cursor? =
                contentResolver.query(mSelectedImageFileUri2!!, imageprojection,null,null,null)
 
            if (cursor != null)
            {
-               cursor.moveToFirst();
-               var indexImage = cursor.getColumnIndex(imageprojection[0]);
-               var partImage = cursor.getString(indexImage)
+               cursor.moveToFirst()
+               val indexImage = cursor.getColumnIndex(imageprojection[0])
+               val partImage = cursor.getString(indexImage)
                val imageRequest = prepareFilePart(partImage)
                list.add(imageRequest)
            }
@@ -161,7 +158,7 @@ class PostHouseFragment : Fragment() {
             requestCode == Constants.IMAGE_REQUEST_CODE_THREE && data!!.data != null){
             mSelectedImageFileUri3 = data.data
             Picasso.get().load(mSelectedImageFileUri3).noPlaceholder().centerCrop().fit()
-                .into((img_3));
+                .into((img_3))
 
             val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
             val cursor: Cursor? =
@@ -169,9 +166,9 @@ class PostHouseFragment : Fragment() {
 
             if (cursor != null)
             {
-                cursor.moveToFirst();
-                var indexImage = cursor.getColumnIndex(imageprojection[0]);
-                var partImage = cursor.getString(indexImage)
+                cursor.moveToFirst()
+                val indexImage = cursor.getColumnIndex(imageprojection[0])
+                val partImage = cursor.getString(indexImage)
                 val imageRequest = prepareFilePart(partImage)
                 list.add(imageRequest)
             }
@@ -180,7 +177,7 @@ class PostHouseFragment : Fragment() {
             requestCode == Constants.IMAGE_REQUEST_CODE_FOUR && data!!.data != null){
             mSelectedImageFileUri4 = data.data
             Picasso.get().load(mSelectedImageFileUri4).noPlaceholder().centerCrop().fit()
-                .into((img_4));
+                .into((img_4))
 
             val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
             val cursor: Cursor? =
@@ -188,9 +185,9 @@ class PostHouseFragment : Fragment() {
 
             if (cursor != null)
             {
-                cursor.moveToFirst();
-                var indexImage = cursor.getColumnIndex(imageprojection[0]);
-                var partImage = cursor.getString(indexImage)
+                cursor.moveToFirst()
+                val indexImage = cursor.getColumnIndex(imageprojection[0])
+                val partImage = cursor.getString(indexImage)
                 val imageRequest = prepareFilePart(partImage)
                 list.add(imageRequest)
             }
@@ -199,7 +196,7 @@ class PostHouseFragment : Fragment() {
             requestCode == Constants.IMAGE_REQUEST_CODE_FIVE && data!!.data != null){
             mSelectedImageFileUri5 = data.data
             Picasso.get().load(mSelectedImageFileUri5).noPlaceholder().centerCrop().fit()
-                .into((img_5));
+                .into((img_5))
 
             val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
             val cursor: Cursor? =
@@ -207,9 +204,9 @@ class PostHouseFragment : Fragment() {
 
             if (cursor != null)
             {
-                cursor.moveToFirst();
-                var indexImage = cursor.getColumnIndex(imageprojection[0]);
-                var partImage = cursor.getString(indexImage)
+                cursor.moveToFirst()
+                val indexImage = cursor.getColumnIndex(imageprojection[0])
+                val partImage = cursor.getString(indexImage)
                 val imageRequest = prepareFilePart(partImage)
                 list.add(imageRequest)
             }
@@ -218,7 +215,7 @@ class PostHouseFragment : Fragment() {
             requestCode == Constants.IMAGE_REQUEST_CODE_SIX && data!!.data != null){
             mSelectedImageFileUri6 = data.data
             Picasso.get().load(mSelectedImageFileUri6).noPlaceholder().centerCrop().fit()
-                .into((img_6));
+                .into((img_6))
 
             val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
 
@@ -227,9 +224,9 @@ class PostHouseFragment : Fragment() {
 
             if (cursor != null)
             {
-                cursor.moveToFirst();
-                var indexImage = cursor.getColumnIndex(imageprojection[0]);
-                var partImage = cursor.getString(indexImage)
+                cursor.moveToFirst()
+                val indexImage = cursor.getColumnIndex(imageprojection[0])
+                val partImage = cursor.getString(indexImage)
                 val imageRequest = prepareFilePart(partImage)
                 list.add(imageRequest)
             }
@@ -238,7 +235,7 @@ class PostHouseFragment : Fragment() {
             requestCode == Constants.IMAGE_REQUEST_CODE_SEVEN && data!!.data != null){
             mSelectedImageFileUri7 = data.data
             Picasso.get().load(mSelectedImageFileUri7).noPlaceholder().centerCrop().fit()
-                .into((img_7));
+                .into((img_7))
 
             val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
             val cursor: Cursor? =
@@ -246,9 +243,9 @@ class PostHouseFragment : Fragment() {
 
             if (cursor != null)
             {
-                cursor.moveToFirst();
-                var indexImage = cursor.getColumnIndex(imageprojection[0]);
-                var partImage = cursor.getString(indexImage)
+                cursor.moveToFirst()
+                val indexImage = cursor.getColumnIndex(imageprojection[0])
+                val partImage = cursor.getString(indexImage)
                 val imageRequest = prepareFilePart(partImage)
                 list.add(imageRequest)
             }
@@ -257,7 +254,7 @@ class PostHouseFragment : Fragment() {
             requestCode == Constants.IMAGE_REQUEST_CODE_EIGHT && data!!.data != null){
             mSelectedImageFileUri8 = data.data
             Picasso.get().load(mSelectedImageFileUri8).noPlaceholder().centerCrop().fit()
-                .into((img_8));
+                .into((img_8))
 
             val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
             val cursor: Cursor? =
@@ -265,9 +262,9 @@ class PostHouseFragment : Fragment() {
 
             if (cursor != null)
             {
-                cursor.moveToFirst();
-                var indexImage = cursor.getColumnIndex(imageprojection[0]);
-                var partImage = cursor.getString(indexImage)
+                cursor.moveToFirst()
+                val indexImage = cursor.getColumnIndex(imageprojection[0])
+                val partImage = cursor.getString(indexImage)
                 val imageRequest = prepareFilePart(partImage)
                 list.add(imageRequest)
             }
@@ -276,7 +273,7 @@ class PostHouseFragment : Fragment() {
             requestCode == Constants.IMAGE_REQUEST_CODE_NINE && data!!.data != null){
             mSelectedImageFileUri9 = data.data
             Picasso.get().load(mSelectedImageFileUri9).noPlaceholder().centerCrop().fit()
-                .into((img_9));
+                .into((img_9))
 
             val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
             val cursor: Cursor? =
@@ -284,9 +281,9 @@ class PostHouseFragment : Fragment() {
 
             if (cursor != null)
             {
-                cursor.moveToFirst();
-                var indexImage = cursor.getColumnIndex(imageprojection[0]);
-                var partImage = cursor.getString(indexImage)
+                cursor.moveToFirst()
+                val indexImage = cursor.getColumnIndex(imageprojection[0])
+                val partImage = cursor.getString(indexImage)
                 val imageRequest = prepareFilePart(partImage)
                 list.add(imageRequest)
             }
@@ -295,7 +292,7 @@ class PostHouseFragment : Fragment() {
             requestCode == Constants.IMAGE_REQUEST_CODE_TEN && data!!.data != null){
             mSelectedImageFileUri10 = data.data
             Picasso.get().load(mSelectedImageFileUri10).noPlaceholder().centerCrop().fit()
-                .into((img_10));
+                .into((img_10))
 
             val imageprojection = arrayOf<String>(MediaStore.Images.Media.DATA)
             val cursor: Cursor? =
@@ -303,9 +300,9 @@ class PostHouseFragment : Fragment() {
 
             if (cursor != null)
             {
-                cursor.moveToFirst();
-                var indexImage = cursor.getColumnIndex(imageprojection[0]);
-                var partImage = cursor.getString(indexImage)
+                cursor.moveToFirst()
+                val indexImage = cursor.getColumnIndex(imageprojection[0])
+                val partImage = cursor.getString(indexImage)
                 val imageRequest = prepareFilePart(partImage)
                 list.add(imageRequest)
             }
@@ -334,9 +331,11 @@ class PostHouseFragment : Fragment() {
             Context.MODE_PRIVATE
         )!!
         isLogin = share.getBoolean("isLogin", false)
+        isLogin = true
         if(isLogin) {
             userID=share.getString(USERID,"")
             userPosition=share.getInt(POSITION,3)
+            userPosition = 1
             if (userPosition==1){
                 ph_createLayout.visibility=View.VISIBLE
                 ph_blankLayout.visibility = View.GONE
@@ -787,7 +786,7 @@ class PostHouseFragment : Fragment() {
                 if (response.code() == 200 && res!=null){
                     uploadImage(list)
                     val intent = Intent(context, ListYourSpaceActivity::class.java)
-                    intent.putExtra(Constants.USERID, userID)
+                    intent.putExtra(USERID, userID)
                     startActivity(intent)
                 }else{
                     Toast.makeText(context,"Fail to insert house data",Toast.LENGTH_SHORT).show()
