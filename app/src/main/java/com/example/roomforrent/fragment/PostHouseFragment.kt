@@ -101,8 +101,6 @@ class PostHouseFragment : Fragment() {
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
 
-
-    private var allowRefresh: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -330,10 +328,30 @@ class PostHouseFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         loadPostHouseScreen()
-        if (allowRefresh){
-            allowRefresh=false
-            requireFragmentManager().beginTransaction().detach(PostHouseFragment()).attach(PostHouseFragment()).commit()
-        }
+        refreshFragment()
+
+    }
+
+    private fun refreshFragment(){
+        requireFragmentManager().beginTransaction().setReorderingAllowed(false)
+        requireFragmentManager().beginTransaction().detach(PostHouseFragment()).attach(PostHouseFragment()).commitAllowingStateLoss()
+        et_guest.setText("")
+        et_address.setText("")
+        et_room.setText("")
+        et_bath.setText("")
+        et_toilet.setText("")
+        et_area.setText("")
+        et_floor.setText("")
+        et_aircon.setText("")
+        et_contact1.setText("")
+        et_contact2.setText("")
+        et_rent.setText("")
+        et_deposit.setText("")
+        et_recommended.setText("")
+        et_contract_rule.setText("")
+        et_available_date.text = ""
+        rb_no.isChecked=false
+        rb_yes.isChecked=false
     }
 
     private fun loadPostHouseScreen(){
@@ -791,17 +809,16 @@ class PostHouseFragment : Fragment() {
 
     private fun getLocationFromAddress(address: String){
 
-        //37.769970321158 and -79.97360445621
         val geoCoder = Geocoder(context)
         try {
-            val addresses = geoCoder.getFromLocationName(address, 1)
+            val addresses = geoCoder.getFromLocationName("1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA", 5)
             Log.i("CheckLatAndLon",addresses.size.toString())
             if (addresses.size > 0) {
                  latitude = addresses[0].latitude
                  longitude = addresses[0].longitude
                 Log.i("CheckLatAndLon","$latitude and $longitude")
             }
-        } catch (e: IOException) { // TODO Auto-generated catch block
+        } catch (e: IOException) {
             e.printStackTrace()
             Log.i("CheckLatAndLon",e.message.toString()+"error")
         }
@@ -817,7 +834,6 @@ class PostHouseFragment : Fragment() {
                 val res = response.body()
                 if (response.code() == 200 && res!=null){
                     uploadImage(list)
-                    allowRefresh=true
                     val intent = Intent(context, ListYourSpaceActivity::class.java)
                     intent.putExtra(USERID, userID)
                     startActivity(intent)
@@ -829,7 +845,6 @@ class PostHouseFragment : Fragment() {
 
         })
     }
-
 
     private fun uploadImage(list: ArrayList<MultipartBody.Part>){
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)

@@ -46,9 +46,6 @@ class MainActivity : BaseActivity() {
                 val currentFragment: Fragment = supportFragmentManager.fragments.last()
                 val ft = supportFragmentManager.beginTransaction()
                 ft.detach(currentFragment).attach(currentFragment).commit()
-                supportFragmentManager.beginTransaction().detach(PostHouseFragment()).attach(
-                    PostHouseFragment()
-                ).commit()
                 Log.i("TestFavourite", tab!!.position.toString() + currentFragment)
                 viewPager.setCurrentItem(tab!!.getPosition())
                 tab?.customView!!.nav_label.setTextColor(resources.getColor(R.color.activeTabTextColor))
