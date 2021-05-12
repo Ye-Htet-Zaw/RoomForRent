@@ -18,11 +18,16 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RoomForRent"
-        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.ChooseAddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar">
+
+        </activity>
         <activity
             android:name=".activity.ListYourSpaceActivity"
             android:screenOrientation="portrait"
