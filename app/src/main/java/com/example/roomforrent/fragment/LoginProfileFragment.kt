@@ -132,11 +132,7 @@ class LoginProfileFragment : BaseFragment() {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 Log.d("Response", "onResponse: ${response.body()}")
                 if (response.isSuccessful) {
-                    val user = response.body()!!
-                    Log.d("Response", "countrylist size : ${user.user_name}")
-                    //Toast.makeText(this@LoginProfileFragment,"user name is ${user.user_name}",Toast.LENGTH_SHORT).show()
-                    Log.i("user_name", user.user_name)
-
+                    val user = response.body()!!                  
                     if(user.user_name == null){
                         tv_owner_name.text = ""
                     } else {
