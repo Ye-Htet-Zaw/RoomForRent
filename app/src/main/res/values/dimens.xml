@@ -39,7 +39,13 @@
         <dimen name="btn_text_size">16sp</dimen>
 
         //Login Screen
-        <dimen name="sign_up_screen_btn_marginTop">30dp</dimen>
+        <dimen name="divide_line_marginTop">30dp</dimen>
+        <dimen name="tv_divide_line_marginLeftRight">10dp</dimen>
+        <dimen name="divide_line_marginLeftRight">16dp</dimen>
+        <dimen name="tv_Register_marginTop">20dp</dimen>
+        <dimen name="layout_margin">5dp</dimen>
+        <dimen name="sign_up_screen_btn_marginTop">40dp</dimen>
+        <dimen name="sign_up_screen_btn_marginLeftRight">90dp</dimen>
         <dimen name="toolbar_title_text_size">18sp</dimen>
         <dimen name="authentication_screen_content_marginTop">40dp</dimen>
         <dimen name="login_screen_image_marginTop">10dp</dimen>
@@ -53,7 +59,8 @@
         <dimen name="authentication_screen_til_marginStartEnd">16dp</dimen>
         <dimen name="et_text_size">16sp</dimen>
         <dimen name="authentication_screen_til_marginTop">20dp</dimen>
-        <dimen name="email_tv_marginTop">40dp</dimen>
+        <dimen name="email_tv_marginLeftRight">30dp</dimen>
+        <dimen name="email_tv_marginTop">10dp</dimen>
         <dimen name="password_tv_marginTop">40dp</dimen>
         <dimen name="email_password_btn_padding">15dp</dimen>
 
