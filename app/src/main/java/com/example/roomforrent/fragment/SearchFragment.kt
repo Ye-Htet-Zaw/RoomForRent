@@ -191,7 +191,7 @@ class SearchFragment : BaseFragment() {
      * load  house list by clicking search button
      */
     private fun showHouseList(serviceName: String) {
-        if(!checkConnection()){
+        if(checkConnection()){
             val intent = Intent(context, HouseListActivity::class.java)
             intent.putExtra(CALLAPI, serviceName)
             intent.putExtra(SelectedCategory, selectedCategory)

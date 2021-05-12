@@ -27,7 +27,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class LoginProfileFragment : Fragment() {
+class LoginProfileFragment : BaseFragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -82,10 +82,11 @@ class LoginProfileFragment : Fragment() {
             startActivity(Intent(context, LoginActivity::class.java))
         }
         v.ll_owner_personal_info.setOnClickListener {
-            val i = Intent(context, PersonalInformationActivity::class.java)
-            i.putExtra(USERID, userId)
-            startActivity(i)
-            //startActivity(Intent(context, PersonalInformationActivity::class.java))
+            if(checkConnection()){
+                val i = Intent(context, PersonalInformationActivity::class.java)
+                i.putExtra(USERID, userId)
+                startActivity(i)
+            }
         }
 
         v.ll_owner_change_password.setOnClickListener {
@@ -97,12 +98,12 @@ class LoginProfileFragment : Fragment() {
 
 
         v.tv_owner_list_space.setOnClickListener{
-
-            val i = Intent(context, ListYourSpaceActivity::class.java)
-            i.putExtra(USERID, userId)
-            startActivity(i)
-            Log.i("Response", "Login UserId at LoginProfileFragment :"+ userId)
-
+            if(checkConnection()){
+                val i = Intent(context, ListYourSpaceActivity::class.java)
+                i.putExtra(USERID, userId)
+                startActivity(i)
+                Log.i("Response", "Login UserId at LoginProfileFragment :"+ userId)
+            }
         }
 
         v.btn_owner_profile_logout.setOnClickListener {

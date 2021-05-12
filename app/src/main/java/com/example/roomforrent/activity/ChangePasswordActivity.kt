@@ -62,59 +62,76 @@ class ChangePasswordActivity : BaseActivity() {
         })
         btn_updatePassword.setOnClickListener() {
 
-            if(et_current_pw.text.toString().trim().isEmpty()){
+            if(checkConnection()){
+            if (et_current_pw.text.toString().trim().isEmpty()) {
                 et_current_pw.error = "Please Insert Current Password"
                 et_current_pw.requestFocus()
                 return@setOnClickListener
-            }
-            else if(et_new_pw.text.toString().trim().isEmpty()){
+            } else if (et_new_pw.text.toString().trim().isEmpty()) {
                 et_new_pw.error = "Please New Current Password"
                 et_new_pw.requestFocus()
                 return@setOnClickListener
-            }
-            else if(et_confirmPassword.text.toString().trim().isEmpty()){
+            } else if (et_confirmPassword.text.toString().trim().isEmpty()) {
                 et_confirmPassword.error = "Please Insert Confirm Password"
                 et_confirmPassword.requestFocus()
                 return@setOnClickListener
-            }
-            else if(et_current_pw.text.toString().trim()==et_new_pw.text.toString().trim() ){
+            } else if (et_current_pw.text.toString().trim() == et_new_pw.text.toString().trim()) {
 
-                Toast.makeText(this,"Current Password and New Password is same",Toast.LENGTH_LONG).show()
-            }
-            else if(et_new_pw.text.toString().trim()!=et_confirmPassword.text.toString().trim()){
-                Toast.makeText(this,"Please enter same with New Password",Toast.LENGTH_LONG).show()
-            }
-            else if(cur_pw.equals(et_current_pw.text.toString().trim())){
-                if(et_new_pw.text.toString().trim().equals(et_confirmPassword.text.toString().trim())){
-                    var callGetPw=destinationService.updatePassword(user_id,et_new_pw.text.toString().trim())
+                Toast.makeText(this, "Current Password and New Password is same", Toast.LENGTH_LONG)
+                    .show()
+            } else if (et_new_pw.text.toString().trim() != et_confirmPassword.text.toString()
+                    .trim()
+            ) {
+                Toast.makeText(this, "Please enter same with New Password", Toast.LENGTH_LONG)
+                    .show()
+            } else if (cur_pw.equals(et_current_pw.text.toString().trim())) {
+                if (et_new_pw.text.toString().trim()
+                        .equals(et_confirmPassword.text.toString().trim())
+                ) {
+                    var callGetPw =
+                        destinationService.updatePassword(user_id, et_new_pw.text.toString().trim())
                     callGetPw.enqueue(object : Callback<UserLogin> {
-                        override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
+                        override fun onResponse(
+                            call: Call<UserLogin>,
+                            response: Response<UserLogin>
+                        ) {
                             //showProgressDialog("Please Wait")
-                            var fragment=LoginProfileFragment()
+                            var fragment = LoginProfileFragment()
                             val b = Bundle()
-                            b.putString(USERID,response.body()!!.user_id)
-                            Log.i("TestingApi", "Login UserId!!!"+response.body()!!.user_id)
+                            b.putString(USERID, response.body()!!.user_id)
+                            Log.i("TestingApi", "Login UserId!!!" + response.body()!!.user_id)
                             fragment.setArguments(b)
                             supportFragmentManager.beginTransaction()
                                 .add(android.R.id.content, fragment).commit()
-                           // hideProgressDialog()
+                            // hideProgressDialog()
                             //Log.i("TestingApi", "Update Successful " +response.body()!!.password)
-                            Toast.makeText(this@ChangePasswordActivity,"Update Successful",Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@ChangePasswordActivity,
+                                "Update Successful",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
 
                         override fun onFailure(call: Call<UserLogin>, t: Throwable) {
                             //Log.i("TestingApi", "Update Fail "+t.message)
-                            Toast.makeText(this@ChangePasswordActivity,"Update Fail",Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@ChangePasswordActivity,
+                                "Update Fail",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
 
                     })
                 }
 
+            } else {
+                Toast.makeText(
+                    this@ChangePasswordActivity,
+                    "Need to SigIn Again ",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-            else{
-                Toast.makeText(this@ChangePasswordActivity,"Need to SigIn Again ",Toast.LENGTH_LONG).show()
-            }
-
+        }
         }
     }
 

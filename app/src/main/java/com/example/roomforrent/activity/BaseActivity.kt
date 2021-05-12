@@ -56,7 +56,7 @@ open class BaseActivity : AppCompatActivity() {
             }
 
             builder.show()
-            return  true
-        }else return false
+            return  false
+        }else return true
     }
 }

@@ -124,7 +124,7 @@ class HouseDetailActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun showDetailMap() {
-        if(!checkConnection()){
+        if(checkConnection()){
             var intent = Intent(this@HouseDetailActivity, LocationActivity::class.java)
             intent.putExtra(Constants.LATITUDE, houseDetails.latitude)
             intent.putExtra(Constants.LONGITUDE, houseDetails.longitude)

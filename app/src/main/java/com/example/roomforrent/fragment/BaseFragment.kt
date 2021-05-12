@@ -65,7 +65,7 @@ open class BaseFragment : Fragment() {
             }
 
             builder.show()
-            return  true
-        }else return false
+            return  false
+        }else return true
     }
 }
