@@ -134,14 +134,14 @@ class LoginProfileFragment : BaseFragment() {
                 if (response.isSuccessful) {
                     val user = response.body()!!                  
                     if(user.user_name == null){
-                        tv_owner_name.text = ""
+                        tv_owner_name.text = "Renter"
                     } else {
                         tv_owner_name.text = user.user_name
                     }
 
 
                     Picasso.get()
-                        .load("http://192.168.101.12:9090/image/user/" + user.user_id + ".jpg").into(
+                        .load("http://192.168.1.15:9090/image/user/" + user.user_id + ".jpg").into(
                             iv_profile_user_image
                         )
 
