@@ -47,6 +47,7 @@ class FavouriteFragment : BaseFragment() {
     val favouriteService = ServiceBuilder.buildService(FavouriteService::class.java)
     var isLogin = false
     var userID : String?=""
+    var isConnected = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i("TestFav", "onCreate")
@@ -116,6 +117,8 @@ class FavouriteFragment : BaseFragment() {
 
                 override fun onFailure(call: Call<List<House>>, t: Throwable) {
                     Log.i("TestFavourite", "fail to load favourite house list")
+                    blankLayout.visibility = View.VISIBLE
+                    txtBlank.text = resources.getString(R.string.nohaveFav)
                 }
 
             })
@@ -146,7 +149,8 @@ class FavouriteFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.i("TestFavourite", "Need to Login")
+        Log.i("TestFavourite", "Favourite on Resume")
+        isConnected = checkConnection()
         getFavList()
     }
 }

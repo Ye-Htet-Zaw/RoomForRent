@@ -144,6 +144,15 @@ class LoginActivity : BaseActivity() {
             }
         })
 
+        //SignUp With Phone
+        btn_phone_otp.setOnClickListener {
+            var intent = Intent(
+                this,
+                LoginWithPhoneActivity::class.java
+            )
+            startActivity(intent)
+        }
+
     }
 
     public override fun onStart() {

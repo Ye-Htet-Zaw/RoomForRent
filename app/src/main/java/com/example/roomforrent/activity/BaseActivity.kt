@@ -42,7 +42,7 @@ open class BaseActivity : AppCompatActivity() {
         mProgressDialog.dismiss()
     }
 
-    fun checkConnection() {
+    fun checkConnection() : Boolean {
         val conMgr: ConnectivityManager =
             getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = conMgr.activeNetworkInfo
@@ -56,6 +56,7 @@ open class BaseActivity : AppCompatActivity() {
             }
 
             builder.show()
-        }
+            return  true
+        }else return false
     }
 }

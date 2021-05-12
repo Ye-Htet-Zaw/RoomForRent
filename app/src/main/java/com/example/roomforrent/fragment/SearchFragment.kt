@@ -46,7 +46,7 @@ import com.example.roomforrent.utils.Constants.periodArr
 import com.example.roomforrent.utils.Constants.townshipArr
 import kotlinx.android.synthetic.main.fragment_search.*
 
-class SearchFragment : Fragment() {
+class SearchFragment : BaseFragment() {
 
     lateinit var categoryAdapter: MySpinnerAdapter
     lateinit var townshipAdapter: MySpinnerAdapter
@@ -191,13 +191,15 @@ class SearchFragment : Fragment() {
      * load  house list by clicking search button
      */
     private fun showHouseList(serviceName: String) {
-        val intent = Intent(context, HouseListActivity::class.java)
-        intent.putExtra(CALLAPI, serviceName)
-        intent.putExtra(SelectedCategory, selectedCategory)
-        intent.putExtra(SelectedAddress, selectedAddress)
-        intent.putExtra(SelectedPeroid, selectedPeroid)
-        intent.putExtra(Amount, amount)
-        startActivity(intent)
+        if(!checkConnection()){
+            val intent = Intent(context, HouseListActivity::class.java)
+            intent.putExtra(CALLAPI, serviceName)
+            intent.putExtra(SelectedCategory, selectedCategory)
+            intent.putExtra(SelectedAddress, selectedAddress)
+            intent.putExtra(SelectedPeroid, selectedPeroid)
+            intent.putExtra(Amount, amount)
+            startActivity(intent)
+        }
     }
 
     @SuppressLint("UseRequireInsteadOfGet")

@@ -124,10 +124,12 @@ class HouseDetailActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun showDetailMap() {
-        var intent = Intent(this@HouseDetailActivity, LocationActivity::class.java)
-        intent.putExtra(Constants.LATITUDE, houseDetails.latitude)
-        intent.putExtra(Constants.LONGITUDE, houseDetails.longitude)
-        startActivity(intent)
+        if(!checkConnection()){
+            var intent = Intent(this@HouseDetailActivity, LocationActivity::class.java)
+            intent.putExtra(Constants.LATITUDE, houseDetails.latitude)
+            intent.putExtra(Constants.LONGITUDE, houseDetails.longitude)
+            startActivity(intent)
+        }
     }
 
     private fun setupActionBar(){
