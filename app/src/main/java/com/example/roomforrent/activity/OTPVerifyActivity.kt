@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.roomforrent.R
+import com.example.roomforrent.fragment.LoginProfileFragment
 import com.example.roomforrent.models.Phone
 import com.example.roomforrent.services.OTPPhoneService
 import com.example.roomforrent.services.ServiceBuilder
@@ -26,8 +27,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-class OTPVerifyActivity : AppCompatActivity() {
+class OTPVerifyActivity : BaseActivity() {
     lateinit var auth: FirebaseAuth
+    var share: SharedPreferences?=null
+    var editor: SharedPreferences.Editor ?=null
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,11 +44,19 @@ class OTPVerifyActivity : AppCompatActivity() {
 
         auth=FirebaseAuth.getInstance()
 
+        share = getSharedPreferences(
+            "myPreference",
+            Context.MODE_PRIVATE
+        )
+
+        editor= share!!.edit()
+
         val storedVerificationId=intent.getStringExtra("storedVerificationId")
 
         verifyBtn.setOnClickListener{
             var otp=id_otp.text.toString().trim()
             if(!otp.isEmpty()){
+                showProgressDialog("Please Wait....")
                 val credential : PhoneAuthCredential = PhoneAuthProvider.getCredential(
                     storedVerificationId.toString(), otp)
                 signInWithPhoneAuthCredential(credential)
@@ -72,10 +83,12 @@ class OTPVerifyActivity : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    hideProgressDialog()
                     checkExistPhoneUser(phoneNo.toString())
                     startActivity(Intent(applicationContext, MainActivity::class.java))
                     finish()
                 } else {
+                    hideProgressDialog()
                         // Sign in failed, display a message and update the UI
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
@@ -88,17 +101,15 @@ class OTPVerifyActivity : AppCompatActivity() {
     private fun checkExistPhoneUser(phoneNo: String) {
         val destinationService = ServiceBuilder.buildService(OTPPhoneService::class.java)
         val requestCall = destinationService.getPhoneUserCount(phoneNo)
-        val share:SharedPreferences  = getSharedPreferences("myPreference",
-            Context.MODE_PRIVATE)
         requestCall.enqueue(object : Callback<Phone> {
             override fun onResponse(call: Call<Phone>, response: Response<Phone>) {
-                if (response.body() != null) {
-                    val editor: SharedPreferences.Editor = share.edit()
-                    editor.putBoolean("isLogin", true)
-                    editor.putString(Constants.USERID,response.body()!!.user_id)
-                    editor.putInt(Constants.POSITION, response.body()!!.user_position)
-                    editor.commit()
+                if (response.isSuccessful) {
+                    editor!!.putBoolean("isLogin", true)
+                    editor!!.putString(Constants.USERID, response.body()!!.user_id)
+                    editor!!.putInt(Constants.POSITION, response.body()!!.user_position)
+                    editor!!.commit()
                     Toast.makeText(this@OTPVerifyActivity, "Already User", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
             }
 
@@ -112,17 +123,14 @@ class OTPVerifyActivity : AppCompatActivity() {
         val destinationService = ServiceBuilder.buildService(OTPPhoneService::class.java)
         var phone = Phone("",phoneNo, 0, 0)
         val requestCall = destinationService.createPhoneUser(phone)
-        val share:SharedPreferences  = getSharedPreferences("myPreference",
-            Context.MODE_PRIVATE)
-
         requestCall.enqueue(object : Callback<Phone>{
             override fun onResponse(call: Call<Phone>, response: Response<Phone>) {
                 if (response.isSuccessful) {
-                    val editor: SharedPreferences.Editor = share.edit()
-                    editor.putBoolean("isLogin", true)
-                    editor.putString(Constants.USERID,response.body()!!.user_id)
-                    editor.putInt(Constants.POSITION, response.body()!!.user_position)
-                    editor.commit()
+                    editor!!.putBoolean("isLogin", true)
+                    editor!!.putString(Constants.USERID, response.body()!!.user_id)
+                    editor!!.putInt(Constants.POSITION, response.body()!!.user_position)
+                    editor!!.commit()
+                    finish()
                 }
             }
 
