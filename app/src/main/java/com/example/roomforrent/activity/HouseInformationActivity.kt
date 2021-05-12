@@ -38,9 +38,12 @@ class HouseInformationActivity : AppCompatActivity() {
         }
 
         if (intent.hasExtra(Constants.WIFI)){
-            house_wifi.text = "Free"
-        } else {
-            house_wifi.text = "None"
+            val noOfWifi = intent.getIntExtra(Constants.WIFI, -1).toString()
+            if (noOfWifi == "1"){
+                house_wifi.text = "Free"
+            }else {
+                house_wifi.text = "None"
+            }
         }
 
         if (intent.hasExtra(Constants.NO_OF_AIRCON)){
