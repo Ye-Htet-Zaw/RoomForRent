@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.roomforrent.R
+import com.example.roomforrent.fragment.LoginProfileFragment
 import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
 import com.facebook.login.Login
 import com.google.firebase.FirebaseException
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_house_detail.*
 import kotlinx.android.synthetic.main.activity_login_with_phone.*
 import java.util.concurrent.TimeUnit
 
-class LoginWithPhoneActivity : AppCompatActivity() {
+class LoginWithPhoneActivity : BaseActivity() {
     lateinit var auth: FirebaseAuth
     lateinit var storedVerificationId:String
     lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
@@ -42,7 +43,7 @@ class LoginWithPhoneActivity : AppCompatActivity() {
 
         var currentUser = auth.currentUser
         if(currentUser != null) {
-            startActivity(Intent(applicationContext, MainActivity::class.java))
+            startActivity(Intent(applicationContext, LoginProfileFragment::class.java))
             finish()
         }
 
@@ -54,11 +55,12 @@ class LoginWithPhoneActivity : AppCompatActivity() {
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                startActivity(Intent(applicationContext, MainActivity::class.java))
+                startActivity(Intent(applicationContext, LoginProfileFragment::class.java))
                 finish()
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
+                hideProgressDialog()
                 Toast.makeText(applicationContext, "Failed", Toast.LENGTH_LONG).show()
             }
 
@@ -76,6 +78,7 @@ class LoginWithPhoneActivity : AppCompatActivity() {
                 intent.putExtra("storedVerificationId",storedVerificationId)
                 intent.putExtra("phoneNo",number)
                 startActivity(intent)
+                hideProgressDialog()
             }
         }
     }
@@ -97,6 +100,7 @@ class LoginWithPhoneActivity : AppCompatActivity() {
         var number=mobileNumber.text.toString().trim()
 
         if(!number.isEmpty()){
+            showProgressDialog("Please Wait....")
             number="+95"+number
             sendVerificationcode (number)
         }else{
