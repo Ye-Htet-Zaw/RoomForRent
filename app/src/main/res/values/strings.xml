@@ -25,13 +25,13 @@
     <string name="plz_login_text">Please login to your account</string>
     <string name="version_text_description">Version 1.0 9/2/2021</string>
     <string name="sign_in">SIGN IN</string>
-    <string name="sign_up">SIGN UP</string>
+    <string name="sign_up">SIGN IN</string>
     //LoginScreen
     <string name="login">Login</string>
-    <string name="login_text">Login To Your Account</string>
+    <string name="login_text">Sign In To Your Account</string>
     <string name="name">Name</string>
-    <string name="password">Password</string>
-    <string name="email">Email Address</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
     <string name="sign_in_description_text">Enter your name, email id and password, to register with us.</string>
 
     //ChangePasswordScreen
