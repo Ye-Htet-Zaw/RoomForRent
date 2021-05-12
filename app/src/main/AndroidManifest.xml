@@ -29,6 +29,14 @@
             android:theme="@style/NoActionBar" />
         <activity android:name=".activity.BaseActivity" />
         <activity
+            android:name=".activity.LoginWithPhoneActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".activity.OTPVerifyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" />
+        <activity
             android:name=".activity.DescriptionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
