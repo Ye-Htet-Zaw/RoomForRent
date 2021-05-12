@@ -75,17 +75,18 @@ class LoginActivity : BaseActivity() {
         btn_sing_up.setOnClickListener() {
             showProgressDialog("Please wait...")
             if (et_email.text.toString().trim().isEmpty()) {
+                hideProgressDialog()
                 et_email.error = "Email Required"
                 et_email.requestFocus()
                 return@setOnClickListener
             }
             else if (et_password.text.toString().trim().isEmpty()) {
+                hideProgressDialog()
                 et_password.error = "Password Required"
                 et_password.requestFocus()
                 return@setOnClickListener
             }else
             {
-
                 val destinationService = ServiceBuilder.buildService(UserLoginService::class.java)
                 callGetUser = destinationService.getUserWithEmailAndPassword(
                     et_email.text.toString().trim(), et_password.text.toString().trim()
@@ -126,9 +127,6 @@ class LoginActivity : BaseActivity() {
         // Initialize Facebook Login button
         //SignInForRenderUserWithFacebook
         callbackManager = CallbackManager.Factory.create()
-        if(Platform.isAndroid){
-            LoginManager.getInstance().loginBehavior = LoginBehavior.WEB_ONLY
-        }
         login_button.setReadPermissions("email", "public_profile")
         login_button.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
