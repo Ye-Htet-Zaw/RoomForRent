@@ -18,6 +18,7 @@ import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserProfileService
 import com.example.roomforrent.utils.Constants.POSITION
 import com.example.roomforrent.utils.Constants.USERID
+import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_login_profile.*
 import kotlinx.android.synthetic.main.fragment_login_profile.view.*
@@ -36,6 +37,8 @@ class LoginProfileFragment : BaseFragment() {
     private var userId: String? = null
     private var position: Int? = null
     private var share : SharedPreferences? = null
+
+    lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +109,11 @@ class LoginProfileFragment : BaseFragment() {
             }
         }
 
+        auth= FirebaseAuth.getInstance()
+
         v.btn_owner_profile_logout.setOnClickListener {
+            showProgressDialog("Please Wait....")
+            auth.signOut()
             startActivity(Intent(context, MainActivity::class.java))
             val share: SharedPreferences = context?.getSharedPreferences(
                 "myPreference",
@@ -115,6 +122,7 @@ class LoginProfileFragment : BaseFragment() {
             val editor: SharedPreferences.Editor = share.edit()
             editor.putBoolean("isLogin", false)
             editor.commit()
+            hideProgressDialog()
         }
         getUserInfoById(userId!!.toString())//changes for numberformat
         return v
