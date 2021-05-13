@@ -358,6 +358,9 @@ class PostHouseFragment : BaseFragment() {
         et_available_date.text = ""
         rb_no.isChecked=false
         rb_yes.isChecked=false
+        tv_towSpinner.setTextColor(Color.parseColor("#7A8089"))
+        tv_catSpinner.setTextColor(Color.parseColor("#7A8089"))
+        tv_perSpinner.setTextColor(Color.parseColor("#7A8089"))
     }
 
     private fun loadPostHouseScreen(){
@@ -388,6 +391,7 @@ class PostHouseFragment : BaseFragment() {
                             id: Long
                         ) {
                             selectedCategory = Constants.categoryArr.get(position)
+                            tv_catSpinner.setTextColor(Color.parseColor("#7A8089"))
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -404,6 +408,7 @@ class PostHouseFragment : BaseFragment() {
                         id: Long
                     ) {
                         selectedAddress = Constants.townshipArr.get(position)
+                        tv_towSpinner.setTextColor(Color.parseColor("#7A8089"))
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -420,6 +425,7 @@ class PostHouseFragment : BaseFragment() {
                         id: Long
                     ) {
                         selectedPeriod = Constants.periodArr.get(position)
+                        tv_perSpinner.setTextColor(Color.parseColor("#7A8089"))
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -434,7 +440,7 @@ class PostHouseFragment : BaseFragment() {
                 }
                 latitude= share.getString(POST_HOUSE_LATITUDE,"")
                 longitude = share.getString(POST_HOUSE_LONGITUDE,"")
-                Toast.makeText(context,"$latitude and $longitude",Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context,"$latitude and $longitude",Toast.LENGTH_SHORT).show()
 
                 iv_available_date.setOnClickListener { view ->
                     clickDataPicker(view)
