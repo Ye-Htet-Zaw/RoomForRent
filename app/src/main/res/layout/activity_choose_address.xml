@@ -16,11 +16,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
             android:gravity="right|center_vertical">
 
-            <Button
+            <TextView
                 android:id="@+id/addrSaveBtn"
-                android:background="@drawable/buttonbg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/personal_info_toolbar_text"
