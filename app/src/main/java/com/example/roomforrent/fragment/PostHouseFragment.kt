@@ -41,6 +41,8 @@ import com.example.roomforrent.services.PostHouseService
 import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.utils.Constants
 import com.example.roomforrent.utils.Constants.POSITION
+import com.example.roomforrent.utils.Constants.POST_HOUSE_LATITUDE
+import com.example.roomforrent.utils.Constants.POST_HOUSE_LONGITUDE
 import com.example.roomforrent.utils.Constants.USERID
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_post_house.*
@@ -99,9 +101,10 @@ class PostHouseFragment : BaseFragment() {
     private var recommendedPoint: String = ""
     private var contractRule: String = ""
     private var period: String = ""
-    private var latitude: Double = 0.0
-    private var longitude: Double = 0.0
+    private var latitude: String? = ""
+    private var longitude: String? = ""
 
+    private var refreshFragment: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -329,7 +332,9 @@ class PostHouseFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         loadPostHouseScreen()
-        refreshFragment()
+        if (refreshFragment){
+            refreshFragment()
+        }
 
     }
 
@@ -361,11 +366,11 @@ class PostHouseFragment : BaseFragment() {
             Context.MODE_PRIVATE
         )!!
         isLogin = share.getBoolean("isLogin", false)
-        //isLogin = true
+        isLogin = true
         if(isLogin) {
             userID=share.getString(USERID,"")
             userPosition=share.getInt(POSITION,3)
-            //userPosition = 1
+            userPosition = 1
             if (userPosition==1){
                 ph_createLayout.visibility=View.VISIBLE
                 ph_blankLayout.visibility = View.GONE
@@ -424,8 +429,12 @@ class PostHouseFragment : BaseFragment() {
                 }
 
                 iv_location.setOnClickListener {
+                    refreshFragment=false
                     startActivity(Intent(context,ChooseAddressActivity::class.java))
                 }
+                latitude= share.getString(POST_HOUSE_LATITUDE,"")
+                longitude = share.getString(POST_HOUSE_LONGITUDE,"")
+                Toast.makeText(context,"$latitude and $longitude",Toast.LENGTH_SHORT).show()
 
                 iv_available_date.setOnClickListener { view ->
                     clickDataPicker(view)
@@ -668,8 +677,6 @@ class PostHouseFragment : BaseFragment() {
 
         houseAddress = et_address.text.toString().trim()
 
-        getLocationFromAddress(houseAddress)
-
         township = selectedAddress
         noOfGuest = et_guest.text.toString().trim()
         noOfRoom = et_room.text.toString().trim()
@@ -797,8 +804,8 @@ class PostHouseFragment : BaseFragment() {
                 contract_RULE = contractRule,
                 period = period.toInt(),
                 user_ID = userID!!,
-                longitude = longitude.toString(),
-                latitude = latitude.toString(),
+                longitude = longitude!!,
+                latitude = latitude!!,
                 expired_DATE = "2020-2-3",
                 rent_FLAG = 0,
                 delete_FLAG = 0,
@@ -813,22 +820,6 @@ class PostHouseFragment : BaseFragment() {
         }
     }
 
-    private fun getLocationFromAddress(address: String){
-
-        val geoCoder = Geocoder(context)
-        try {
-            val addresses = geoCoder.getFromLocationName("1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA", 5)
-            Log.i("CheckLatAndLon",addresses.size.toString())
-            if (addresses.size > 0) {
-                 latitude = addresses[0].latitude
-                 longitude = addresses[0].longitude
-                Log.i("CheckLatAndLon","$latitude and $longitude")
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Log.i("CheckLatAndLon",e.message.toString()+"error")
-        }
-    }
 
     private fun createHouse(house: House){
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
@@ -839,6 +830,7 @@ class PostHouseFragment : BaseFragment() {
             override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                 val res = response.body()
                 if (response.code() == 200 && res!=null){
+                    refreshFragment=true
                     uploadImage(list)
                     val intent = Intent(context, ListYourSpaceActivity::class.java)
                     intent.putExtra(USERID, userID)

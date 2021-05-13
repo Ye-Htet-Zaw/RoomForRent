@@ -239,6 +239,8 @@ object Constants {
     const val IMAGE_REQUEST_CODE_EIGHT = 9
     const val IMAGE_REQUEST_CODE_NINE = 10
     const val IMAGE_REQUEST_CODE_TEN = 11
+    const val POST_HOUSE_LATITUDE: String = "latitude"
+    const val POST_HOUSE_LONGITUDE: String = "longitude"
 
 
     /**
