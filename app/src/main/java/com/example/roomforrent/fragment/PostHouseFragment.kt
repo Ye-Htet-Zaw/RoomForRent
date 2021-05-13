@@ -366,11 +366,11 @@ class PostHouseFragment : BaseFragment() {
             Context.MODE_PRIVATE
         )!!
         isLogin = share.getBoolean("isLogin", false)
-        isLogin = true
+        //isLogin = true
         if(isLogin) {
             userID=share.getString(USERID,"")
             userPosition=share.getInt(POSITION,3)
-            userPosition = 1
+            //userPosition = 1
             if (userPosition==1){
                 ph_createLayout.visibility=View.VISIBLE
                 ph_blankLayout.visibility = View.GONE
