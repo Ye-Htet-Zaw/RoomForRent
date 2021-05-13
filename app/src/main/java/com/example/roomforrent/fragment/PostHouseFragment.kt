@@ -361,6 +361,8 @@ class PostHouseFragment : BaseFragment() {
         tv_towSpinner.setTextColor(Color.parseColor("#7A8089"))
         tv_catSpinner.setTextColor(Color.parseColor("#7A8089"))
         tv_perSpinner.setTextColor(Color.parseColor("#7A8089"))
+        tv_location.setText(R.string.location_of_house)
+        tv_location.setTextColor(Color.parseColor("#7A8089"))
     }
 
     private fun loadPostHouseScreen(){
@@ -440,6 +442,10 @@ class PostHouseFragment : BaseFragment() {
                 }
                 latitude= share.getString(POST_HOUSE_LATITUDE,"")
                 longitude = share.getString(POST_HOUSE_LONGITUDE,"")
+                if(!refreshFragment){
+                    tv_location.text="Location is selected!"
+                    tv_location.setTextColor(Color.BLACK)
+                }
                 //Toast.makeText(context,"$latitude and $longitude",Toast.LENGTH_SHORT).show()
 
                 iv_available_date.setOnClickListener { view ->
