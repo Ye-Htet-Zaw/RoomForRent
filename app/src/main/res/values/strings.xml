@@ -78,7 +78,7 @@
     <string name="township">Please Choose Township</string>
     <string name="post_house">Post House</string>
     <string name="photo_of_your_house">Photos of Your House</string>
-    <string name="street_building_floor">Street, Building No., Floor</string>
+    <string name="street_building_floor">Ward,Street,Building No.</string>
     <string name="no_of_guest">No Of Guests</string>
     <string name="no_of_room">No Of Room</string>
     <string name="no_of_toilet">No Of Toilet</string>
@@ -100,6 +100,7 @@
     <string name="recommended_point">Recommended Point</string>
     <string name="create_house_login">Need to login to create your house!</string>
     <string name="create_house_login_with_owner">Need to login with owner to create house!</string>
+    <string name="location_of_house">Select the location of your house</string>
 
     //fb
     <string name="facebook_app_id">247575357151339</string>

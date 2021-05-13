@@ -33,6 +33,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
+import com.example.roomforrent.activity.ChooseAddressActivity
 import com.example.roomforrent.activity.ListYourSpaceActivity
 import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.models.House
@@ -420,6 +421,10 @@ class PostHouseFragment : BaseFragment() {
 
                     }
 
+                }
+
+                iv_location.setOnClickListener {
+                    startActivity(Intent(context,ChooseAddressActivity::class.java))
                 }
 
                 iv_available_date.setOnClickListener { view ->

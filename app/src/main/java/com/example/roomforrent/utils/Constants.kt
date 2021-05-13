@@ -224,6 +224,9 @@ object Constants {
     const val LONGITUDE: String = "longitude"
 
 
+    /**
+     * Upload Image
+     */
     const val READ_STORAGE_PERMISSION_CODE = 1
 
     const val IMAGE_REQUEST_CODE_ONE = 2
@@ -238,8 +241,9 @@ object Constants {
     const val IMAGE_REQUEST_CODE_TEN = 11
 
 
-
-
+    /**
+     * Image choose from gallery
+     */
     fun showImageChooser(activity: PostHouseFragment, requestCode: Int){
         var galleryIntent = Intent(
             Intent.ACTION_PICK,
@@ -247,7 +251,4 @@ object Constants {
         activity.startActivityForResult(galleryIntent,requestCode)
     }
 
-    fun getFileExtension(activity: FragmentActivity,uri: Uri?): String?{
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(activity.contentResolver.getType(uri!!))
-    }
 }
