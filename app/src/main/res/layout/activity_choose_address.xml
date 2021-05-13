@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LocationActivity">
+    tools:context=".activity.ChooseAddressActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_location_activity"
+        android:paddingRight="10dp"
+        android:id="@+id/toolbar_choose_addr"
         android:layout_width="match_parent"
+        android:background="@drawable/toolbarbg"
         android:layout_height="?attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical">
+
+            <Button
+                android:id="@+id/addrSaveBtn"
+                android:background="@drawable/buttonbg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personal_info_toolbar_text"
+                android:textColor="@color/white"
+                android:textSize="@dimen/personal_info_toolbar_textsize"
+                android:textStyle="bold" />
+        </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-</fragment>
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</LinearLayout>
