@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:id="@+id/layout_personal_info"
-
     android:fillViewport="true">
     <!--this is my changes-->
     <LinearLayout
@@ -68,6 +67,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <RelativeLayout
+                    android:layout_marginTop="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal">
@@ -147,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="10dp"
+                    android:paddingTop="20dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
 
@@ -179,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="10dp"
+                    android:paddingTop="20dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
 
@@ -211,7 +211,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="10dp"
+                    android:paddingTop="20dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
 
@@ -244,7 +244,7 @@
                 <LinearLayout
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="10dp"
+                    android:paddingTop="20dp"
                     android:paddingBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -281,7 +281,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="10dp"
+                    android:paddingTop="20dp"
                     android:paddingBottom="10dp"
                     android:orientation="vertical">
 

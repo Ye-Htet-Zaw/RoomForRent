@@ -252,7 +252,7 @@ class HouseListActivity : BaseActivity() {
                     adapter.setData(houseList as ArrayList<House>)
                     adapter.setOnClickListener(object : HouseItemAdapter.OnClickListener{
                         override fun onClick(position: Int, model: House) {
-                            if(!checkConnection()){
+                            if(checkConnection()){
                                 showProgressDialog("Please Wait...")
                                 getDetailData(model.house_ID)
                             }

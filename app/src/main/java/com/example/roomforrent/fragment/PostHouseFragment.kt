@@ -54,7 +54,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PostHouseFragment : Fragment() {
+class PostHouseFragment : BaseFragment() {
 
     private var list: ArrayList<MultipartBody.Part> = ArrayList()
     private var isLogin = false
@@ -427,7 +427,8 @@ class PostHouseFragment : Fragment() {
                 }
 
                 btn_post_house.setOnClickListener {
-                    setHouseData()
+                    if(checkConnection())
+                        setHouseData()
                 }
 
                 checkImageAndRadioData()

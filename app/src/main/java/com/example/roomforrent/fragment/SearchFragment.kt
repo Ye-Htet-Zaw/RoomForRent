@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
+import com.example.roomforrent.activity.ChooseAddressActivity
 import com.example.roomforrent.activity.HouseListActivity
 import com.example.roomforrent.adapter.MySpinnerAdapter
 import com.example.roomforrent.utils.Constants.Amount
@@ -191,7 +192,7 @@ class SearchFragment : BaseFragment() {
      * load  house list by clicking search button
      */
     private fun showHouseList(serviceName: String) {
-        if(!checkConnection()){
+        if(checkConnection()){
             val intent = Intent(context, HouseListActivity::class.java)
             intent.putExtra(CALLAPI, serviceName)
             intent.putExtra(SelectedCategory, selectedCategory)
@@ -200,6 +201,7 @@ class SearchFragment : BaseFragment() {
             intent.putExtra(Amount, amount)
             startActivity(intent)
         }
+        //startActivity(Intent(context,ChooseAddressActivity::class.java))
     }
 
     @SuppressLint("UseRequireInsteadOfGet")

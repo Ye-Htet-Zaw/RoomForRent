@@ -42,7 +42,6 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class LoginActivity : BaseActivity() {
     private lateinit var auth: FirebaseAuth
     var callbackManager: CallbackManager?=null
@@ -59,7 +58,6 @@ class LoginActivity : BaseActivity() {
         callbackManager = CallbackManager.Factory.create()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
         share = getSharedPreferences(
             "myPreference",
             Context.MODE_PRIVATE
@@ -70,23 +68,19 @@ class LoginActivity : BaseActivity() {
         window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
         window.setBackgroundDrawable(resources.getDrawable(R.drawable.toolbarbg))
         setUpActionBar()
-
         //SignInForOwnerUser
         btn_sing_up.setOnClickListener() {
-            showProgressDialog("Please wait...")
+            if (checkConnection()) {
             if (et_email.text.toString().trim().isEmpty()) {
-                hideProgressDialog()
                 et_email.error = "Email Required"
                 et_email.requestFocus()
                 return@setOnClickListener
-            }
-            else if (et_password.text.toString().trim().isEmpty()) {
-                hideProgressDialog()
+            } else if (et_password.text.toString().trim().isEmpty()) {
                 et_password.error = "Password Required"
                 et_password.requestFocus()
                 return@setOnClickListener
-            }else
-            {
+            } else {
+                showProgressDialog("Please wait...")
                 val destinationService = ServiceBuilder.buildService(UserLoginService::class.java)
                 callGetUser = destinationService.getUserWithEmailAndPassword(
                     et_email.text.toString().trim(), et_password.text.toString().trim()
@@ -97,7 +91,6 @@ class LoginActivity : BaseActivity() {
                         Toast.makeText(this@LoginActivity, "Something Wrong", Toast.LENGTH_LONG)
                             .show()
                         Log.e(t.message, "ERROR")
-
                     }
 
                     override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
@@ -113,16 +106,12 @@ class LoginActivity : BaseActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
                             finish()
-
                         }
                     }
-
                 }
-
                 )
-
             }
-
+        }
         }
         // Initialize Facebook Login button
         //SignInForRenderUserWithFacebook
@@ -132,18 +121,14 @@ class LoginActivity : BaseActivity() {
             override fun onSuccess(loginResult: LoginResult) {
                 Log.d("TAG", "facebook:onSuccess:$loginResult")
                 handleFacebookAccessToken(loginResult.accessToken)
-
             }
-
             override fun onCancel() {
                 Log.d("TAG", "facebook:onCancel")
             }
-
             override fun onError(error: FacebookException) {
                 Log.d("TAG", "facebook:onError", error)
             }
         })
-
         //SignUp With Phone
         btn_phone_otp.setOnClickListener {
             var intent = Intent(
@@ -152,9 +137,7 @@ class LoginActivity : BaseActivity() {
             )
             startActivity(intent)
         }
-
     }
-
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -163,7 +146,6 @@ class LoginActivity : BaseActivity() {
     }
     private fun handleFacebookAccessToken(token: AccessToken) {
         Log.d("TAG", "handleFacebookAccessToken:$token")
-
         val credential = FacebookAuthProvider.getCredential(token.token)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
@@ -202,9 +184,7 @@ class LoginActivity : BaseActivity() {
                     callfbCount=facebookService.getFacebookId(fb_id)
                     callFbForUserId=facebookService.getUserId(fb_id)
                     Log.i("TAG", callfbCount.toString())
-
                     callfbCount.enqueue(object : Callback<Int> {
-
                         override fun onResponse(call: Call<Int>, response: Response<Int>) {
                             Log.i("TAG", "$user_email&$user_name&$fb_id")
                             Log.i("TAG", response.body().toString()+"COUNT SUCESS")
@@ -212,21 +192,16 @@ class LoginActivity : BaseActivity() {
                                 //Register Fb User in database
                                 callCreateAccount=facebookService.createUser(account)
                                 getAccountList()
-
                             }
                             else{
                                 getUserId()
-
                             }
                         }
-
                         override fun onFailure(call: Call<Int>, t: Throwable) {
                             Log.i("TAG", "COUNT fail")
                         }
 
-
                     })
-
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("TAG", "signInWithCredential:failure", task.exception)
@@ -238,11 +213,8 @@ class LoginActivity : BaseActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         callbackManager?.onActivityResult(requestCode, resultCode, data)
-
     }
-
     private fun setUpActionBar() {
         setSupportActionBar(toolBarLogin)
         val actionBar = supportActionBar
@@ -254,9 +226,7 @@ class LoginActivity : BaseActivity() {
         toolBarLogin.setNavigationOnClickListener { onBackPressed() }
     }
     private fun updateUI(user: FirebaseUser?) {
-
     }
-
     //CallApiForFacebookUserRegister
     private fun getAccountList() {
         callCreateAccount.enqueue(object : Callback<List<UserLogin>> {
@@ -264,14 +234,10 @@ class LoginActivity : BaseActivity() {
                 Log.i("TAG", "Retrieve" +response.body()!!.size.toString())
                 getUserId()
             }
-
             override fun onFailure(call: Call<List<UserLogin>>, t: Throwable) {
-
             }
-
         })
     }
-
     //Call Api for callFbForUserId
     private fun getUserId(){
         callFbForUserId.enqueue(object : Callback<UserLogin> {
@@ -280,20 +246,15 @@ class LoginActivity : BaseActivity() {
                 response: Response<UserLogin>
             ) {
                 Log.d("TAG", "USERIDSUCESSFUL:"+response.body()!!.user_id)
-
                 editor!!.putBoolean("isLogin", true)
                 editor!!.putString(USERID, response.body()!!.user_id)
                 editor!!.putInt(POSITION, response.body()!!.user_position)
                 editor!!.commit()
                 finish()
-
             }
-
             override fun onFailure(call: Call<UserLogin>, t: Throwable) {
                 Log.d("TAG", "USERID FAIL")
-
             }
-
         })
     }
 }

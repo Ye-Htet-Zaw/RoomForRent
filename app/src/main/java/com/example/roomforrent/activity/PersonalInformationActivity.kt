@@ -279,17 +279,18 @@ class PersonalInformationActivity : BaseActivity() {
                 if (response.isSuccessful) {
                     val user = response.body()!!
                     Log.d("Response", "countrylist size : ${user.user_name}")
-                    Toast.makeText(
-                        this@PersonalInformationActivity,
-                        "user name is ${user.user_name}",
-                        Toast.LENGTH_SHORT
-                    ).show()
 
                     Picasso.get()
                         .load("http://192.168.101.12:9090/image/user/" + user.user_id + ".jpg").into(
                             cv_information_profile
                         )
-                    et_user_name.setText(user.user_name)
+
+                    if (user.user_name == null){
+                        et_user_name.setText("Renter")
+                    } else {
+                        et_user_name.setText(user.user_name)
+                    }
+
                     when (user.user_gender) {
                         0 -> et_gender.setText("Male")
                         1 -> et_gender.setText("Female")
@@ -298,17 +299,22 @@ class PersonalInformationActivity : BaseActivity() {
                     }
 
                     //assign date from db to local var to show in android screen
-                    var dateFromDb: Date = user.user_dob
-                    //to show date from db to android
-                    val pattern = "dd/MM/yyyy"
-                    val simpleDateFormat = SimpleDateFormat(pattern)
-                    val date = simpleDateFormat.format(dateFromDb)
-                    et_birth_date.setText(date)
+                    if (user.user_dob == null) {
+                        et_birth_date.setText("")
+                    } else {
+                        var dateFromDb: Date = user.user_dob
+                        //to show date from db to android
+                        val pattern = "dd/MM/yyyy"
+                        val simpleDateFormat = SimpleDateFormat(pattern)
+                        val date = simpleDateFormat.format(dateFromDb)
+                        et_birth_date.setText(date)
 
-                    //if datepicker is not used to save orignal date
-                    val pattern1 = "yyyy-MM-dd"
-                    val simpleDateFormat1 = SimpleDateFormat(pattern1)
-                    dateFromDbString = simpleDateFormat1.format(dateFromDb)
+                        //if datepicker is not used to save orignal date
+                        val pattern1 = "yyyy-MM-dd"
+                        val simpleDateFormat1 = SimpleDateFormat(pattern1)
+                        dateFromDbString = simpleDateFormat1.format(dateFromDb)
+                    }
+
 
                     et_email.setText(user.user_email)
                     et_phone_num1.setText(user.phone_one)

@@ -18,6 +18,7 @@ import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserProfileService
 import com.example.roomforrent.utils.Constants.POSITION
 import com.example.roomforrent.utils.Constants.USERID
+import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_login_profile.*
 import kotlinx.android.synthetic.main.fragment_login_profile.view.*
@@ -27,7 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class LoginProfileFragment : Fragment() {
+class LoginProfileFragment : BaseFragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -36,6 +37,8 @@ class LoginProfileFragment : Fragment() {
     private var userId: String? = null
     private var position: Int? = null
     private var share : SharedPreferences? = null
+
+    lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,10 +85,11 @@ class LoginProfileFragment : Fragment() {
             startActivity(Intent(context, LoginActivity::class.java))
         }
         v.ll_owner_personal_info.setOnClickListener {
-            val i = Intent(context, PersonalInformationActivity::class.java)
-            i.putExtra(USERID, userId)
-            startActivity(i)
-            //startActivity(Intent(context, PersonalInformationActivity::class.java))
+            if(checkConnection()){
+                val i = Intent(context, PersonalInformationActivity::class.java)
+                i.putExtra(USERID, userId)
+                startActivity(i)
+            }
         }
 
         v.ll_owner_change_password.setOnClickListener {
@@ -97,15 +101,19 @@ class LoginProfileFragment : Fragment() {
 
 
         v.tv_owner_list_space.setOnClickListener{
-
-            val i = Intent(context, ListYourSpaceActivity::class.java)
-            i.putExtra(USERID, userId)
-            startActivity(i)
-            Log.i("Response", "Login UserId at LoginProfileFragment :"+ userId)
-
+            if(checkConnection()){
+                val i = Intent(context, ListYourSpaceActivity::class.java)
+                i.putExtra(USERID, userId)
+                startActivity(i)
+                Log.i("Response", "Login UserId at LoginProfileFragment :"+ userId)
+            }
         }
 
+        auth= FirebaseAuth.getInstance()
+
         v.btn_owner_profile_logout.setOnClickListener {
+            showProgressDialog("Please Wait....")
+            auth.signOut()
             startActivity(Intent(context, MainActivity::class.java))
             val share: SharedPreferences = context?.getSharedPreferences(
                 "myPreference",
@@ -114,6 +122,7 @@ class LoginProfileFragment : Fragment() {
             val editor: SharedPreferences.Editor = share.edit()
             editor.putBoolean("isLogin", false)
             editor.commit()
+            hideProgressDialog()
         }
         getUserInfoById(userId!!.toString())//changes for numberformat
         return v
@@ -131,20 +140,16 @@ class LoginProfileFragment : Fragment() {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 Log.d("Response", "onResponse: ${response.body()}")
                 if (response.isSuccessful) {
-                    val user = response.body()!!
-                    Log.d("Response", "countrylist size : ${user.user_name}")
-                    //Toast.makeText(this@LoginProfileFragment,"user name is ${user.user_name}",Toast.LENGTH_SHORT).show()
-                    Log.i("user_name", user.user_name)
-
+                    val user = response.body()!!                  
                     if(user.user_name == null){
-                        tv_owner_name.text = ""
+                        tv_owner_name.text = "Renter"
                     } else {
                         tv_owner_name.text = user.user_name
                     }
 
 
                     Picasso.get()
-                        .load("http://192.168.101.12:9090/image/user/" + user.user_id + ".jpg").into(
+                        .load("http://192.168.1.15:9090/image/user/" + user.user_id + ".jpg").into(
                             iv_profile_user_image
                         )
 
