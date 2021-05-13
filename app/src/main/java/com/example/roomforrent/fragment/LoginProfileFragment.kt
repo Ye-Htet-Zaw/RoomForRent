@@ -149,7 +149,7 @@ class LoginProfileFragment : BaseFragment() {
 
 
                     Picasso.get()
-                        .load("http://192.168.1.15:9090/image/user/" + user.user_id + ".jpg").into(
+                        .load("http://192.168.1.9:9090/image/user/" + user.user_id + ".jpg").into(
                             iv_profile_user_image
                         )
 
@@ -166,6 +166,7 @@ class LoginProfileFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        position=share!!.getInt(POSITION,3)
         isLogin = share!!.getBoolean("isLogin",false)
         userId= share!!.getString(USERID,"")
         if(isLogin){

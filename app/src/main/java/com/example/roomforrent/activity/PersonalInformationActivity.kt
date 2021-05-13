@@ -281,7 +281,7 @@ class PersonalInformationActivity : BaseActivity() {
                     Log.d("Response", "countrylist size : ${user.user_name}")
 
                     Picasso.get()
-                        .load("http://192.168.101.12:9090/image/user/" + user.user_id + ".jpg").into(
+                        .load("http://192.168.1.9:9090/image/user/" + user.user_id + ".jpg").into(
                             cv_information_profile
                         )
 
