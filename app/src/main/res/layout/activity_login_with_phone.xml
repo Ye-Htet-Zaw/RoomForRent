@@ -76,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_bg"
                 android:inputType="phone"
+                android:maxLength="11"
                 android:paddingLeft="10dp"
                 android:textColor="#1F1F1F" />
         </LinearLayout>
