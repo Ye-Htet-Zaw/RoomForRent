@@ -18,6 +18,7 @@ import com.example.roomforrent.services.ServiceBuilder
 import com.example.roomforrent.services.UserProfileService
 import com.example.roomforrent.utils.Constants.POSITION
 import com.example.roomforrent.utils.Constants.USERID
+import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_login_profile.*
@@ -114,6 +115,7 @@ class LoginProfileFragment : BaseFragment() {
         v.btn_owner_profile_logout.setOnClickListener {
             showProgressDialog("Please Wait....")
             auth.signOut()
+            LoginManager.getInstance().logOut()
             startActivity(Intent(context, MainActivity::class.java))
             val share: SharedPreferences = context?.getSharedPreferences(
                 "myPreference",

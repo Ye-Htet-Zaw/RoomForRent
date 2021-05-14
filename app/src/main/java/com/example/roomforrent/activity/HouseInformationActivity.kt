@@ -1,3 +1,11 @@
+/**
+ *
+ * HouseInformationActivity
+ *
+ * 2021/03/8 YHZ Create New
+ *
+ * Load House Information
+ */
 package com.example.roomforrent.activity
 
 import androidx.appcompat.app.AppCompatActivity
@@ -62,6 +70,7 @@ class HouseInformationActivity : AppCompatActivity() {
         setupActionBar()
     }
 
+    //ToolBar
     private fun setupActionBar(){
         setSupportActionBar(toolbar_house_information_activity)
         var actionBar = supportActionBar
@@ -70,7 +79,6 @@ class HouseInformationActivity : AppCompatActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24)
             actionBar.title = ""
         }
-
         toolbar_house_information_activity.setNavigationOnClickListener { onBackPressed() }
     }
 }

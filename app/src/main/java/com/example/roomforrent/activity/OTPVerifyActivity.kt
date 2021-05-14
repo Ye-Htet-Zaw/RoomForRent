@@ -1,3 +1,11 @@
+/**
+ *
+ * OTPVerifyActivity
+ *
+ * 2021/04/30 YHZ Create New
+ *
+ * OTP SMS Verify
+ */
 package com.example.roomforrent.activity
 
 import android.content.Context
@@ -74,10 +82,10 @@ class OTPVerifyActivity : BaseActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_backward_icon)
             actionBar.title= "OTP Verify"
         }
-
         toolbar_otp_verify.setNavigationOnClickListener { onBackPressed() }
     }
 
+    //OTP SMS Verify
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         val phoneNo=intent.getStringExtra("phoneNo")
         auth.signInWithCredential(credential)
@@ -98,6 +106,7 @@ class OTPVerifyActivity : BaseActivity() {
             }
     }
 
+    //Check Existing User
     private fun checkExistPhoneUser(phoneNo: String) {
         val destinationService = ServiceBuilder.buildService(OTPPhoneService::class.java)
         val requestCall = destinationService.getPhoneUserCount(phoneNo)
@@ -112,13 +121,13 @@ class OTPVerifyActivity : BaseActivity() {
                     finish()
                 }
             }
-
             override fun onFailure(call: Call<Phone>, t: Throwable) {
                 createPhoneUser(phoneNo)
             }
         })
     }
 
+    //Create User With Phone No
     private fun createPhoneUser(phoneNo: String) {
         val destinationService = ServiceBuilder.buildService(OTPPhoneService::class.java)
         var phone = Phone("",phoneNo, 0, 0)
@@ -133,7 +142,6 @@ class OTPVerifyActivity : BaseActivity() {
                     finish()
                 }
             }
-
             override fun onFailure(call: Call<Phone>, t: Throwable) {
                 Toast.makeText(this@OTPVerifyActivity, "Something went wrong $t", Toast.LENGTH_SHORT)
             }
