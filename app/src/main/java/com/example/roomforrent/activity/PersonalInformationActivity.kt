@@ -122,7 +122,6 @@ class PersonalInformationActivity : BaseActivity() {
 
         //if save text is clicked ,updatefun is worked
         tv_titlePI.setOnClickListener { view->
-            showProgressDialog("Please Wait.....")
             updatePersonalInfo(view, userId)
         }
 
@@ -281,7 +280,7 @@ class PersonalInformationActivity : BaseActivity() {
                     Log.d("Response", "countrylist size : ${user.user_name}")
 
                     Picasso.get()
-                        .load("http://192.168.1.9:9090/image/user/" + user.user_id + ".jpg").into(
+                        .load("http://192.168.1.11:9090/image/user/" + user.user_id + ".jpg").into(
                             cv_information_profile
                         )
 
@@ -346,6 +345,7 @@ class PersonalInformationActivity : BaseActivity() {
 
         var name = et_user_name.text.toString()
         var selectedGender=et_gender.text.toString()
+        var date = et_birth_date.text.toString()
         var gender=0
         when(selectedGender){
             "Male" -> gender = 0
@@ -364,8 +364,11 @@ class PersonalInformationActivity : BaseActivity() {
               tv_user_name_error.text="Name should start with A-Z"
               tv_user_name_error.isVisible=true
 
-       }else{
-
+       } else if (date.isEmpty()){
+          tv_birth_date_error.text="Birth Date must not be empty"
+          tv_birth_date_error.isVisible=true
+      } else{
+           showProgressDialog("Please Wait.....")
            // Create JSON using JSONObject
            val jsonObject = JSONObject()
            jsonObject.put("user_id", user_id)

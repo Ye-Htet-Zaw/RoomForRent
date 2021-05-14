@@ -18,7 +18,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Color
-import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -31,7 +30,6 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.example.roomforrent.R
 import com.example.roomforrent.activity.ChooseAddressActivity
 import com.example.roomforrent.activity.ListYourSpaceActivity
@@ -53,7 +51,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -103,8 +100,8 @@ class PostHouseFragment : BaseFragment() {
     private var period: String = ""
     private var latitude: String? = ""
     private var longitude: String? = ""
-
     private var refreshFragment: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -118,7 +115,6 @@ class PostHouseFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loadPostHouseScreen()
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -338,6 +334,9 @@ class PostHouseFragment : BaseFragment() {
 
     }
 
+    /**
+     * clear insert data in edit text when user back to fragment
+     */
     private fun refreshFragment(){
         requireFragmentManager().beginTransaction().setReorderingAllowed(false)
         requireFragmentManager().beginTransaction().detach(PostHouseFragment()).attach(PostHouseFragment()).commitAllowingStateLoss()
@@ -365,17 +364,18 @@ class PostHouseFragment : BaseFragment() {
         tv_location.setTextColor(Color.parseColor("#7A8089"))
     }
 
+    /**
+     * show create house screen
+     */
     private fun loadPostHouseScreen(){
         val share: SharedPreferences = context?.getSharedPreferences(
             "myPreference",
             Context.MODE_PRIVATE
         )!!
         isLogin = share.getBoolean("isLogin", false)
-        //isLogin = true
         if(isLogin) {
             userID=share.getString(USERID,"")
             userPosition=share.getInt(POSITION,3)
-            //userPosition = 1
             if (userPosition==1){
                 ph_createLayout.visibility=View.VISIBLE
                 ph_blankLayout.visibility = View.GONE
@@ -446,7 +446,6 @@ class PostHouseFragment : BaseFragment() {
                     tv_location.text="Location is selected!"
                     tv_location.setTextColor(Color.BLACK)
                 }
-                //Toast.makeText(context,"$latitude and $longitude",Toast.LENGTH_SHORT).show()
 
                 iv_available_date.setOnClickListener { view ->
                     clickDataPicker(view)
@@ -460,14 +459,12 @@ class PostHouseFragment : BaseFragment() {
                 checkImageAndRadioData()
             }else{
                 ph_createLayout.visibility=View.GONE
-                Log.i("TestHouse", "User Position Owner")
                 ph_blankLayout.visibility=View.VISIBLE
                 ph_txtBlank.text=resources.getString(R.string.create_house_login_with_owner)
             }
 
         }else{
             ph_createLayout.visibility=View.GONE
-            Log.i("TestHouse", "Need to Login")
             ph_blankLayout.visibility=View.VISIBLE
             ph_txtBlank.text=resources.getString(R.string.create_house_login)
         }
@@ -475,12 +472,19 @@ class PostHouseFragment : BaseFragment() {
 
     }
 
-
+    /**
+     * create spinner
+     * @param context,String ArrayList
+     * @return spinner Adapter
+     */
     private fun createSpinnerAdapter(context: Context, arr: ArrayList<String>): MySpinnerAdapter {
         return MySpinnerAdapter(context, arr)
     }
 
-
+    /**
+     * set image click listener
+     * check radio button
+     */
     private fun checkImageAndRadioData(){
 
         val radioGroup = view?.findViewById(R.id.rb_group) as RadioGroup
@@ -656,6 +660,11 @@ class PostHouseFragment : BaseFragment() {
 
     }
 
+    /**
+     * show date picker dialog when user click date picker icon
+     * @param view
+     *
+     */
     private fun clickDataPicker(view: View) {
         val c = Calendar.getInstance()
         val year =
@@ -679,12 +688,20 @@ class PostHouseFragment : BaseFragment() {
         dpd?.show() // It is used to show the datePicker Dialog.
     }
 
+    /**
+     * change image uri to MultipartBody.Part
+     * @param partName
+     * @return MultipartBody.Part
+     */
     private fun prepareFilePart(partName: String): MultipartBody.Part {
         val imageFile = File(partName)
         val reqBody = imageFile.asRequestBody("multipart/form-file".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("imageupload", imageFile.name, reqBody)
     }
 
+    /**
+     * set the house data and null check
+     */
     private fun setHouseData(){
 
         houseAddress = et_address.text.toString().trim()
@@ -832,7 +849,11 @@ class PostHouseFragment : BaseFragment() {
         }
     }
 
-
+    /**
+     * insert house data to database
+     * @param house
+     *
+     */
     private fun createHouse(house: House){
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
         destinationService.createHouse(house).enqueue(object: Callback<List<House>>{
@@ -856,6 +877,11 @@ class PostHouseFragment : BaseFragment() {
         })
     }
 
+    /**
+     * upload image to server
+     * @param list
+     *
+     */
     private fun uploadImage(list: ArrayList<MultipartBody.Part>){
         val destinationService  = ServiceBuilder.buildService(PostHouseService::class.java)
         destinationService.uploadImages(list).enqueue(object : Callback<Void> {

@@ -203,6 +203,15 @@
                         android:focusable="false"
                         android:textColor="@color/black"
                         android:textSize="@dimen/owner_personal_info_text_size" />
+
+                    <TextView
+                        android:id="@+id/tv_birth_date_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:textColor="@color/red"
+                        android:visibility="gone"
+                        android:textSize="@dimen/owner_personal_info_text_size" />
                 </LinearLayout>
 
                 <!--email text-->

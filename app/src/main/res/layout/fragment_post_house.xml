@@ -438,7 +438,7 @@
                     android:imeOptions="actionGo"
                     android:hint="@string/contact_two"
                     android:inputType="number"
-                    android:maxLength="14"
+                    android:maxLength="13"
                     android:textColor="@color/black"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>

@@ -20,9 +20,15 @@ import retrofit2.http.Part
 
 interface PostHouseService {
 
+    /**
+     * save all house Info
+     */
     @POST("createHouse")
     fun createHouse(@Body house: House): Call<List<House>>
 
+    /**
+     * upload image to server
+     */
     @Multipart
     @POST("uploadMultipleFiles")
     fun uploadImages(@Part images: ArrayList<MultipartBody.Part>): Call<Void>

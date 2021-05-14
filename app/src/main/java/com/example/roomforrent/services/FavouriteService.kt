@@ -14,24 +14,34 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface FavouriteService {
-    @GET("getAllFavouriteListWithUserId/{USER_ID}")
-    fun getAllFavouriteListWithUserId(@Path("USER_ID") user_id: String): Call<List<Favourite>>
 
+    /**
+     * get favourite house list by user id
+     */
     @GET("/getFavHouseListWithUserId/{USER_ID}")
     fun getFavHouseListWithUserId(@Path("USER_ID") user_id: String): Call<List<House>>
 
+    /**
+     * save favouite information
+     */
     @POST("saveFavouriteInfo")
     fun saveFavouriteInfo(@Body favourite: Favourite): Call<List<Favourite>>
 
+    /**
+     * get favourite id by user id and house id
+     */
     @GET("getFavouriteId/{USER_ID}&{HOUSE_ID}")
-    fun getFavouriteId(@Path("USER_ID")user_id: String,@Path("HOUSE_ID")house_id: String):Call<Favourite>
+    fun getFavouriteId(
+        @Path("USER_ID") user_id: String,
+        @Path("HOUSE_ID") house_id: String
+    ): Call<Favourite>
 
-    @DELETE("deleteFavouriteWithId/{USER_ID}&{FAVOURITE_ID}")
-    fun deleteFavouriteWithId(@Path("USER_ID")user_id: String,@Path("FAVOURITE_ID")favourite_id: String):Call<List<Favourite>>
-
-    @GET("getFavouritHouseList")
-    fun getFavouritHouseList():Call<List<House>>
-
+    /**
+     * delete favourite item by user id and house id
+     */
     @DELETE("deleteFavouriteWithUserAndHouseId/{USER_ID}&{HOUSE_ID}")
-    fun deleteFavouriteWithUserAndHouseId(@Path("USER_ID")user_id: String,@Path("HOUSE_ID")house_id: String):Call<List<House>>
+    fun deleteFavouriteWithUserAndHouseId(
+        @Path("USER_ID") user_id: String,
+        @Path("HOUSE_ID") house_id: String
+    ): Call<List<House>>
 }
