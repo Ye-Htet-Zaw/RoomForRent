@@ -1,10 +1,16 @@
+/**
+ *
+ * LoginWithPhoneActivity
+ *
+ * 2021/04/30 YHZ Create New
+ *
+ * Login With Phone No
+ */
 package com.example.roomforrent.activity
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.Toast
@@ -12,14 +18,11 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.roomforrent.R
 import com.example.roomforrent.fragment.LoginProfileFragment
-import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
-import com.facebook.login.Login
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
-import kotlinx.android.synthetic.main.activity_house_detail.*
 import kotlinx.android.synthetic.main.activity_login_with_phone.*
 import java.util.concurrent.TimeUnit
 
@@ -68,8 +71,6 @@ class LoginWithPhoneActivity : BaseActivity() {
                 verificationId: String,
                 token: PhoneAuthProvider.ForceResendingToken
             ) {
-
-                Log.d("TAG","onCodeSent:$verificationId")
                 storedVerificationId = verificationId
                 var number="+95"+phoneNumber.text.toString().trim()
                 resendToken = token

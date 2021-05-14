@@ -11,7 +11,6 @@ package com.example.roomforrent.activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.DrawableRes
@@ -68,6 +67,7 @@ class LocationActivity : BaseActivity(), OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 16.0f));
     }
 
+    //Show House Icon In Google Map
     private fun bitmapDescriptorFromVector(
         context: Context,
         @DrawableRes vectorDrawableResourceId: Int

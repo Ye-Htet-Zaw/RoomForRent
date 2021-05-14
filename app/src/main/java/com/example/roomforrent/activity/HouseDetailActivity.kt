@@ -12,7 +12,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
@@ -48,6 +47,7 @@ class HouseDetailActivity : BaseActivity(), OnMapReadyCallback {
         setupActionBar()
     }
 
+    //Bind House Information
     private fun loadHouseDetailsData() {
         if (intent.hasExtra(Constants.HOUSE_DETAIL)) {
             houseDetails = intent.getParcelableExtra(Constants.HOUSE_DETAIL)!!
@@ -123,6 +123,7 @@ class HouseDetailActivity : BaseActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
+    //Show House in Google Map
     private fun showDetailMap() {
         if(checkConnection()){
             var intent = Intent(this@HouseDetailActivity, LocationActivity::class.java)
@@ -132,6 +133,7 @@ class HouseDetailActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
+    //Toolbar
     private fun setupActionBar(){
         setSupportActionBar(toolbar_house_detail_activity)
         var actionBar = supportActionBar
@@ -150,12 +152,9 @@ class HouseDetailActivity : BaseActivity(), OnMapReadyCallback {
         val lattitude = houseDetails.latitude
         val longitude = houseDetails.longitude
 
-        // Add a marker in Sydney and move the camera
-        /*val location = LatLng(16.844353, 96.128355)*/
         val location = LatLng(lattitude, longitude)
         mMap.addMarker(
             MarkerOptions().position(location)
-
                 .title("Current Location")
         )
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 16.0f));
