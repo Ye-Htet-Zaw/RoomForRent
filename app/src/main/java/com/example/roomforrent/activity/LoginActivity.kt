@@ -145,11 +145,13 @@ class LoginActivity : BaseActivity() {
         updateUI(currentUser)
     }
     private fun handleFacebookAccessToken(token: AccessToken) {
+        showProgressDialog("Please wait..")
         Log.d("TAG", "handleFacebookAccessToken:$token")
         val credential = FacebookAuthProvider.getCredential(token.token)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    hideProgressDialog()
                     val facebookService = ServiceBuilder.buildService(FacebookLoginService::class.java)
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("TAG", "signInWithCredential:success")
@@ -189,20 +191,24 @@ class LoginActivity : BaseActivity() {
                             Log.i("TAG", "$user_email&$user_name&$fb_id")
                             Log.i("TAG", response.body().toString()+"COUNT SUCESS")
                             if(response.body()==0){
+                                hideProgressDialog()
                                 //Register Fb User in database
                                 callCreateAccount=facebookService.createUser(account)
                                 getAccountList()
                             }
                             else{
+                                hideProgressDialog()
                                 getUserId()
                             }
                         }
                         override fun onFailure(call: Call<Int>, t: Throwable) {
+                            hideProgressDialog()
                             Log.i("TAG", "COUNT fail")
                         }
 
                     })
                 } else {
+                    hideProgressDialog()
                     // If sign in fails, display a message to the user.
                     Log.w("TAG", "signInWithCredential:failure", task.exception)
                     Toast.makeText(baseContext, "Authentication failed.",
