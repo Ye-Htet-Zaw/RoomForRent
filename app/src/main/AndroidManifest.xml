@@ -49,10 +49,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
         <activity
-            android:name=".activity.DescriptionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar" />
-        <activity
             android:name=".activity.HouseInformationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
