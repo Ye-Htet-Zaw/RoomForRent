@@ -85,7 +85,7 @@ class FavouriteFragment : BaseFragment() {
         if(isLogin){
             userID=share.getString(USERID,"")
             blankLayout.visibility=View.GONE
-            var callGetFavouriteHouseList = favouriteService.getFavouritHouseList()
+            var callGetFavouriteHouseList = favouriteService.getFavHouseListWithUserId(userID!!)
             callGetFavouriteHouseList.enqueue(object : Callback<List<House>> {
                 override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
                     Log.i("TestFavourite", "success to load favourite house list")

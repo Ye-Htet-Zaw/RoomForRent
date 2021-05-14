@@ -17,6 +17,9 @@ interface FavouriteService {
     @GET("getAllFavouriteListWithUserId/{USER_ID}")
     fun getAllFavouriteListWithUserId(@Path("USER_ID") user_id: String): Call<List<Favourite>>
 
+    @GET("/getFavHouseListWithUserId/{USER_ID}")
+    fun getFavHouseListWithUserId(@Path("USER_ID") user_id: String): Call<List<House>>
+
     @POST("saveFavouriteInfo")
     fun saveFavouriteInfo(@Body favourite: Favourite): Call<List<Favourite>>
 
