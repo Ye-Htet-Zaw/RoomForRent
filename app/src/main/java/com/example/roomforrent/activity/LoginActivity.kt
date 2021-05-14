@@ -198,6 +198,7 @@ class LoginActivity : BaseActivity() {
                     val user_email = user.email
                     val fb_id = user.uid
                     val user_name = user.displayName
+                    val dob=""
                     var date = SimpleDateFormat(
                         "yyyy-MM-dd",
                         Locale.getDefault()
@@ -212,7 +213,7 @@ class LoginActivity : BaseActivity() {
                         phone_two = "",
                         user_address = "",
                         user_gender = 0,
-                        user_dob = date,
+                        user_dob = dob,
                         user_position = 0,
                         delete_flag = 0,
                         delete_datetime = date,
