@@ -61,27 +61,31 @@ class ChangePasswordActivity : BaseActivity() {
 
         })
         btn_updatePassword.setOnClickListener() {
-
+            showProgressDialog("Please wait..")
             if(checkConnection()){
             if (et_current_pw.text.toString().trim().isEmpty()) {
+                hideProgressDialog()
                 et_current_pw.error = "Please Insert Current Password"
                 et_current_pw.requestFocus()
                 return@setOnClickListener
             } else if (et_new_pw.text.toString().trim().isEmpty()) {
+                hideProgressDialog()
                 et_new_pw.error = "Please New Current Password"
                 et_new_pw.requestFocus()
                 return@setOnClickListener
             } else if (et_confirmPassword.text.toString().trim().isEmpty()) {
+                hideProgressDialog()
                 et_confirmPassword.error = "Please Insert Confirm Password"
                 et_confirmPassword.requestFocus()
                 return@setOnClickListener
             } else if (et_current_pw.text.toString().trim() == et_new_pw.text.toString().trim()) {
-
+                hideProgressDialog()
                 Toast.makeText(this, "Current Password and New Password is same", Toast.LENGTH_LONG)
                     .show()
             } else if (et_new_pw.text.toString().trim() != et_confirmPassword.text.toString()
                     .trim()
             ) {
+                hideProgressDialog()
                 Toast.makeText(this, "Please enter same with New Password", Toast.LENGTH_LONG)
                     .show()
             } else if (cur_pw.equals(et_current_pw.text.toString().trim())) {
@@ -95,6 +99,7 @@ class ChangePasswordActivity : BaseActivity() {
                             call: Call<UserLogin>,
                             response: Response<UserLogin>
                         ) {
+                            hideProgressDialog()
                             //showProgressDialog("Please Wait")
                             var fragment = LoginProfileFragment()
                             val b = Bundle()
@@ -113,6 +118,7 @@ class ChangePasswordActivity : BaseActivity() {
                         }
 
                         override fun onFailure(call: Call<UserLogin>, t: Throwable) {
+                            hideProgressDialog()
                             //Log.i("TestingApi", "Update Fail "+t.message)
                             Toast.makeText(
                                 this@ChangePasswordActivity,
@@ -125,6 +131,7 @@ class ChangePasswordActivity : BaseActivity() {
                 }
 
             } else {
+                hideProgressDialog()
                 Toast.makeText(
                     this@ChangePasswordActivity,
                     "Need to SigIn Again ",
