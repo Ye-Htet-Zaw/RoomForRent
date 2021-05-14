@@ -17,7 +17,6 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,20 +42,22 @@ import retrofit2.Response
 
 class FavouriteFragment : BaseFragment() {
 
-    lateinit var adapter : FavouriteItemAdapter
+    lateinit var adapter: FavouriteItemAdapter
     val favouriteService = ServiceBuilder.buildService(FavouriteService::class.java)
     var isLogin = false
-    var userID : String?=""
+    var userID: String? = ""
     var isConnected = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i("TestFav", "onCreate")
         super.onCreate(savedInstanceState)
     }
 
+    /**
+     * initialize favourite adapter
+     */
     private fun initAdapter() {
         adapter = context?.let { FavouriteItemAdapter(it) }!!
-        favouriteRecyclerView.layoutManager= LinearLayoutManager(context)
+        favouriteRecyclerView.layoutManager = LinearLayoutManager(context)
         favouriteRecyclerView.adapter = adapter
     }
 
@@ -64,45 +65,46 @@ class FavouriteFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.i("TestFav", "onCreateView")
         return inflater.inflate(R.layout.fragment_favourite, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i("TestFav", "onViewCreated")
         initAdapter()
         getFavList()
     }
 
-    fun getFavList(){
+    /**
+     * retrieve favourite house list with user id
+     */
+    fun getFavList() {
         val share: SharedPreferences = context?.getSharedPreferences(
             "myPreference",
             Context.MODE_PRIVATE
         )!!
         isLogin = share.getBoolean("isLogin", false)
 
-        if(isLogin){
-            userID=share.getString(USERID,"")
-            blankLayout.visibility=View.GONE
+        if (isLogin) {
+            userID = share.getString(USERID, "")
+            blankLayout.visibility = View.GONE
             var callGetFavouriteHouseList = favouriteService.getFavHouseListWithUserId(userID!!)
             callGetFavouriteHouseList.enqueue(object : Callback<List<House>> {
                 override fun onResponse(call: Call<List<House>>, response: Response<List<House>>) {
-                    Log.i("TestFavourite", "success to load favourite house list")
                     adapter.setData(response.body() as ArrayList<House>, userID!!)
                     if (response.body()?.size == 0) {
                         blankLayout.visibility = View.VISIBLE
                         txtBlank.text = resources.getString(R.string.nohaveFav)
-                    }else {
+                    } else {
                         blankLayout.visibility = View.GONE
                     }
 
-                    adapter.setOnHeartClickListener(object :FavouriteItemAdapter.OnHeartClickListener{
+                    adapter.setOnHeartClickListener(object :
+                        FavouriteItemAdapter.OnHeartClickListener {
                         override fun onClick(houseList: ArrayList<House>) {
                             if (houseList.size == 0) {
                                 blankLayout.visibility = View.VISIBLE
                                 txtBlank.text = resources.getString(R.string.nohaveFav)
-                            }else {
+                            } else {
                                 blankLayout.visibility = View.GONE
                             }
                         }
@@ -116,18 +118,21 @@ class FavouriteFragment : BaseFragment() {
                 }
 
                 override fun onFailure(call: Call<List<House>>, t: Throwable) {
-                    Log.i("TestFavourite", "fail to load favourite house list")
                     blankLayout.visibility = View.VISIBLE
                     txtBlank.text = resources.getString(R.string.nohaveFav)
                 }
 
             })
-        }else{
-            Log.i("TestFavourite", "Need to Login")
-            blankLayout.visibility=View.VISIBLE
-            txtBlank.text=resources.getString(R.string.nologin)
+        } else {
+            blankLayout.visibility = View.VISIBLE
+            txtBlank.text = resources.getString(R.string.nologin)
         }
     }
+
+    /**
+     * get detail data of favouite house
+     * @param mDetailId
+     */
     private fun getDetailData(mDetailId: String) {
         val destinationService = ServiceBuilder.buildService(RoomForRentService::class.java)
         val requestCall = destinationService.getHouseDetailById(mDetailId)
@@ -149,7 +154,6 @@ class FavouriteFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.i("TestFavourite", "Favourite on Resume")
         isConnected = checkConnection()
         getFavList()
     }

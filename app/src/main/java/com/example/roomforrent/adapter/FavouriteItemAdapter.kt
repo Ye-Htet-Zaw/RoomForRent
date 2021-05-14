@@ -9,7 +9,6 @@
 package com.example.roomforrent.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,32 +21,43 @@ import com.example.roomforrent.services.FavouriteService
 import com.example.roomforrent.services.ServiceBuilder
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.favourite_item.view.*
-import kotlinx.android.synthetic.main.fragment_favourite.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FavouriteItemAdapter(val context: Context):RecyclerView.Adapter<FavouriteItemAdapter.ViewHolder>() {
+class FavouriteItemAdapter(val context: Context) :
+    RecyclerView.Adapter<FavouriteItemAdapter.ViewHolder>() {
 
-    var favouriteHouseList : ArrayList<House>? = ArrayList()
+    var favouriteHouseList: ArrayList<House>? = ArrayList()
     private var onClickListener: FavouriteItemAdapter.OnClickListener? = null
-    private var onHeartClickListener : FavouriteItemAdapter.OnHeartClickListener?=null
+    private var onHeartClickListener: FavouriteItemAdapter.OnHeartClickListener? = null
     val favouriteService = ServiceBuilder.buildService(FavouriteService::class.java)
-    var userId :String=""
-    fun setData(favouriteHouseList : ArrayList<House>,userId : String){
+    var userId: String = ""
+
+    /**
+     * set favouriteHouseList data to show favouirte recycler view
+     * @param favouriteHouseList
+     * @param userId
+     */
+    fun setData(favouriteHouseList: ArrayList<House>, userId: String) {
         this.favouriteHouseList = favouriteHouseList
         this.userId = userId
         notifyDataSetChanged()
     }
 
-    interface OnHeartClickListener{
-        fun onClick(houseList : ArrayList<House>)
+    interface OnHeartClickListener {
+        fun onClick(houseList: ArrayList<House>)
     }
 
-    fun setOnHeartClickListener(onHeartClickListener: FavouriteItemAdapter.OnHeartClickListener){
+    /**
+     * event on heart click
+     * @param onHeartClickListener
+     */
+    fun setOnHeartClickListener(onHeartClickListener: FavouriteItemAdapter.OnHeartClickListener) {
         this.onHeartClickListener = onHeartClickListener
     }
-    class ViewHolder(view : View): RecyclerView.ViewHolder(view) {
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val ivHeart = view.iv_heart
 
         fun bindView(item: House?) {
@@ -72,16 +82,17 @@ class FavouriteItemAdapter(val context: Context):RecyclerView.Adapter<FavouriteI
         var changeColor: Boolean = true
         var item = favouriteHouseList?.get(position)
         holder.ivHeart.setColorFilter(ContextCompat.getColor(context, R.color.red))
-        holder.ivHeart.setOnClickListener{
+        holder.ivHeart.setOnClickListener {
             changeColor = onClick(holder.ivHeart, changeColor)
-            if(!changeColor){
-                val callDeleteFavouriteItem = favouriteService.deleteFavouriteWithUserAndHouseId(userId,item!!.house_ID)
-                callDeleteFavouriteItem.enqueue(object : Callback<List<House>>{
+            if (!changeColor) {
+                val callDeleteFavouriteItem =
+                    favouriteService.deleteFavouriteWithUserAndHouseId(userId, item!!.house_ID)
+                callDeleteFavouriteItem.enqueue(object : Callback<List<House>> {
                     override fun onResponse(
                         call: Call<List<House>>,
                         response: Response<List<House>>
                     ) {
-                        setData(response.body() as ArrayList<House>,userId)
+                        setData(response.body() as ArrayList<House>, userId)
                         if (onHeartClickListener != null) {
                             onHeartClickListener!!.onClick(response.body() as ArrayList<House>)
                         }
@@ -108,6 +119,11 @@ class FavouriteItemAdapter(val context: Context):RecyclerView.Adapter<FavouriteI
         return favouriteHouseList?.size ?: 0
     }
 
+    /**
+     * change color when click on heart icon
+     * @param  heart
+     * @param  changedColor
+     */
     private fun onClick(heart: ImageView, changedColor: Boolean): Boolean {
         var changeColor: Boolean = changedColor
         changeColor = if (changeColor) {
@@ -125,6 +141,10 @@ class FavouriteItemAdapter(val context: Context):RecyclerView.Adapter<FavouriteI
         fun onClick(position: Int, model: House)
     }
 
+    /**
+     * event on favourite item click
+     * @param onClickListener
+     */
     fun setOnClickListener(onClickListener: FavouriteItemAdapter.OnClickListener) {
         this.onClickListener = onClickListener
     }

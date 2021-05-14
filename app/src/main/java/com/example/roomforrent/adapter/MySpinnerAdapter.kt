@@ -17,7 +17,7 @@ import com.example.roomforrent.R
 import kotlinx.android.synthetic.main.spinner_item.view.*
 import java.util.ArrayList
 
-class MySpinnerAdapter(context: Context, arr: ArrayList<String>) : BaseAdapter(){
+class MySpinnerAdapter(context: Context, arr: ArrayList<String>) : BaseAdapter() {
 
     val arr = arr
     val context = context
@@ -30,13 +30,13 @@ class MySpinnerAdapter(context: Context, arr: ArrayList<String>) : BaseAdapter()
     }
 
     override fun getItemId(position: Int): Long {
-        return  0
+        return 0
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view = LayoutInflater.from(context).inflate(R.layout.spinner_item, null)
         view.txtItem.text = arr.get(position)
-        return  view
+        return view
     }
 
 }

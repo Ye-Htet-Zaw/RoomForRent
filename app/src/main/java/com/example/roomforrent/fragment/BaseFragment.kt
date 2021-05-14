@@ -13,7 +13,6 @@ import android.app.Dialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,26 +35,37 @@ open class BaseFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_base, container, false)
     }
-    fun showProgressDialog(text: String) {
+
+    /**
+     * show progress dialog
+     * @param progressText
+     */
+    fun showProgressDialog(progressText: String) {
         mProgressDialog = context?.let { Dialog(it) }!!
 
         /*Set the screen content from a layout resource.
         The resource will be inflated, adding all top-level views to the screen.*/
         mProgressDialog.setContentView(R.layout.dialog_progress)
 
-        mProgressDialog.tv_progress_text.text = text
+        mProgressDialog.tv_progress_text.text = progressText
 
         //Start the dialog and display it on screen.
         mProgressDialog.show()
     }
+
+    /**
+     * hide progress dialog
+     */
     fun hideProgressDialog() {
         mProgressDialog.dismiss()
     }
 
-    fun checkConnection() : Boolean {
+    /**
+     * check internet conection
+     */
+    fun checkConnection(): Boolean {
         val conMgr = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = conMgr.activeNetworkInfo
-        Log.i("CheckInternet", netInfo.toString())
         if (netInfo == null) {
             val builder = AlertDialog.Builder(context)
             with(builder) {
@@ -65,7 +75,7 @@ open class BaseFragment : Fragment() {
             }
 
             builder.show()
-            return  false
-        }else return true
+            return false
+        } else return true
     }
 }

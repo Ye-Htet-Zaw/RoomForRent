@@ -20,8 +20,10 @@ class MyTabAdapter(
     supportFragmentManager: FragmentManager,
     tabCount: Int
 ) : FragmentPagerAdapter(supportFragmentManager) {
-    private val share: SharedPreferences = context?.getSharedPreferences("myPreference",
-        Context.MODE_PRIVATE)!!
+    private val share: SharedPreferences = context?.getSharedPreferences(
+        "myPreference",
+        Context.MODE_PRIVATE
+    )!!
     val context = context
     val tabCount: Int = tabCount
     override fun getCount(): Int {
